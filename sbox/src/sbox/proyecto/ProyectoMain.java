@@ -11,23 +11,20 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.crypto.URIReferenceException;
-import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
-import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.jdesktop.swingworker.SwingWorker;
 import sbox.activityrender.initScreenRecorder;
 import sbox.facerecorder.*;
@@ -37,8 +34,6 @@ import sbox.facerecorder.*;
  * @author Álvaro Andrés Maldonado Pinto
  */
 public class ProyectoMain extends javax.swing.JFrame {
-
-    private WebcamAndMicrophoneCapture capture = null;
 
     class CameraSwingWorker extends SwingWorker<String, Object> {
 
@@ -51,42 +46,20 @@ public class ProyectoMain extends javax.swing.JFrame {
         @Override
         public String doInBackground() throws Exception {
             try {
-//                _video = new Video(path);
-//              _video.startCamera(sessionId, tipoProyecto, nameSessionId);
-//                _video.startCamera("", "", "");
                 capture = new WebcamAndMicrophoneCapture();
                 capture.startCamera(path);
-
             } catch (FrameGrabber.Exception | FrameRecorder.Exception e) {
-//                System.out.println(e.getMessage());
-//                e.printStackTrace();
-//              logger.error(e.getMessage());
+                log.error(e);
             }
             return null;
         }
 
-        @Override
-        protected void done() {
-            try {
-//                        toggleButton(true, false, false);
-            } catch (Exception ignore) {
-//                        logger.error(ignore.getMessage());
-            }
-        }
     }
 
-    /**
-     * Creates new form NewJFrame
-     *
-     * @param user
-     */
-    public ProyectoMain(/*String user*/) {
-//        userSbox = user;
+    public ProyectoMain() {
         initComponents();
         tabPanelPrincipal.setVisible(false);
         cargandoProgressBar.setVisible(false);
-//        labelUsuario.setText(user);
-        labelUsuario.setVisible(false);
         txtDirIP.setEnabled(false);
         buscarButton.setEnabled(false);
         comboDispositivos.setEnabled(false);
@@ -163,7 +136,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         descartarFuentesButton = new javax.swing.JButton();
         procesamientoPanel = new javax.swing.JPanel();
         visualizacionPanel = new javax.swing.JPanel();
-        labelUsuario = new javax.swing.JLabel();
         statusBarPanel = new javax.swing.JPanel();
         cargandoProgressBar = new javax.swing.JProgressBar();
         labelDondeEstoy = new javax.swing.JLabel();
@@ -744,10 +716,6 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         tabPanelPrincipal.addTab("Visualización de Secuencias", new javax.swing.ImageIcon(getClass().getResource("/resources/video.png")), visualizacionPanel); // NOI18N
 
-        labelUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconUserGear_16x16.png"))); // NOI18N
-        labelUsuario.setToolTipText("");
-        labelUsuario.setName(""); // NOI18N
-
         statusBarPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         cargandoProgressBar.setString("Cargando...");
@@ -823,19 +791,13 @@ public class ProyectoMain extends javax.swing.JFrame {
             .addComponent(statusBarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(labelUsuario))
-                    .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(33, 33, 33)
                 .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(statusBarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -901,7 +863,6 @@ public class ProyectoMain extends javax.swing.JFrame {
                 Properties p = new Properties();
                 rutaProperties = txtRutaProyecto.getText();
                 p.load(new FileInputStream(rutaProperties));
-                p.setProperty("sbox.proyecto.usuario", userSbox);
                 txtNombreProyecto.setEnabled(false);
                 txtNombreProyecto.setText(p.getProperty("sbox.proyecto.nombre"));
                 setTitle("Proyecto " + txtNombreProyecto.getText());
@@ -946,7 +907,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 proyectoCargado = true;
                 creacionProyecto = true;
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
                 JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
                 seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox");
             }
@@ -975,6 +936,12 @@ public class ProyectoMain extends javax.swing.JFrame {
                 } else {
                     path = rutaProyecto + "\\" + nombreProyecto;
                 }
+                Properties propLog = new Properties();
+                propLog.load(new FileInputStream("log4j.properties"));
+                propLog.setProperty("log4j.appender.ARCHIVO.File", path + "\\" + nombreProyecto + ".log");
+                FileOutputStream outLog = new FileOutputStream("log4j.properties");
+                propLog.store(outLog, null);
+
                 carpetaPrincipal = new File(path);
                 File prop = new File(path, "properties.sbox");
                 Properties p = new Properties();
@@ -992,23 +959,29 @@ public class ProyectoMain extends javax.swing.JFrame {
                             p.load(new FileInputStream(prop.getAbsolutePath()));
 
                             try {
-                                p.setProperty("sbox.proyecto.usuario", userSbox);
+                                PropertyConfigurator.configure("log4j.properties");
                                 p.setProperty("sbox.proyecto.nombre", txtNombreProyecto.getText());
                                 p.setProperty("sbox.proyecto.destino", txtRutaProyecto.getText());
+                                log.info("**************************** S-Box ****************************");
+                                log.info("Nombre proyecto: "+txtNombreProyecto.getText());
                                 if (faceRecorderCheck.isSelected()) {
                                     if (perspectiva1.mkdirs()) {
                                         p.setProperty("sbox.proyecto.perspectiva1", "true");
+                                        log.info("FaceRecoder: Habilitado");
                                     }
                                 } else {
                                     p.setProperty("sbox.proyecto.perspectiva1", "false");
+                                    log.info("FaceRecoder: Deshabilitado");
                                 }
 
                                 if (activityRenderCheck.isSelected()) {
                                     if (perspectiva2.mkdirs()) {
                                         p.setProperty("sbox.proyecto.perspectiva2", "true");
+                                        log.info("ActivityRender: Habilitado");
                                     }
                                 } else {
                                     p.setProperty("sbox.proyecto.perspectiva2", "false");
+                                    log.info("ActivityRender: Deshabilitado");
                                 }
 
                                 if (agregarPerspectiva) {
@@ -1017,14 +990,20 @@ public class ProyectoMain extends javax.swing.JFrame {
                                         p.setProperty("sbox.proyecto.perspectiva3.ip", txtDirIP.getText());
                                         p.setProperty("sbox.proyecto.perspectiva3.dispositivo", comboDispositivos.getSelectedItem().toString());
                                         p.setProperty("sbox.proyecto.perspectiva3.descripcion", txtDescPerspectiva.getText());
+                                        log.info("Canal de grabacion externo: Habilitado");
+                                        log.info("Descripcion de canal externo: "+txtDescPerspectiva.getText());
+                                        log.info("IP de canal externo: "+txtDirIP.getText());
+                                        log.info("Dispositivo de grabación de canal externo: "+comboDispositivos.getSelectedItem().toString());
                                     }
                                 } else {
                                     p.setProperty("sbox.proyecto.perspectiva3", "false");
+                                    log.info("Canal de grabacion externo: Deshabilitado");
                                 }
 
                                 p.setProperty("sbox.proyecto.reconocedor.origen", txtRutaReconocedor.getText());
+                                log.info("Path de Reconocedor: "+txtRutaReconocedor.getText());
                                 p.setProperty("sbox.fuentes.obtener", "false");
-                                java.io.FileOutputStream out = new java.io.FileOutputStream(prop.getAbsolutePath());
+                                FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                                 p.store(out, null);
 
                                 obtencionFuentes = false;
@@ -1034,6 +1013,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 tabPanelPrincipal.setEnabledAt(1, true);
                                 tabPanelPrincipal.setEnabledAt(2, false);
                                 tabPanelPrincipal.setEnabledAt(3, false);
+                                log.info("****************** Proyecto creado con exito ******************");
 
                                 if (agregarPerspectiva) {
                                     agregarPerspectivaButton.setText("Modificar Perspectiva");
@@ -1056,7 +1036,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 rutaProyectoButton.setVisible(false);
                                 proyectoCargado = true;
                             } catch (IOException ex) {
-                                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                                log.error(ex);
                                 JOptionPane.showMessageDialog(this, "Error al crear el proyecto", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                             new Thread("").start();
@@ -1067,7 +1047,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                         txtNombreProyecto.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
                         JOptionPane.showMessageDialog(this, "Ya existe un proyecto con el mismo nombre", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-
+                    
                 } else if ("Guardar Cambios".equals(crearProyectoButton.getText())) {
                     if (!prop.exists()) {
                         prop.createNewFile();
@@ -1161,7 +1141,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     txtDescPerspectiva.setEnabled(false);
                 }
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
 
         }
@@ -1310,9 +1290,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         try {
             p.load(new FileInputStream(rutaProperties));
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         faceRecorderVerButton.setVisible(false);
         actRenderVerButton.setVisible(false);
@@ -1395,9 +1375,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         try {
             p.load(new FileInputStream(rutaProperties));
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         p.setProperty("sbox.fuentes.obtener", "false");
         obtencionFuentes = false;
@@ -1407,9 +1387,9 @@ public class ProyectoMain extends javax.swing.JFrame {
             out = new java.io.FileOutputStream(rutaProperties);
             p.store(out, null);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
 
         if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva1"))) {
@@ -1444,8 +1424,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 init = new initScreenRecorder();
                 init.start(path);
             } catch (IOException | AWTException ex) {
-                System.out.println(ex.getMessage());
-//                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         }
 
@@ -1502,9 +1481,9 @@ public class ProyectoMain extends javax.swing.JFrame {
 //                }
                 faceRecorderVerButton.setVisible(true);
             } catch (FrameRecorder.Exception ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             } catch (FrameGrabber.Exception ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         }
 
@@ -1530,7 +1509,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         }
 
@@ -1579,9 +1558,9 @@ public class ProyectoMain extends javax.swing.JFrame {
             try {
                 p.load(new FileInputStream(rutaProperties));
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
             p.setProperty("sbox.fuentes.vista.previa", "false");
             File fuentes = null;
@@ -1632,9 +1611,9 @@ public class ProyectoMain extends javax.swing.JFrame {
                 out = new java.io.FileOutputStream(rutaProperties);
                 p.store(out, null);
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         } else if ("Cancelar".equals(descartarFuentesButton.getText())) {
             guardarFuentesButton.setText("Modificar Fuentes");
@@ -1663,9 +1642,9 @@ public class ProyectoMain extends javax.swing.JFrame {
             try {
                 p.load(new FileInputStream(rutaProperties));
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
             p.setProperty("sbox.fuentes.obtener", "true");
             p.setProperty("sbox.fuentes.vista.previa", "true");
@@ -1679,9 +1658,9 @@ public class ProyectoMain extends javax.swing.JFrame {
                 out = new java.io.FileOutputStream(rutaProperties);
                 p.store(out, null);
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoMain.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         } else if ("Modificar Fuentes".equals(guardarFuentesButton.getText())) {
             guardarFuentesButton.setText("Guardar Fuentes");
@@ -1825,7 +1804,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProyectoMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            log.error(ex);
         }
         //</editor-fold>
 
@@ -1840,29 +1819,33 @@ public class ProyectoMain extends javax.swing.JFrame {
         });
     }
 
-    private OpenCVFrameConverter.ToMat converter = null;
-    private static long videoTS = 0;
-    private static long startTime = 0;
-    final private static int FRAME_RATE = 30;
-    final private static int GOP_LENGTH_IN_FRAMES = 60;
-    private String userSbox = "";
-    private File carpetaPrincipal = null;
-    private String rutaProperties = "";
-//    private boolean con = false;
+    //Socket
     private final String ipOld = "";
-    private boolean agregarPerspectiva = false;
+    private PerspectivaCliente pc = null;
+
+    //Flag pestañas
     private boolean proyectoCargado = false;
     private boolean creacionProyecto = false;
     private boolean obtencionFuentes = false;
     private boolean syncFuentes = false;
     private boolean visualizacion = false;
-    private PerspectivaCliente pc = null;
 
+    //Flag Perspectivas
+    private boolean agregarPerspectiva = false;
     private boolean faceRecorder = false;
     private boolean activityRender = false;
     private boolean perspExt = false;
+
+    //Grabacion
+    private WebcamAndMicrophoneCapture capture = null;
     private initScreenRecorder init = null;
-    private FFmpegFrameRecorder recorder = null;
+
+    //File
+    private File carpetaPrincipal = null;
+    private String rutaProperties = "";
+
+    //Log
+    private final static Logger log = Logger.getLogger(ProyectoMain.class.getName());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actRenderVerButton;
@@ -1907,7 +1890,6 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JLabel labelPerspExtIcon;
     private javax.swing.JLabel labelRutaProyecto;
     private javax.swing.JLabel labelRutaReconocedor;
-    private javax.swing.JLabel labelUsuario;
     private javax.swing.JMenuBar menuBarPrincipal;
     private javax.swing.JMenu menuProyecto;
     private javax.swing.JProgressBar perspExtGrabando;
