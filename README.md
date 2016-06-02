@@ -3,7 +3,7 @@ S-Box: Un ambiente para analizar videos asociados al fenómeno de la sonrisa
 
 Requisitos para ejecutar S-Box
 
-JAVA 7u79:
+JAVA 7u79 (32 bits):
 
 http://www.oracle.com/technetwork/es/java/javase/downloads/jdk7-downloads-1880260.html
 
