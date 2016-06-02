@@ -16,6 +16,7 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 import javax.swing.JFrame;
 import javax.swing.Timer;
+import org.apache.log4j.Logger;
 
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core;
@@ -33,7 +34,7 @@ import org.bytedeco.javacv.OpenCVFrameGrabber;
 
 public class WebcamAndMicrophoneCapture {
 
-    final private int WEBCAM_DEVICE_INDEX = 0;
+    final private int WEBCAM_DEVICE_INDEX = 1;
     final private int AUDIO_DEVICE_INDEX = 4;
 
     final private int FRAME_RATE = 30;
@@ -52,6 +53,7 @@ public class WebcamAndMicrophoneCapture {
     private FFmpegFrameRecorder recorder = null;
     private CanvasFrame cFrame = null;
     private boolean running = true;
+    private final static Logger log = Logger.getLogger(WebcamAndMicrophoneCapture.class.getName());
 
     public WebcamAndMicrophoneCapture() {
 
@@ -122,6 +124,7 @@ public class WebcamAndMicrophoneCapture {
 
         // Jack 'n coke... do it...
         recorder.start();
+        log.info("FaceRecorder: Inicio de grabacion");
 
         // Thread for audio capture, this could be in a nested private class if
         // you prefer...
@@ -195,12 +198,12 @@ public class WebcamAndMicrophoneCapture {
                                     recorder.recordSamples(sampleRate, numChannels, sBuff);
                                 }
                             } catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
-                                e.printStackTrace();
+                                log.error(e);
                             }
                         }
                     }, 0, (long) 1000 / FRAME_RATE, TimeUnit.MILLISECONDS);
                 } catch (LineUnavailableException e1) {
-                    e1.printStackTrace();
+                    log.error(e1);
                 }
             }
         }).start();
@@ -264,12 +267,13 @@ public class WebcamAndMicrophoneCapture {
 
     public void stopCamera() throws org.bytedeco.javacv.FrameRecorder.Exception, FrameGrabber.Exception {
         running = false;
-        cFrame.dispose();
-        recorder.stop();
         grabber.stop();
+        recorder.stop();
+        cFrame.dispose();
         if (t.isRunning()) {
             t.stop();
         }
+        log.info("FaceRecorder: Fin de grabación");
     }
 
     public String initReloj() {

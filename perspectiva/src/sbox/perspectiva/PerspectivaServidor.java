@@ -16,9 +16,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.crypto.URIReferenceException;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.bytedeco.javacpp.opencv_highgui.VideoCapture;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
@@ -39,6 +39,7 @@ public class PerspectivaServidor {
     private Video _video = null;
     private String device = "";
     private File temp = null;
+     private final static Logger log = Logger.getLogger(PerspectivaServidor.class.getName());
 
     class CameraSwingWorker extends SwingWorker<String, Object> {
 
@@ -50,25 +51,22 @@ public class PerspectivaServidor {
         public String doInBackground() throws Exception {
             try {
                 _video = new Video(temp.getAbsolutePath());
+                enviarObj("Canal externo: Inicio de grabacion");
                 _video.startCamera(Integer.parseInt(device));
             } catch (FrameGrabber.Exception | FrameRecorder.Exception | IOException | URISyntaxException | URIReferenceException e) {
-                System.out.println(e.getMessage());
-//              logger.error(e.getMessage());
+                log.error(e);
             }
             return null;
         }
 
-        @Override
-        protected void done() {
-            try {
-//                        toggleButton(true, false, false);
-            } catch (Exception ignore) {
-//                        logger.error(ignore.getMessage());
-            }
-        }
     }
 
     public PerspectivaServidor() {
+        temp = new File("C:\\temp\\");
+        if (!temp.exists()) {
+            temp.mkdir();
+        }
+        PropertyConfigurator.configure("log4j.properties");
         escuchar();
     }
 
@@ -100,10 +98,6 @@ public class PerspectivaServidor {
     }
 
     public void iniciarGrabacion(String cmd) {
-        temp = new File("C:\\temp\\");
-        if (!temp.exists()) {
-            temp.mkdir();
-        }
         String[] a = cmd.split(";");
         device = a[1];
         CameraSwingWorker cameraSwingWorker = new CameraSwingWorker();
@@ -112,19 +106,20 @@ public class PerspectivaServidor {
 
     public void enviarArchivo(File f) {
         try {
-            enviarObj("ARCHIVO");
+            enviarObj("Canal externo: Transfiriendo video");
             byte[] readAllBytes = Files.readAllBytes(f.toPath());
             enviarObj(readAllBytes);
-            enviarObj("FIN ARCHIVO");
+            enviarObj("Canal externo: Video Recibido con exito");
         } catch (IOException ex) {
-            Logger.getLogger(PerspectivaServidor.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
     }
 
     public void detenerGrabacion() {
         try {
+            
             _video.stopCamera();
-
+            enviarObj("Canal externo: Fin de grabacion");
             enviarArchivo(new File("C:\\temp\\canalExterno.avi"));
             //Eliminar temporales
             if (temp.exists()) {
@@ -140,25 +135,25 @@ public class PerspectivaServidor {
             }
 
         } catch (FrameRecorder.Exception | FrameGrabber.Exception ex) {
-            Logger.getLogger(PerspectivaServidor.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
     }
 
     public void cerrarConexion() {
-        System.out.println("\nCerrando conexion");
+        log.info("\nCerrando conexion");
         try {
             entrada.close();
             salida.close();
             conexion.close();
         } catch (IOException excepcionES) {
-            excepcionES.printStackTrace();
+            log.error(excepcionES);
         }
     }
 
     public void escuchar() {
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println("Esperando una conexion\n");
+            log.info("Esperando una conexion\n");
             conexion = serverSocket.accept();
             if (conexion != null) {
                 salida = new ObjectOutputStream(conexion.getOutputStream());
@@ -166,35 +161,33 @@ public class PerspectivaServidor {
                 recibirInstrucciones();
             }
         } catch (IOException ex) {
-            Logger.getLogger(PerspectivaServidor.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
     }
 
     public void enviarObj(Object o) {
-        System.out.println("enviarObj a cliente");
+        log.info("Enviando respuesta a cliente: "+o);
         try {
             salida.writeObject(o);
             salida.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
     public void recibirInstrucciones() {
-        System.out.println("recibirInstrucciones()");
-        System.out.println("escuchando");
+        log.info("Escuchando...");
         while (running) {
             try {
 
                 if (entrada.ready()) {
                     String cmd = entrada.readLine();
-                    System.out.println("cmd: " + cmd);
+                    log.info("Recibiendo instruccion de cliente: " + cmd);
                     if ("DISPOSITIVOS".equalsIgnoreCase(cmd)) {
                         obtenerDispositivos();
                     }
                     if (cmd.contains("FRAMES")) {
                         iniciarGrabacion(cmd);
-                        enviarObj("grabando...");
                     }
                     if ("CERRAR".equalsIgnoreCase(cmd)) {
                         cerrarConexion();
@@ -205,7 +198,7 @@ public class PerspectivaServidor {
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(PerspectivaServidor.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         }
     }

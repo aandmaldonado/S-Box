@@ -963,7 +963,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 p.setProperty("sbox.proyecto.nombre", txtNombreProyecto.getText());
                                 p.setProperty("sbox.proyecto.destino", txtRutaProyecto.getText());
                                 log.info("**************************** S-Box ****************************");
-                                log.info("Nombre proyecto: "+txtNombreProyecto.getText());
+                                log.info("Nombre proyecto: " + txtNombreProyecto.getText());
                                 if (faceRecorderCheck.isSelected()) {
                                     if (perspectiva1.mkdirs()) {
                                         p.setProperty("sbox.proyecto.perspectiva1", "true");
@@ -991,9 +991,9 @@ public class ProyectoMain extends javax.swing.JFrame {
                                         p.setProperty("sbox.proyecto.perspectiva3.dispositivo", comboDispositivos.getSelectedItem().toString());
                                         p.setProperty("sbox.proyecto.perspectiva3.descripcion", txtDescPerspectiva.getText());
                                         log.info("Canal de grabacion externo: Habilitado");
-                                        log.info("Descripcion de canal externo: "+txtDescPerspectiva.getText());
-                                        log.info("IP de canal externo: "+txtDirIP.getText());
-                                        log.info("Dispositivo de grabación de canal externo: "+comboDispositivos.getSelectedItem().toString());
+                                        log.info("Descripcion de canal externo: " + txtDescPerspectiva.getText());
+                                        log.info("IP de canal externo: " + txtDirIP.getText());
+                                        log.info("Dispositivo de grabación de canal externo: " + comboDispositivos.getSelectedItem().toString());
                                     }
                                 } else {
                                     p.setProperty("sbox.proyecto.perspectiva3", "false");
@@ -1001,7 +1001,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 }
 
                                 p.setProperty("sbox.proyecto.reconocedor.origen", txtRutaReconocedor.getText());
-                                log.info("Path de Reconocedor: "+txtRutaReconocedor.getText());
+                                log.info("Path de Reconocedor: " + txtRutaReconocedor.getText());
                                 p.setProperty("sbox.fuentes.obtener", "false");
                                 FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                                 p.store(out, null);
@@ -1047,7 +1047,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                         txtNombreProyecto.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
                         JOptionPane.showMessageDialog(this, "Ya existe un proyecto con el mismo nombre", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    
+
                 } else if ("Guardar Cambios".equals(crearProyectoButton.getText())) {
                     if (!prop.exists()) {
                         prop.createNewFile();
@@ -1128,7 +1128,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     }
 
                     p.setProperty("sbox.proyecto.reconocedor.origen", txtRutaReconocedor.getText());
-                    java.io.FileOutputStream out = new java.io.FileOutputStream(prop.getAbsolutePath());
+                    FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                     p.store(out, null);
                     JOptionPane.showMessageDialog(this, "Proyecto modificado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
 
@@ -1156,9 +1156,10 @@ public class ProyectoMain extends javax.swing.JFrame {
                 pc = new PerspectivaCliente(txtDirIP.getText());
                 pc.start();
                 pc.enviarInstruccion("DISPOSITIVOS");
+                System.out.println("Enviando instruccion a servidor: DISPOSITIVOS");
 //                waitList(pc.getDispositivos());
                 while (!PerspectivaCliente.listaDispositivos) {
-                    System.out.println("waiting...");
+                    System.out.println("Esperando dispositivos...");
                 }
                 List<String> dispositivos = pc.getDispositivos();
                 String[] dis = new String[dispositivos.size()];
@@ -1173,9 +1174,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 cargandoProgressBar.setIndeterminate(false);
                 cargandoProgressBar.setVisible(false);
             } catch (Exception e) {
-
-                System.out.println("Ha ocurrido un error: " + e);
-
+                e.printStackTrace();
             }
         } else if ("".equals(txtDirIP.getText())) {
             JOptionPane.showMessageDialog(this, "Debe ingresar IP", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1382,9 +1381,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         p.setProperty("sbox.fuentes.obtener", "false");
         obtencionFuentes = false;
 
-        java.io.FileOutputStream out;
+        FileOutputStream out;
         try {
-            out = new java.io.FileOutputStream(rutaProperties);
+            out = new FileOutputStream(rutaProperties);
             p.store(out, null);
         } catch (FileNotFoundException ex) {
             log.error(ex);
@@ -1606,9 +1605,9 @@ public class ProyectoMain extends javax.swing.JFrame {
             tabPanelPrincipal.setEnabledAt(1, true);
             tabPanelPrincipal.setEnabledAt(2, false);
             tabPanelPrincipal.setEnabledAt(3, false);
-            java.io.FileOutputStream out;
+            FileOutputStream out;
             try {
-                out = new java.io.FileOutputStream(rutaProperties);
+                out = new FileOutputStream(rutaProperties);
                 p.store(out, null);
             } catch (FileNotFoundException ex) {
                 log.error(ex);
@@ -1653,9 +1652,9 @@ public class ProyectoMain extends javax.swing.JFrame {
             tabPanelPrincipal.setEnabledAt(1, true);
             tabPanelPrincipal.setEnabledAt(2, true);
             tabPanelPrincipal.setEnabledAt(3, false);
-            java.io.FileOutputStream out;
+            FileOutputStream out;
             try {
-                out = new java.io.FileOutputStream(rutaProperties);
+                out = new FileOutputStream(rutaProperties);
                 p.store(out, null);
             } catch (FileNotFoundException ex) {
                 log.error(ex);
@@ -1778,12 +1777,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             field.setText(selectedFile.getAbsolutePath());
-        }
-    }
-
-    public void waitList(List l) {
-        while (l.isEmpty()) {
-            System.out.println("waiting...");
         }
     }
 

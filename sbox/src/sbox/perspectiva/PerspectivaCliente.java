@@ -15,8 +15,7 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -34,13 +33,13 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public static boolean listaDispositivos = false;
     public static boolean listaFrames = false;
     private String path;
+    private final static Logger log = Logger.getLogger(PerspectivaCliente.class.getName());
 
     public List<String> getDispositivos() {
         return dispositivos;
     }
 
     public void setDispositivos(List<String> dispositivos) {
-        System.out.println("setDispositivos: " + dispositivos);
         listaDispositivos = true;
         this.dispositivos = dispositivos;
     }
@@ -56,7 +55,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
                 entrada = new ObjectInputStream(cliente.getInputStream());
             }
         } catch (IOException ex) {
-            Logger.getLogger(PerspectivaCliente.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -66,12 +65,14 @@ public class PerspectivaCliente extends Thread implements Serializable {
 
     public void enviarInstruccion(String cmd) {
         try {
-            System.out.println("Enviando instruccion a servidor: " + cmd);
+            if (!"DISPOSITIVOS".equalsIgnoreCase(cmd)) {
+                log.info("Enviando instruccion a servidor: " + cmd);
+            }
             instruccion = cmd;
             salida.println(cmd);
             salida.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -93,7 +94,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
         try {
             Files.write(new File(path + "canalExterno.avi").toPath(), content);
         } catch (IOException ex) {
-            Logger.getLogger(PerspectivaCliente.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
     }
 
@@ -105,22 +106,21 @@ public class PerspectivaCliente extends Thread implements Serializable {
 
                 if (o != null) {
                     if (o instanceof List) {
-                        System.out.println("Recibido: " + o);
                         if ("DISPOSITIVOS".equalsIgnoreCase(instruccion)) {
                             setDispositivos((List<String>) o);
                         }
                     }
                     if (o instanceof String) {
-                        System.out.println("Recibido: " + o);
-                        if (instruccion.contains("FRAMES")) {
-                            System.out.println("grabando desde perspectiva externa...");
-                        }
-                        if (o.toString().equalsIgnoreCase("ARCHIVO")) {
+                        log.info("Recibiendo respuesta del servidor: " + o);
+//                        if (instruccion.contains("FRAMES")) {
+//                            log.info("Canal externo: Inicio de grabacion");
+//                        }
+                        if (o.toString().equalsIgnoreCase("Canal externo: Transfiriendo video")) {
                             recibirArchivo();
                         }
-                        if (instruccion.contains("DETENER")) {
-                            System.out.println("Deteniendo grabacion desde perspectiva externa...");
-                        }
+//                        if (instruccion.contains("DETENER")) {
+//                            log.info("Canal externo: Fin de grabacion");
+//                        }
 
                     }
                 }
