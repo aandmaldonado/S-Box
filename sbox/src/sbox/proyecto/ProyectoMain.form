@@ -111,6 +111,9 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="tabPanelPrincipal">
+      <Events>
+        <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="tabPanelPrincipalComponentShown"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -384,15 +387,18 @@
                                   <Component id="comboDispositivos" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
+                                          <Component id="labelDispositivos" alignment="0" min="-2" pref="166" max="-2" attributes="0"/>
+                                          <Component id="labelDescPerspectiva" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
                                               <Component id="labelDirIP" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtDirIP" min="-2" pref="204" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="buscarProgressBar" max="32767" attributes="0"/>
+                                                  <Component id="txtDirIP" pref="204" max="32767" attributes="0"/>
+                                              </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="buscarButton" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="labelDispositivos" alignment="0" min="-2" pref="166" max="-2" attributes="0"/>
-                                          <Component id="labelDescPerspectiva" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
@@ -411,7 +417,9 @@
                                   <Component id="txtDirIP" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buscarButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                              <Component id="buscarProgressBar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                               <Component id="labelDispositivos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="comboDispositivos" min="-2" max="-2" attributes="0"/>
@@ -483,6 +491,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
+                    <Component class="javax.swing.JProgressBar" name="buscarProgressBar">
+                      <Properties>
+                        <Property name="string" type="java.lang.String" value="Conectando..."/>
+                        <Property name="stringPainted" type="boolean" value="true"/>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Component class="javax.swing.JLabel" name="faceRecorderIcon">
@@ -1040,32 +1054,21 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="labelDondeEstoy" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="cargandoProgressBar" pref="538" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
+                  <EmptySpace pref="650" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="labelDondeEstoy" min="-2" max="-2" attributes="0"/>
-                      <Component id="cargandoProgressBar" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  <Component id="labelDondeEstoy" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JProgressBar" name="cargandoProgressBar">
-          <Properties>
-            <Property name="string" type="java.lang.String" value="Cargando..."/>
-            <Property name="stringPainted" type="boolean" value="true"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="labelDondeEstoy">
           <Properties>
             <Property name="text" type="java.lang.String" value="Usted est&#xe1; en Pantalla de Bienvenida"/>

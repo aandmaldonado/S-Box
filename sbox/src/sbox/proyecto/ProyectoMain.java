@@ -59,7 +59,6 @@ public class ProyectoMain extends javax.swing.JFrame {
     public ProyectoMain() {
         initComponents();
         tabPanelPrincipal.setVisible(false);
-        cargandoProgressBar.setVisible(false);
         txtDirIP.setEnabled(false);
         buscarButton.setEnabled(false);
         comboDispositivos.setEnabled(false);
@@ -106,6 +105,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         labelDescPerspectiva = new javax.swing.JLabel();
         descPerspectivaScrollPanel = new javax.swing.JScrollPane();
         txtDescPerspectiva = new javax.swing.JTextArea();
+        buscarProgressBar = new javax.swing.JProgressBar();
         faceRecorderIcon = new javax.swing.JLabel();
         activityRenderIcon = new javax.swing.JLabel();
         reconocedorPanel = new javax.swing.JPanel();
@@ -137,7 +137,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         procesamientoPanel = new javax.swing.JPanel();
         visualizacionPanel = new javax.swing.JPanel();
         statusBarPanel = new javax.swing.JPanel();
-        cargandoProgressBar = new javax.swing.JProgressBar();
         labelDondeEstoy = new javax.swing.JLabel();
         menuBarPrincipal = new javax.swing.JMenuBar();
         menuProyecto = new javax.swing.JMenu();
@@ -148,6 +147,12 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+
+        tabPanelPrincipal.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                tabPanelPrincipalComponentShown(evt);
+            }
+        });
 
         proyectoPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -269,6 +274,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         txtDescPerspectiva.setRows(5);
         descPerspectivaScrollPanel.setViewportView(txtDescPerspectiva);
 
+        buscarProgressBar.setString("Conectando...");
+        buscarProgressBar.setStringPainted(true);
+
         javax.swing.GroupLayout perspectivaPanelLayout = new javax.swing.GroupLayout(perspectivaPanel);
         perspectivaPanel.setLayout(perspectivaPanelLayout);
         perspectivaPanelLayout.setHorizontalGroup(
@@ -279,14 +287,16 @@ public class ProyectoMain extends javax.swing.JFrame {
                     .addComponent(comboDispositivos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(perspectivaPanelLayout.createSequentialGroup()
                         .addGroup(perspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelDispositivos, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelDescPerspectiva)
                             .addGroup(perspectivaPanelLayout.createSequentialGroup()
                                 .addComponent(labelDirIP)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDirIP, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(perspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(buscarProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtDirIP, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(buscarButton))
-                            .addComponent(labelDispositivos, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelDescPerspectiva))
+                                .addComponent(buscarButton)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(descPerspectivaScrollPanel))
                 .addContainerGap())
@@ -299,7 +309,9 @@ public class ProyectoMain extends javax.swing.JFrame {
                     .addComponent(labelDirIP)
                     .addComponent(txtDirIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buscarButton))
-                .addGap(18, 18, 18)
+                .addGap(2, 2, 2)
+                .addComponent(buscarProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addComponent(labelDispositivos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(comboDispositivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -718,9 +730,6 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         statusBarPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        cargandoProgressBar.setString("Cargando...");
-        cargandoProgressBar.setStringPainted(true);
-
         labelDondeEstoy.setText("Usted está en Pantalla de Bienvenida");
 
         javax.swing.GroupLayout statusBarPanelLayout = new javax.swing.GroupLayout(statusBarPanel);
@@ -730,17 +739,13 @@ public class ProyectoMain extends javax.swing.JFrame {
             .addGroup(statusBarPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelDondeEstoy)
-                .addGap(18, 18, 18)
-                .addComponent(cargandoProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
-                .addGap(94, 94, 94))
+                .addContainerGap(650, Short.MAX_VALUE))
         );
         statusBarPanelLayout.setVerticalGroup(
             statusBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statusBarPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(statusBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelDondeEstoy)
-                    .addComponent(cargandoProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addComponent(labelDondeEstoy)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -839,6 +844,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         rutaProyectoButton.setVisible(true);
         setLocationRelativeTo(null);
         setBounds(0, 0, 842, 643);
+        buscarProgressBar.setVisible(false);
 
     }//GEN-LAST:event_itemMenuNuevoActionPerformed
 
@@ -903,9 +909,11 @@ public class ProyectoMain extends javax.swing.JFrame {
                 txtRutaReconocedor.setEnabled(false);
                 crearProyectoButton.setText("Guardar Cambios");
                 rutaProyectoButton.setVisible(false);
+                buscarProgressBar.setVisible(false);
                 JOptionPane.showMessageDialog(this, "Proyecto cargado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
                 proyectoCargado = true;
                 creacionProyecto = true;
+
             } catch (IOException ex) {
                 log.error(ex);
                 JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1150,20 +1158,18 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void buscarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarButtonActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtDirIP.getText()) && !ipOld.equals(txtDirIP.getText())) {
-            cargandoProgressBar.setVisible(true);
-            cargandoProgressBar.setIndeterminate(true);
-            try {
-                pc = new PerspectivaCliente(txtDirIP.getText());
+            buscarProgressBar.setIndeterminate(true);
+            buscarProgressBar.setVisible(true);
+            pc = new PerspectivaCliente(txtDirIP.getText());
+            if (PerspectivaCliente.con) {
                 pc.start();
                 pc.enviarInstruccion("DISPOSITIVOS");
                 System.out.println("Enviando instruccion a servidor: DISPOSITIVOS");
-//                waitList(pc.getDispositivos());
                 while (!PerspectivaCliente.listaDispositivos) {
                     System.out.println("Esperando dispositivos...");
                 }
                 List<String> dispositivos = pc.getDispositivos();
                 String[] dis = new String[dispositivos.size()];
-
                 for (int i = 0; i < dispositivos.size(); i++) {
                     dis[i] = dispositivos.get(i);
                     System.out.println(dispositivos.get(i));
@@ -1171,11 +1177,12 @@ public class ProyectoMain extends javax.swing.JFrame {
                 comboDispositivos.setModel(new DefaultComboBoxModel<>(dis));
                 comboDispositivos.setEnabled(true);
                 txtDescPerspectiva.setEnabled(true);
-                cargandoProgressBar.setIndeterminate(false);
-                cargandoProgressBar.setVisible(false);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                buscarProgressBar.setVisible(false);
+                JOptionPane.showMessageDialog(this, "No se puede conectar con IP ingresada", "Error", JOptionPane.ERROR_MESSAGE);
+
             }
+
         } else if ("".equals(txtDirIP.getText())) {
             JOptionPane.showMessageDialog(this, "Debe ingresar IP", "Error", JOptionPane.ERROR_MESSAGE);
         } else if (ipOld.equals(txtDirIP.getText())) {
@@ -1441,8 +1448,13 @@ public class ProyectoMain extends javax.swing.JFrame {
                 pc.enviarInstruccion("FRAMES;" + device);
             } else {
                 pc = new PerspectivaCliente(txtDirIP.getText());
-                pc.start();
-                pc.enviarInstruccion("FRAMES;" + device);
+                if (PerspectivaCliente.con) {
+                    pc.start();
+                    pc.enviarInstruccion("FRAMES;" + device);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se puede conectar con IP ingresada", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
             }
         }
 
@@ -1702,6 +1714,10 @@ public class ProyectoMain extends javax.swing.JFrame {
         preview.setVisible(true);
     }//GEN-LAST:event_actRenderVerButtonActionPerformed
 
+    private void tabPanelPrincipalComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabPanelPrincipalComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabPanelPrincipalComponentShown
+
     /**
      *
      * @return
@@ -1847,7 +1863,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JLabel activityRenderIcon;
     private javax.swing.JButton agregarPerspectivaButton;
     private javax.swing.JButton buscarButton;
-    private javax.swing.JProgressBar cargandoProgressBar;
+    private javax.swing.JProgressBar buscarProgressBar;
     private javax.swing.JComboBox<String> comboDispositivos;
     private javax.swing.JPanel confPerspectivaPanel;
     private javax.swing.JPanel controlPanel;

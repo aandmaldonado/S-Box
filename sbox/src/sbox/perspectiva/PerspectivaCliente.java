@@ -34,6 +34,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public static boolean listaFrames = false;
     private String path;
     private final static Logger log = Logger.getLogger(PerspectivaCliente.class.getName());
+    public static boolean con = false;
 
     public List<String> getDispositivos() {
         return dispositivos;
@@ -53,6 +54,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
             if (cliente != null) {
                 salida = new PrintWriter(cliente.getOutputStream());
                 entrada = new ObjectInputStream(cliente.getInputStream());
+                con = true;
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -125,6 +127,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
                     }
                 }
             } else {
+                con = true;
                 running = false;
             }
         }
