@@ -1158,8 +1158,8 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void buscarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarButtonActionPerformed
         // TODO add your handling code here:
         if (!"".equals(txtDirIP.getText()) && !ipOld.equals(txtDirIP.getText())) {
-            buscarProgressBar.setIndeterminate(true);
-            buscarProgressBar.setVisible(true);
+//            buscarProgressBar.setIndeterminate(true);
+//            buscarProgressBar.setVisible(true);
             pc = new PerspectivaCliente(txtDirIP.getText());
             if (PerspectivaCliente.con) {
                 pc.start();

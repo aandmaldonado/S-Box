@@ -1,4 +1,5 @@
 package sbox.proyecto;
+
 import com.sun.jna.NativeLibrary;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,9 +22,10 @@ public class Reproductor extends javax.swing.JFrame {
 
     //bandera para controlar la reproduccion de video y el cambio en el avance de video
     private boolean band = true;
-    
+
     /**
      * Creates new form Reproductor
+     *
      * @param f
      */
     public Reproductor(File f) {
@@ -34,79 +36,86 @@ public class Reproductor extends javax.swing.JFrame {
         setLocationRelativeTo(null);//centrar en pantalla
         player = new EmbeddedMediaPlayerComponent();
         //se añade reproductor 
-        jPanel2.add(player);        
-        player.setSize(jPanel2.getSize());                
-        player.setVisible(true);                
+        jPanel2.add(player);
+        player.setSize(jPanel2.getSize());
+        player.setVisible(true);
         //slider control progreso
         sldProgress.setMinimum(0);
         sldProgress.setMaximum(100);
         sldProgress.setValue(0);
         sldProgress.setEnabled(false);
-       
+
         //Control de reproduccion
         btnPlay.addActionListener(new ActionListener() {
- 
+
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                if (file!=null){     
-                    if("Iniciar".equals(btnPlay.getText())){
+            public void actionPerformed(ActionEvent e) {
+                if (file != null) {
+                    if ("Iniciar".equals(btnPlay.getText())) {
                         player.getMediaPlayer().playMedia(file.getAbsolutePath());
                         player.getMediaPlayer().saveSnapshot(new File(""));
-                        sldProgress.setEnabled(true); 
+                        sldProgress.setEnabled(true);
                         btnPlay.setText("Pausar");
-                    }else if("Pausar".equals(btnPlay.getText())){
-                        player.getMediaPlayer().setPause( player.getMediaPlayer().isPlaying()?true:false );
+                    } else if ("Pausar".equals(btnPlay.getText())) {
+                        player.getMediaPlayer().setPause(player.getMediaPlayer().isPlaying() ? true : false);
                         btnPlay.setText("Reanudar");
-                    }else if("Reanudar".equals(btnPlay.getText())){
-                        player.getMediaPlayer().setPause( player.getMediaPlayer().isPlaying()?true:false );
+                    } else if ("Reanudar".equals(btnPlay.getText())) {
+                        player.getMediaPlayer().setPause(player.getMediaPlayer().isPlaying() ? true : false);
                         btnPlay.setText("Pausar");
                     }
                 }
             }
-        }); 
-       
+        });
+
         //Control detener reproduccion
         btnStop.addActionListener(new ActionListener() {
- 
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-              player.getMediaPlayer().stop();   
-              sldProgress.setValue(0);
-              sldProgress.setEnabled(false);
-              btnPlay.setText("Iniciar");
-            }
-        }); 
-        
-        //Listener de reproductor para mostrar el progreso en la reproduccion del video 
-        player.getMediaPlayer().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
-            
-            @Override
-            public void positionChanged(MediaPlayer mp, float pos)
-            {
-                if(band){
-                    int value = Math.min(100, Math.round(pos * 100.0f));            
-                    sldProgress.setValue(value);                                                    
-                }
-            }
-            
-            @Override
-            public void finished(MediaPlayer mediaPlayer){
-                
-            }
-            
-        });
-        
-        //Listener para el slider progress
-        sldProgress.addMouseListener(new MouseListener(){
 
             @Override
-            public void mouseClicked(MouseEvent e) {}
+            public void actionPerformed(ActionEvent e) {
+                player.getMediaPlayer().stop();
+                sldProgress.setValue(0);
+                sldProgress.setEnabled(false);
+                btnPlay.setText("Iniciar");
+            }
+        });
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                player.getMediaPlayer().stop();
+                sldProgress.setValue(0);
+                sldProgress.setEnabled(false);
+            }
+        });
+
+        //Listener de reproductor para mostrar el progreso en la reproduccion del video 
+        player.getMediaPlayer().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+
+            @Override
+            public void positionChanged(MediaPlayer mp, float pos) {
+                if (band) {
+                    int value = Math.min(100, Math.round(pos * 100.0f));
+                    sldProgress.setValue(value);
+                }
+            }
+
+            @Override
+            public void finished(MediaPlayer mediaPlayer) {
+
+            }
+
+        });
+
+        //Listener para el slider progress
+        sldProgress.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                band= false;
+                band = false;
             }
 
             @Override
@@ -115,27 +124,29 @@ public class Reproductor extends javax.swing.JFrame {
             }
 
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) {}
-            
+            public void mouseExited(MouseEvent e) {
+            }
+
         });
-        
+
         //Control para cambiar a posicion de reproduccion
-        sldProgress.addChangeListener(new ChangeListener(){
+        sldProgress.addChangeListener(new ChangeListener() {
 
             @Override
             public synchronized void stateChanged(ChangeEvent e) {
-                if( !band ){
-                    Object source = e.getSource();                                
-                    float np = ((JSlider) source).getValue() / 100f;                    
-                    player.getMediaPlayer().setPosition(np);    
+                if (!band) {
+                    Object source = e.getSource();
+                    float np = ((JSlider) source).getValue() / 100f;
+                    player.getMediaPlayer().setPosition(np);
                 }
-                
-            }            
+
+            }
         });
-        
+
     }//end: constructor
 
     /**
