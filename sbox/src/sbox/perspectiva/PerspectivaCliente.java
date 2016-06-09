@@ -127,7 +127,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
                     }
                 }
             } else {
-                con = true;
+                con = false;
                 running = false;
             }
         }
