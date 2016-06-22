@@ -43,6 +43,7 @@ public class initScreenRecorder extends javax.swing.JFrame {
     private final static Logger log = Logger.getLogger(WebcamAndMicrophoneCapture.class.getName());
     private ScreenRecorder screenRecorder = null;
     private File movieFolder;
+    private String videoScreen = "";
 
     private static class AreaItem {
 
@@ -134,7 +135,7 @@ public class initScreenRecorder extends javax.swing.JFrame {
         }
     }
 
-    public void start(String path) throws IOException, AWTException {
+    public void start(String path,String nombreProyecto) throws IOException, AWTException {
         GraphicsConfiguration cfg = getGraphicsConfiguration();
         Rectangle areaRect = null;
         Dimension outputDimension = null;
@@ -190,6 +191,7 @@ public class initScreenRecorder extends javax.swing.JFrame {
                 //
                 // the storage location of the movie
                 movieFolder);
+        ScreenRecorder.nombreProyecto=nombreProyecto;
 
         screenRecorder.start();
 
@@ -198,10 +200,11 @@ public class initScreenRecorder extends javax.swing.JFrame {
     public static void main(String[] args) throws IOException, AWTException {
 
         initScreenRecorder init = new initScreenRecorder();
-        init.start("");
+        init.start("","");
     }
 
-    public void stop() throws IOException {
-        screenRecorder.stop();
+    public String stop() throws IOException {
+        videoScreen = screenRecorder.stop();
+        return videoScreen;
     }
 }

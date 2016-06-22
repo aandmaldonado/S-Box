@@ -34,7 +34,7 @@ import org.bytedeco.javacv.OpenCVFrameGrabber;
 
 public class WebcamAndMicrophoneCapture {
 
-    final private int WEBCAM_DEVICE_INDEX = 1;
+    final private int WEBCAM_DEVICE_INDEX = 0;
     final private int AUDIO_DEVICE_INDEX = 4;
 
     final private int FRAME_RATE = 30;
@@ -53,13 +53,14 @@ public class WebcamAndMicrophoneCapture {
     private FFmpegFrameRecorder recorder = null;
     private CanvasFrame cFrame = null;
     private boolean running = true;
+    private String videoFace = "";
     private final static Logger log = Logger.getLogger(WebcamAndMicrophoneCapture.class.getName());
 
     public WebcamAndMicrophoneCapture() {
 
     }
 
-    public void startCamera(String path) throws Exception, org.bytedeco.javacv.FrameGrabber.Exception {
+    public void startCamera(String path,String nombreProyecto) throws Exception, org.bytedeco.javacv.FrameGrabber.Exception {
 //    public static void main(String[] args) throws Exception, org.bytedeco.javacv.FrameGrabber.Exception {
         int captureWidth = 800;
         int captureHeight = 600;
@@ -85,7 +86,10 @@ public class WebcamAndMicrophoneCapture {
         // imageWidth = width we specified for the grabber
         // imageHeight = height we specified for the grabber
         // audioChannels = 2, because we like stereo
-        recorder = new FFmpegFrameRecorder(path + "faceRecorder.avi", captureWidth, captureHeight, 2);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy'_'HH.mm.ss.ms");
+        dateFormat.format(new Date());
+        videoFace = nombreProyecto + "_faceRecorder_"+dateFormat.format(new Date());
+        recorder = new FFmpegFrameRecorder(path + videoFace+".avi", captureWidth, captureHeight, 2);
         recorder.setInterleaved(true);
 
         // decrease "startup" latency in FFMPEG (see:
@@ -265,7 +269,7 @@ public class WebcamAndMicrophoneCapture {
 //        grabber.stop();
     }
 
-    public void stopCamera() throws org.bytedeco.javacv.FrameRecorder.Exception, FrameGrabber.Exception {
+    public String stopCamera() throws org.bytedeco.javacv.FrameRecorder.Exception, FrameGrabber.Exception {
         running = false;
         grabber.stop();
         recorder.stop();
@@ -274,6 +278,7 @@ public class WebcamAndMicrophoneCapture {
             t.stop();
         }
         log.info("FaceRecorder: Fin de grabación");
+        return videoFace;
     }
 
     public String initReloj() {

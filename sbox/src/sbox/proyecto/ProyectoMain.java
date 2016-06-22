@@ -38,16 +38,18 @@ public class ProyectoMain extends javax.swing.JFrame {
     class CameraSwingWorker extends SwingWorker<String, Object> {
 
         private String path = "";
+        private String nombreProyecto = "";
 
-        public CameraSwingWorker(String path) {
+        public CameraSwingWorker(String path,String nombreProyecto) {
             this.path = path;
+            this.nombreProyecto = nombreProyecto;
         }
 
         @Override
         public String doInBackground() throws Exception {
             try {
                 capture = new WebcamAndMicrophoneCapture();
-                capture.startCamera(path);
+                capture.startCamera(path,nombreProyecto);
             } catch (FrameGrabber.Exception | FrameRecorder.Exception e) {
                 log.error(e);
             }
@@ -147,6 +149,11 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tabPanelPrincipal.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -1311,50 +1318,75 @@ public class ProyectoMain extends javax.swing.JFrame {
             detenerButton.setEnabled(false);
             obtencionFuentes = false;
         } else if ("true".equalsIgnoreCase(p.getProperty("sbox.fuentes.obtener"))) {
-            guardarFuentesButton.setVisible(true);
-            guardarFuentesButton.setEnabled(true);
-            guardarFuentesButton.setText("Modificar Fuentes");
-            descartarFuentesButton.setVisible(false);
-            iniciarButton.setEnabled(false);
+//            guardarFuentesButton.setVisible(true);
+//            guardarFuentesButton.setEnabled(true);
+//            guardarFuentesButton.setText("Modificar Fuentes");
+//            descartarFuentesButton.setVisible(false);
+//            iniciarButton.setEnabled(false);
             obtencionFuentes = true;
             tabPanelPrincipal.setEnabledAt(0, true);
             tabPanelPrincipal.setEnabledAt(1, true);
             tabPanelPrincipal.setEnabledAt(2, true);
             tabPanelPrincipal.setEnabledAt(3, false);
         }
-
+        boolean archivo = false;
+        File fuentes = null;
+        File[] archivos = null;
+        String nombreProyecto = txtNombreProyecto.getText();
+        String rutaProyecto = txtRutaProyecto.getText();
+        String path = "";
+        if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
+            path = rutaProyecto + nombreProyecto + "\\";
+        } else {
+            path = rutaProyecto + "\\" + nombreProyecto + "\\";
+        }
         if ("true".equals(p.getProperty("sbox.proyecto.perspectiva1"))) {
-            if (null != p.getProperty("sbox.fuentes.vista.previa") && !"false".equals(p.getProperty("sbox.fuentes.vista.previa"))) {
-                faceRecorderVerButton.setVisible(true);
-            } else {
-                faceRecorderVerButton.setVisible(false);
-            }
+//            if (null != p.getProperty("sbox.fuentes.vista.previa") && !"false".equals(p.getProperty("sbox.fuentes.vista.previa"))) {
+//                faceRecorderVerButton.setVisible(true);
+//            } else {
+//                faceRecorderVerButton.setVisible(false);
+//            }
             labelFaceRecorder.setIcon(new ImageIcon(getClass().getResource("/resources/OK.png")));
+            fuentes = new File(path + "perspectiva1");
+            archivos = fuentes.listFiles();
+            if(archivos.length>0){
+                archivo = true;
+            }
         } else {
             labelFaceRecorder.setIcon(new ImageIcon(getClass().getResource("/resources/No-entry.png")));
         }
         if ("true".equals(p.getProperty("sbox.proyecto.perspectiva2"))) {
-            if (null != p.getProperty("sbox.fuentes.vista.previa") && !"false".equals(p.getProperty("sbox.fuentes.vista.previa"))) {
-                actRenderVerButton.setVisible(true);
-            } else {
-                actRenderVerButton.setVisible(false);
-            }
+//            if (null != p.getProperty("sbox.fuentes.vista.previa") && !"false".equals(p.getProperty("sbox.fuentes.vista.previa"))) {
+//                actRenderVerButton.setVisible(true);
+//            } else {
+//                actRenderVerButton.setVisible(false);
+//            }
             labelActivityRender.setIcon(new ImageIcon(getClass().getResource("/resources/OK.png")));
+            fuentes = new File(path + "perspectiva2");
+            archivos = fuentes.listFiles();
+            if(archivos.length>0){
+                archivo = true;
+            }
         } else {
             labelActivityRender.setIcon(new ImageIcon(getClass().getResource("/resources/No-entry.png")));
         }
         if ("true".equals(p.getProperty("sbox.proyecto.perspectiva3"))) {
-            if (null != p.getProperty("sbox.fuentes.vista.previa") && !"false".equals(p.getProperty("sbox.fuentes.vista.previa"))) {
-                perspExtVerButton.setVisible(true);
-            } else {
-                perspExtVerButton.setVisible(false);
-            }
+//            if (null != p.getProperty("sbox.fuentes.vista.previa") && !"false".equals(p.getProperty("sbox.fuentes.vista.previa"))) {
+//                perspExtVerButton.setVisible(true);
+//            } else {
+//                perspExtVerButton.setVisible(false);
+//            }
             labelPerspExt.setIcon(new ImageIcon(getClass().getResource("/resources/OK.png")));
+            fuentes = new File(path + "perspectiva3");
+            archivos = fuentes.listFiles();
+            if(archivos.length>0){
+                archivo = true;
+            }
 //                    labelPerspExtIcon.setText(p.getProperty("sbox.proyecto.perspectiva3.descripcion"));
         } else {
             labelPerspExt.setIcon(new ImageIcon(getClass().getResource("/resources/No-entry.png")));
         }
-
+        tabPanelPrincipal.setEnabledAt(2, archivo);
         faceRecorderGrabando.setVisible(false);
         activityRenderGrabando.setVisible(false);
         perspExtGrabando.setVisible(false);
@@ -1410,7 +1442,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             } else {
                 path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva1\\";
             }
-            CameraSwingWorker cameraSwingWorker = new CameraSwingWorker(path);
+            CameraSwingWorker cameraSwingWorker = new CameraSwingWorker(path,nombreProyecto);
             cameraSwingWorker.execute();
         }
 
@@ -1428,7 +1460,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2";
                 }
                 init = new initScreenRecorder();
-                init.start(path);
+                init.start(path,nombreProyecto);
             } catch (IOException | AWTException ex) {
                 log.error(ex);
             }
@@ -1467,7 +1499,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         if (faceRecorder) {
             try {
                 faceRecorderGrabando.setVisible(false);
-                capture.stopCamera();
+                videoFace = capture.stopCamera();
 //                _video.setIsVisibleDefault(false);
 //                String nombreProyecto = txtNombreProyecto.getText();
 //                String rutaProyecto = txtRutaProyecto.getText();
@@ -1491,9 +1523,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 //                    }
 //                }
                 faceRecorderVerButton.setVisible(true);
-            } catch (FrameRecorder.Exception ex) {
-                log.error(ex);
-            } catch (FrameGrabber.Exception ex) {
+            } catch (FrameRecorder.Exception | FrameGrabber.Exception ex) {
                 log.error(ex);
             }
         }
@@ -1502,23 +1532,23 @@ public class ProyectoMain extends javax.swing.JFrame {
             activityRenderGrabando.setVisible(false);
             actRenderVerButton.setVisible(true);
             try {
-                init.stop();
-                String nombreProyecto = txtNombreProyecto.getText();
-                String rutaProyecto = txtRutaProyecto.getText();
-                String path = "";
-                if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-                    path = rutaProyecto + nombreProyecto + "\\perspectiva2";
-                } else {
-                    path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2";
-                }
-                File p2 = new File(path);
-                File rename = new File(path + "\\activityRender.avi");
-                if (p2.exists()) {
-                    File[] archivos = p2.listFiles();
-                    for (File archivo : archivos) {
-                        archivo.renameTo(rename);
-                    }
-                }
+                videoScreen = init.stop();
+//                String nombreProyecto = txtNombreProyecto.getText();
+//                String rutaProyecto = txtRutaProyecto.getText();
+//                String path = "";
+//                if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
+//                    path = rutaProyecto + nombreProyecto + "\\perspectiva2";
+//                } else {
+//                    path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2";
+//                }
+//                File p2 = new File(path);
+//                File rename = new File(path + "\\activityRender.avi");
+//                if (p2.exists()) {
+//                    File[] archivos = p2.listFiles();
+//                    for (File archivo : archivos) {
+//                        archivo.renameTo(rename);
+//                    }
+//                }
             } catch (IOException ex) {
                 log.error(ex);
             }
@@ -1535,9 +1565,11 @@ public class ProyectoMain extends javax.swing.JFrame {
                 path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva3\\";
             }
             pc.setPath(path);
+            pc.setNombreProyecto(nombreProyecto);
             pc.enviarInstruccion("DETENER");
             perspExtGrabando.setVisible(false);
             perspExtVerButton.setVisible(true);
+            videoExt = pc.getNombreProyecto()+"_"+pc.getNombreVideo();
         }
 
         guardarFuentesButton.setEnabled(true);
@@ -1554,9 +1586,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         String rutaProyecto = txtRutaProyecto.getText();
         String path = "";
         if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-            path = rutaProyecto + nombreProyecto + "\\perspectiva3\\canalExterno.avi";
+            path = rutaProyecto + nombreProyecto + "\\perspectiva3\\"+videoExt+".avi";
         } else {
-            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva3\\canalExterno.avi";
+            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva3\\"+videoExt+".avi";
         }
         Reproductor preview = new Reproductor(new File(path));
         preview.setVisible(true);
@@ -1584,27 +1616,34 @@ public class ProyectoMain extends javax.swing.JFrame {
             } else {
                 path = rutaProyecto + "\\" + nombreProyecto + "\\";
             }
+            boolean archivo = false;
             if (faceRecorder) {
+                fuentes = new File(path + "perspectiva1\\" + videoFace+".avi");
+                fuentes.delete();
                 fuentes = new File(path + "perspectiva1");
                 archivos = fuentes.listFiles();
-                for (File archivo : archivos) {
-                    archivo.delete();
+                if(archivos.length>0){
+                    archivo = true;
                 }
             }
 
             if (activityRender) {
+                fuentes = new File(path + "perspectiva2\\" + videoScreen+".avi");
+                fuentes.delete();
                 fuentes = new File(path + "perspectiva2");
                 archivos = fuentes.listFiles();
-                for (File archivo : archivos) {
-                    archivo.delete();
+                if(archivos.length>0){
+                    archivo = true;
                 }
             }
 
             if (perspExt) {
+                fuentes = new File(path + "perspectiva3\\" + videoExt+".avi");
+                fuentes.delete();
                 fuentes = new File(path + "perspectiva3");
                 archivos = fuentes.listFiles();
-                for (File archivo : archivos) {
-                    archivo.delete();
+                if(archivos.length>0){
+                    archivo = true;
                 }
             }
             guardarFuentesButton.setVisible(false);
@@ -1615,7 +1654,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             perspExtVerButton.setVisible(false);
             tabPanelPrincipal.setEnabledAt(0, true);
             tabPanelPrincipal.setEnabledAt(1, true);
-            tabPanelPrincipal.setEnabledAt(2, false);
+            tabPanelPrincipal.setEnabledAt(2, archivo);
             tabPanelPrincipal.setEnabledAt(3, false);
             FileOutputStream out;
             try {
@@ -1626,28 +1665,30 @@ public class ProyectoMain extends javax.swing.JFrame {
             } catch (IOException ex) {
                 log.error(ex);
             }
-        } else if ("Cancelar".equals(descartarFuentesButton.getText())) {
-            guardarFuentesButton.setText("Modificar Fuentes");
-            obtencionFuentes = true;
-            iniciarButton.setEnabled(false);
-            descartarFuentesButton.setText("Descartar Fuentes");
-            descartarFuentesButton.setVisible(false);
-            guardarFuentesButton.setEnabled(true);
-            tabPanelPrincipal.setEnabledAt(0, true);
-            tabPanelPrincipal.setEnabledAt(1, true);
-            tabPanelPrincipal.setEnabledAt(2, true);
-            tabPanelPrincipal.setEnabledAt(3, false);
-        }
+        } 
+//        else if ("Cancelar".equals(descartarFuentesButton.getText())) {
+//            guardarFuentesButton.setText("Modificar Fuentes");
+//            obtencionFuentes = true;
+//            iniciarButton.setEnabled(false);
+//            descartarFuentesButton.setText("Descartar Fuentes");
+//            descartarFuentesButton.setVisible(false);
+//            guardarFuentesButton.setEnabled(true);
+//            tabPanelPrincipal.setEnabledAt(0, true);
+//            tabPanelPrincipal.setEnabledAt(1, true);
+//            tabPanelPrincipal.setEnabledAt(2, true);
+//            tabPanelPrincipal.setEnabledAt(3, false);
+//        }
 
     }//GEN-LAST:event_descartarFuentesButtonActionPerformed
 
     private void guardarFuentesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarFuentesButtonActionPerformed
         // TODO add your handling code here:
         if ("Guardar Fuentes".equals(guardarFuentesButton.getText())) {
-            guardarFuentesButton.setText("Modificar Fuentes");
+//            guardarFuentesButton.setText("Modificar Fuentes");
 
-            iniciarButton.setEnabled(false);
+            iniciarButton.setEnabled(true);
             descartarFuentesButton.setVisible(false);
+            guardarFuentesButton.setVisible(false);
             JOptionPane.showMessageDialog(this, "Fuentes guardadas con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
             Properties p = new Properties();
             try {
@@ -1658,7 +1699,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 log.error(ex);
             }
             p.setProperty("sbox.fuentes.obtener", "true");
-            p.setProperty("sbox.fuentes.vista.previa", "true");
+//            p.setProperty("sbox.fuentes.vista.previa", "true");
             obtencionFuentes = true;
             tabPanelPrincipal.setEnabledAt(0, true);
             tabPanelPrincipal.setEnabledAt(1, true);
@@ -1673,17 +1714,22 @@ public class ProyectoMain extends javax.swing.JFrame {
             } catch (IOException ex) {
                 log.error(ex);
             }
-        } else if ("Modificar Fuentes".equals(guardarFuentesButton.getText())) {
-            guardarFuentesButton.setText("Guardar Fuentes");
-            guardarFuentesButton.setEnabled(false);
-            descartarFuentesButton.setVisible(true);
-            iniciarButton.setEnabled(true);
-            descartarFuentesButton.setText("Cancelar");
-            tabPanelPrincipal.setEnabledAt(0, false);
-            tabPanelPrincipal.setEnabledAt(1, true);
-            tabPanelPrincipal.setEnabledAt(2, false);
-            tabPanelPrincipal.setEnabledAt(3, false);
-        }
+            faceRecorderVerButton.setVisible(false);
+            actRenderVerButton.setVisible(false);
+            perspExtVerButton.setVisible(false);
+            
+        } 
+//        else if ("Modificar Fuentes".equals(guardarFuentesButton.getText())) {
+//            guardarFuentesButton.setText("Guardar Fuentes");
+//            guardarFuentesButton.setEnabled(false);
+//            descartarFuentesButton.setVisible(true);
+//            iniciarButton.setEnabled(true);
+//            descartarFuentesButton.setText("Cancelar");
+//            tabPanelPrincipal.setEnabledAt(0, false);
+//            tabPanelPrincipal.setEnabledAt(1, true);
+//            tabPanelPrincipal.setEnabledAt(2, false);
+//            tabPanelPrincipal.setEnabledAt(3, false);
+//        }
     }//GEN-LAST:event_guardarFuentesButtonActionPerformed
 
     private void faceRecorderVerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_faceRecorderVerButtonActionPerformed
@@ -1692,9 +1738,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         String rutaProyecto = txtRutaProyecto.getText();
         String path = "";
         if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-            path = rutaProyecto + nombreProyecto + "\\perspectiva1\\faceRecorder.avi";
+            path = rutaProyecto + nombreProyecto + "\\perspectiva1\\"+videoFace+".avi";
         } else {
-            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva1\\faceRecorder.avi";
+            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva1\\"+videoFace+".avi";
         }
         Reproductor preview = new Reproductor(new File(path));
         preview.setVisible(true);
@@ -1706,9 +1752,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         String rutaProyecto = txtRutaProyecto.getText();
         String path = "";
         if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-            path = rutaProyecto + nombreProyecto + "\\perspectiva2\\activityRender.avi";
+            path = rutaProyecto + nombreProyecto + "\\perspectiva2\\"+videoScreen+".avi";
         } else {
-            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2\\activityRender.avi";
+            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2\\"+videoScreen+".avi";
         }
         Reproductor preview = new Reproductor(new File(path));
         preview.setVisible(true);
@@ -1717,6 +1763,10 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void tabPanelPrincipalComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabPanelPrincipalComponentShown
         // TODO add your handling code here:
     }//GEN-LAST:event_tabPanelPrincipalComponentShown
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      *
@@ -1852,6 +1902,9 @@ public class ProyectoMain extends javax.swing.JFrame {
     //File
     private File carpetaPrincipal = null;
     private String rutaProperties = "";
+    private String videoFace = "";
+    private String videoScreen = "";
+    private String videoExt = "";
 
     //Log
     private final static Logger log = Logger.getLogger(ProyectoMain.class.getName());

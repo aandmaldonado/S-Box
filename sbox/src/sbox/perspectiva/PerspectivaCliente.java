@@ -35,6 +35,24 @@ public class PerspectivaCliente extends Thread implements Serializable {
     private String path;
     private final static Logger log = Logger.getLogger(PerspectivaCliente.class.getName());
     public static boolean con = false;
+    private String nombreVideo = "";
+    private String nombreProyecto = "";
+
+    public String getNombreProyecto() {
+        return nombreProyecto;
+    }
+
+    public void setNombreProyecto(String nombreProyecto) {
+        this.nombreProyecto = nombreProyecto;
+    }
+
+    public String getNombreVideo() {
+        return nombreVideo;
+    }
+
+    public void setNombreVideo(String nombreVideo) {
+        this.nombreVideo = nombreVideo;
+    }
 
     public List<String> getDispositivos() {
         return dispositivos;
@@ -94,7 +112,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public void recibirArchivo() {
         byte[] content = (byte[]) recibirObj();
         try {
-            Files.write(new File(path + "canalExterno.avi").toPath(), content);
+            Files.write(new File(path + getNombreProyecto()+"_"+getNombreVideo()+".avi").toPath(), content);
         } catch (IOException ex) {
             log.error(ex);
         }
@@ -113,7 +131,13 @@ public class PerspectivaCliente extends Thread implements Serializable {
                         }
                     }
                     if (o instanceof String) {
-                        log.info("Recibiendo respuesta del servidor: " + o);
+                        
+                        if (o.toString().contains("nombreVideo:")) {
+                            String[] arr = o.toString().split(":");
+                            setNombreVideo(arr[1]);
+                        }else{
+                            log.info("Recibiendo respuesta del servidor: " + o);
+                        }
 //                        if (instruccion.contains("FRAMES")) {
 //                            log.info("Canal externo: Inicio de grabacion");
 //                        }

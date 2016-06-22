@@ -100,6 +100,7 @@ import org.monte.media.quicktime.QuickTimeWriter;
 public class ScreenRecorder extends AbstractStateModel {
 
     private final static Logger log = Logger.getLogger(ScreenRecorder.class.getName());
+    private String videoScreen = "";
 
     public enum State {
 
@@ -231,6 +232,8 @@ public class ScreenRecorder extends AbstractStateModel {
      * Audio mixer used for audio input. Set to null for default audio input.
      */
     private Mixer mixer;
+    
+    public static String nombreProyecto = "";
 
     /**
      * Creates a screen recorder.
@@ -459,11 +462,14 @@ public class ScreenRecorder extends AbstractStateModel {
             throw new IOException("\"" + movieFolder + "\" is not a directory.");
         }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH.mm.ss");
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH.mm.ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy'_'HH.mm.ss.ms");
+        dateFormat.format(new Date());
+        videoScreen = nombreProyecto + "_activityRender_"+dateFormat.format(new Date());
 
         File f = new File(movieFolder,//
                 //                "ScreenRecording " + dateFormat.format(new Date()) + "." + Registry.getInstance().getExtension(fileFormat
-                "activityRender." + Registry.getInstance().getExtension(fileFormat));
+                videoScreen+"." + Registry.getInstance().getExtension(fileFormat));
 
         return f;
     }
@@ -1295,7 +1301,7 @@ public class ScreenRecorder extends AbstractStateModel {
      * up a movie file which may take some time depending on the amount of
      * meta-data that needs to be written.
      */
-    public void stop() throws IOException {
+    public String stop() throws IOException {
         if (state == State.RECORDING) {
             recordingStopTime = System.currentTimeMillis();
             stopMouseCapture();
@@ -1339,6 +1345,7 @@ public class ScreenRecorder extends AbstractStateModel {
             setState(State.DONE, null);
             log.info("ActivityRender: Fin de grabación");
         }
+        return videoScreen;
     }
 
     private void stopWriter() throws IOException {
