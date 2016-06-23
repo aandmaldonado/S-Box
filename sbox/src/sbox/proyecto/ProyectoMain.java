@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
@@ -40,7 +41,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         private String path = "";
         private String nombreProyecto = "";
 
-        public CameraSwingWorker(String path,String nombreProyecto) {
+        public CameraSwingWorker(String path, String nombreProyecto) {
             this.path = path;
             this.nombreProyecto = nombreProyecto;
         }
@@ -49,7 +50,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         public String doInBackground() throws Exception {
             try {
                 capture = new WebcamAndMicrophoneCapture();
-                capture.startCamera(path,nombreProyecto);
+                capture.startCamera(path, nombreProyecto, experimentos);
             } catch (FrameGrabber.Exception | FrameRecorder.Exception e) {
                 log.error(e);
             }
@@ -71,6 +72,15 @@ public class ProyectoMain extends javax.swing.JFrame {
         obtencionFuentes = false;
         syncFuentes = false;
         visualizacion = false;
+        rutaHaarcascades = System.getProperty("user.dir") + "\\src\\resources\\haarcascades";
+        File haarcascades = new File(rutaHaarcascades);
+        File[] archivos = haarcascades.listFiles();
+        String[] listHaar = new String[archivos.length + 1];
+        listHaar[0] = "Seleccione reconocedor";
+        for (int i = 0; i < archivos.length; i++) {
+            listHaar[i + 1] = archivos[i].getName();
+        }
+        comboReconocedor.setModel(new DefaultComboBoxModel<>(listHaar));
         setLocationRelativeTo(null);
         setBounds(0, 0, 842, 641);
     }
@@ -111,9 +121,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         faceRecorderIcon = new javax.swing.JLabel();
         activityRenderIcon = new javax.swing.JLabel();
         reconocedorPanel = new javax.swing.JPanel();
-        labelRutaReconocedor = new javax.swing.JLabel();
-        txtRutaReconocedor = new javax.swing.JTextField();
-        rutaReconocedorButton = new javax.swing.JButton();
+        comboReconocedor = new javax.swing.JComboBox<>();
         fuentesPanel = new javax.swing.JPanel();
         confPerspectivaPanel = new javax.swing.JPanel();
         labelFaceRecorder = new javax.swing.JLabel();
@@ -375,22 +383,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         reconocedorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Reconocedor"));
 
-        labelRutaReconocedor.setText("Origen:");
-
-        txtRutaReconocedor.setEditable(false);
-        txtRutaReconocedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRutaReconocedorActionPerformed(evt);
-            }
-        });
-
-        rutaReconocedorButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        rutaReconocedorButton.setText("...");
-        rutaReconocedorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rutaReconocedorButtonActionPerformed(evt);
-            }
-        });
+        comboReconocedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione reconocedor" }));
 
         javax.swing.GroupLayout reconocedorPanelLayout = new javax.swing.GroupLayout(reconocedorPanel);
         reconocedorPanel.setLayout(reconocedorPanelLayout);
@@ -398,21 +391,14 @@ public class ProyectoMain extends javax.swing.JFrame {
             reconocedorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reconocedorPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelRutaReconocedor)
-                .addGap(18, 18, 18)
-                .addComponent(txtRutaReconocedor, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rutaReconocedorButton)
+                .addComponent(comboReconocedor, 0, 346, Short.MAX_VALUE)
                 .addContainerGap())
         );
         reconocedorPanelLayout.setVerticalGroup(
             reconocedorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reconocedorPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(reconocedorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelRutaReconocedor)
-                    .addComponent(txtRutaReconocedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rutaReconocedorButton))
+                .addComponent(comboReconocedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -830,9 +816,8 @@ public class ProyectoMain extends javax.swing.JFrame {
         txtDescPerspectiva.setText("");
         txtNombreProyecto.setText("");
         txtRutaProyecto.setText("");
-        txtRutaReconocedor.setText("");
+
         rutaProyectoButton.setEnabled(true);
-        rutaReconocedorButton.setEnabled(true);
         crearProyectoButton.setText("Crear Proyecto");
 
         labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
@@ -846,7 +831,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         comboDispositivos.setEnabled(false);
         txtDescPerspectiva.setEnabled(false);
         txtRutaProyecto.setEnabled(false);
-        txtRutaReconocedor.setEnabled(false);
         txtNombreProyecto.setEnabled(true);
         rutaProyectoButton.setVisible(true);
         setLocationRelativeTo(null);
@@ -865,6 +849,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox");
         } else {
             try {
+
                 labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
                 tabPanelPrincipal.setVisible(true);
                 tabPanelPrincipal.setSelectedIndex(0);
@@ -911,15 +896,20 @@ public class ProyectoMain extends javax.swing.JFrame {
                     comboDispositivos.setEnabled(false);
                     txtDescPerspectiva.setEnabled(false);
                 }
-                txtRutaReconocedor.setText(p.getProperty("sbox.proyecto.reconocedor.origen"));
-                txtRutaReconocedor.setVisible(true);
-                txtRutaReconocedor.setEnabled(false);
+                comboReconocedor.setSelectedItem(p.getProperty("sbox.proyecto.reconocedor.origen"));
                 crearProyectoButton.setText("Guardar Cambios");
                 rutaProyectoButton.setVisible(false);
                 buscarProgressBar.setVisible(false);
                 JOptionPane.showMessageDialog(this, "Proyecto cargado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
                 proyectoCargado = true;
                 creacionProyecto = true;
+                Properties propLog = new Properties();
+                propLog.load(new FileInputStream("log4j.properties"));
+                propLog.setProperty("log4j.appender.ARCHIVO.File", txtRutaProyecto.getText() + txtNombreProyecto.getText() + "\\" + txtNombreProyecto.getText() + ".log");
+                FileOutputStream outLog = new FileOutputStream("log4j.properties");
+                propLog.store(outLog, null);
+                PropertyConfigurator.configure("log4j.properties");
+                log.info("***************** Proyecto retomado con exito *****************");
 
             } catch (IOException ex) {
                 log.error(ex);
@@ -975,6 +965,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 
                             try {
                                 PropertyConfigurator.configure("log4j.properties");
+                                p.setProperty("sbox.proyecto.experimentos", "0");
                                 p.setProperty("sbox.proyecto.nombre", txtNombreProyecto.getText());
                                 p.setProperty("sbox.proyecto.destino", txtRutaProyecto.getText());
                                 log.info("**************************** S-Box ****************************");
@@ -1015,8 +1006,8 @@ public class ProyectoMain extends javax.swing.JFrame {
                                     log.info("Canal de grabacion externo: Deshabilitado");
                                 }
 
-                                p.setProperty("sbox.proyecto.reconocedor.origen", txtRutaReconocedor.getText());
-                                log.info("Path de Reconocedor: " + txtRutaReconocedor.getText());
+                                p.setProperty("sbox.proyecto.reconocedor.origen", (String) comboReconocedor.getSelectedItem());
+                                log.info("Reconocedor: " + comboReconocedor.getSelectedItem());
                                 p.setProperty("sbox.fuentes.obtener", "false");
                                 FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                                 p.store(out, null);
@@ -1142,7 +1133,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 
                     }
 
-                    p.setProperty("sbox.proyecto.reconocedor.origen", txtRutaReconocedor.getText());
+                    p.setProperty("sbox.proyecto.reconocedor.origen", (String) comboReconocedor.getSelectedItem());
                     FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                     p.store(out, null);
                     JOptionPane.showMessageDialog(this, "Proyecto modificado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
@@ -1200,19 +1191,6 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void comboDispositivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDispositivosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboDispositivosActionPerformed
-
-    private void txtRutaReconocedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRutaReconocedorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRutaReconocedorActionPerformed
-
-    private void rutaReconocedorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rutaReconocedorButtonActionPerformed
-        // TODO add your handling code here:
-        seleccionarArchivo(JFileChooser.FILES_ONLY, "Seleccionar", txtRutaReconocedor, "xml");
-        if (!txtRutaReconocedor.getText().endsWith(".xml")) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un archivo xml", "Error", JOptionPane.ERROR_MESSAGE);
-            txtRutaReconocedor.setText("");
-        }
-    }//GEN-LAST:event_rutaReconocedorButtonActionPerformed
 
     private void agregarPerspectivaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarPerspectivaButtonActionPerformed
 
@@ -1323,6 +1301,10 @@ public class ProyectoMain extends javax.swing.JFrame {
 //            guardarFuentesButton.setText("Modificar Fuentes");
 //            descartarFuentesButton.setVisible(false);
 //            iniciarButton.setEnabled(false);
+guardarFuentesButton.setVisible(false);
+            descartarFuentesButton.setVisible(false);
+            iniciarButton.setEnabled(true);
+            detenerButton.setEnabled(false);
             obtencionFuentes = true;
             tabPanelPrincipal.setEnabledAt(0, true);
             tabPanelPrincipal.setEnabledAt(1, true);
@@ -1349,7 +1331,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             labelFaceRecorder.setIcon(new ImageIcon(getClass().getResource("/resources/OK.png")));
             fuentes = new File(path + "perspectiva1");
             archivos = fuentes.listFiles();
-            if(archivos.length>0){
+            if (archivos.length > 0) {
                 archivo = true;
             }
         } else {
@@ -1364,7 +1346,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             labelActivityRender.setIcon(new ImageIcon(getClass().getResource("/resources/OK.png")));
             fuentes = new File(path + "perspectiva2");
             archivos = fuentes.listFiles();
-            if(archivos.length>0){
+            if (archivos.length > 0) {
                 archivo = true;
             }
         } else {
@@ -1379,7 +1361,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             labelPerspExt.setIcon(new ImageIcon(getClass().getResource("/resources/OK.png")));
             fuentes = new File(path + "perspectiva3");
             archivos = fuentes.listFiles();
-            if(archivos.length>0){
+            if (archivos.length > 0) {
                 archivo = true;
             }
 //                    labelPerspExtIcon.setText(p.getProperty("sbox.proyecto.perspectiva3.descripcion"));
@@ -1398,6 +1380,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 
     private void iniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarButtonActionPerformed
         // TODO add your handling code here:
+        log.info("********************* Experimento iniciado *********************");
         tabPanelPrincipal.setEnabledAt(0, false);
         tabPanelPrincipal.setEnabledAt(1, true);
         tabPanelPrincipal.setEnabledAt(2, false);
@@ -1430,6 +1413,8 @@ public class ProyectoMain extends javax.swing.JFrame {
             log.error(ex);
         }
 
+        experimentos = Integer.parseInt(p.getProperty("sbox.proyecto.experimentos"));
+        experimentos = experimentos + 1;
         if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva1"))) {
             faceRecorderGrabando.setVisible(true);
             faceRecorderGrabando.setIndeterminate(true);
@@ -1442,7 +1427,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             } else {
                 path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva1\\";
             }
-            CameraSwingWorker cameraSwingWorker = new CameraSwingWorker(path,nombreProyecto);
+            CameraSwingWorker cameraSwingWorker = new CameraSwingWorker(path, nombreProyecto);
             cameraSwingWorker.execute();
         }
 
@@ -1460,7 +1445,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2";
                 }
                 init = new initScreenRecorder();
-                init.start(path,nombreProyecto);
+                init.start(path, nombreProyecto, experimentos);
             } catch (IOException | AWTException ex) {
                 log.error(ex);
             }
@@ -1523,6 +1508,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 //                    }
 //                }
                 faceRecorderVerButton.setVisible(true);
+                log.info("Se ha generado el archivo '" + videoFace + ".avi'");
             } catch (FrameRecorder.Exception | FrameGrabber.Exception ex) {
                 log.error(ex);
             }
@@ -1549,6 +1535,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 //                        archivo.renameTo(rename);
 //                    }
 //                }
+                log.info("Se ha generado el archivo '" + videoScreen + ".avi'");
             } catch (IOException ex) {
                 log.error(ex);
             }
@@ -1569,7 +1556,20 @@ public class ProyectoMain extends javax.swing.JFrame {
             pc.enviarInstruccion("DETENER");
             perspExtGrabando.setVisible(false);
             perspExtVerButton.setVisible(true);
-            videoExt = pc.getNombreProyecto()+"_"+pc.getNombreVideo();
+            while (!PerspectivaCliente.video) {
+                System.out.println("Esperando video externo...");
+            }
+            videoExt = pc.getNombreProyecto() + "_" + pc.getNombreVideo();
+            File vExt = new File(path + videoExt + ".avi");
+            //Concatenar secuencial de experimentos
+            videoExt = videoExt + "_" + String.valueOf(experimentos);
+            //Crear nuevo nombre
+            File vExt2 = new File(path + videoExt + ".avi");
+            //Renombrar video externo
+            vExt.renameTo(vExt2);
+
+            PerspectivaCliente.video = false;
+            log.info("Se ha generado el archivo '" + videoExt + ".avi'");
         }
 
         guardarFuentesButton.setEnabled(true);
@@ -1578,6 +1578,30 @@ public class ProyectoMain extends javax.swing.JFrame {
         descartarFuentesButton.setVisible(true);
         descartarFuentesButton.setText("Descartar Fuentes");
         guardarFuentesButton.setText("Guardar Fuentes");
+
+        log.info("******************** Experimento finalizado ********************");
+        String nombreProyecto = txtNombreProyecto.getText();
+        String rutaProyecto = txtRutaProyecto.getText();
+        String path = "";
+        if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
+            path = rutaProyecto + nombreProyecto;
+        } else {
+            path = rutaProyecto + "\\" + nombreProyecto;
+        }
+        carpetaPrincipal = new File(path);
+        File prop = new File(path, "properties.sbox");
+        Properties p = new Properties();
+        try {
+            if (!prop.exists()) {
+                prop.createNewFile();
+            }
+            p.load(new FileInputStream(prop.getAbsolutePath()));
+            p.setProperty("sbox.proyecto.experimentos", String.valueOf(experimentos));
+            FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
+            p.store(out, null);
+        } catch (IOException | NumberFormatException ex) {
+            log.error(ex);
+        }
     }//GEN-LAST:event_detenerButtonActionPerformed
 
     private void perspExtVerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_perspExtVerButtonActionPerformed
@@ -1586,9 +1610,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         String rutaProyecto = txtRutaProyecto.getText();
         String path = "";
         if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-            path = rutaProyecto + nombreProyecto + "\\perspectiva3\\"+videoExt+".avi";
+            path = rutaProyecto + nombreProyecto + "\\perspectiva3\\" + videoExt + ".avi";
         } else {
-            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva3\\"+videoExt+".avi";
+            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva3\\" + videoExt + ".avi";
         }
         Reproductor preview = new Reproductor(new File(path));
         preview.setVisible(true);
@@ -1597,6 +1621,8 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void descartarFuentesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descartarFuentesButtonActionPerformed
         // TODO add your handling code here:
         if ("Descartar Fuentes".equals(descartarFuentesButton.getText())) {
+            log.info("*************** Iniciando eliminación de fuentes ***************");
+
             Properties p = new Properties();
             try {
                 p.load(new FileInputStream(rutaProperties));
@@ -1618,31 +1644,37 @@ public class ProyectoMain extends javax.swing.JFrame {
             }
             boolean archivo = false;
             if (faceRecorder) {
-                fuentes = new File(path + "perspectiva1\\" + videoFace+".avi");
-                fuentes.delete();
+                fuentes = new File(path + "perspectiva1\\" + videoFace + ".avi");
+                if (fuentes.delete()) {
+                    log.info("Se ha eliminado el archivo '" + videoFace + ".avi'");
+                }
                 fuentes = new File(path + "perspectiva1");
                 archivos = fuentes.listFiles();
-                if(archivos.length>0){
+                if (archivos.length > 0) {
                     archivo = true;
                 }
             }
 
             if (activityRender) {
-                fuentes = new File(path + "perspectiva2\\" + videoScreen+".avi");
-                fuentes.delete();
+                fuentes = new File(path + "perspectiva2\\" + videoScreen + ".avi");
+                if (fuentes.delete()) {
+                    log.info("Se ha eliminado el archivo '" + videoScreen + ".avi'");
+                }
                 fuentes = new File(path + "perspectiva2");
                 archivos = fuentes.listFiles();
-                if(archivos.length>0){
+                if (archivos.length > 0) {
                     archivo = true;
                 }
             }
 
             if (perspExt) {
-                fuentes = new File(path + "perspectiva3\\" + videoExt+".avi");
-                fuentes.delete();
+                fuentes = new File(path + "perspectiva3\\" + videoExt + ".avi");
+                if (fuentes.delete()) {
+                    log.info("Se ha eliminado el archivo '" + videoExt + ".avi'");
+                }
                 fuentes = new File(path + "perspectiva3");
                 archivos = fuentes.listFiles();
-                if(archivos.length>0){
+                if (archivos.length > 0) {
                     archivo = true;
                 }
             }
@@ -1665,7 +1697,8 @@ public class ProyectoMain extends javax.swing.JFrame {
             } catch (IOException ex) {
                 log.error(ex);
             }
-        } 
+            log.info("************** Finalizando eliminación de fuentes **************");
+        }
 //        else if ("Cancelar".equals(descartarFuentesButton.getText())) {
 //            guardarFuentesButton.setText("Modificar Fuentes");
 //            obtencionFuentes = true;
@@ -1717,8 +1750,8 @@ public class ProyectoMain extends javax.swing.JFrame {
             faceRecorderVerButton.setVisible(false);
             actRenderVerButton.setVisible(false);
             perspExtVerButton.setVisible(false);
-            
-        } 
+
+        }
 //        else if ("Modificar Fuentes".equals(guardarFuentesButton.getText())) {
 //            guardarFuentesButton.setText("Guardar Fuentes");
 //            guardarFuentesButton.setEnabled(false);
@@ -1738,9 +1771,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         String rutaProyecto = txtRutaProyecto.getText();
         String path = "";
         if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-            path = rutaProyecto + nombreProyecto + "\\perspectiva1\\"+videoFace+".avi";
+            path = rutaProyecto + nombreProyecto + "\\perspectiva1\\" + videoFace + ".avi";
         } else {
-            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva1\\"+videoFace+".avi";
+            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva1\\" + videoFace + ".avi";
         }
         Reproductor preview = new Reproductor(new File(path));
         preview.setVisible(true);
@@ -1752,9 +1785,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         String rutaProyecto = txtRutaProyecto.getText();
         String path = "";
         if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-            path = rutaProyecto + nombreProyecto + "\\perspectiva2\\"+videoScreen+".avi";
+            path = rutaProyecto + nombreProyecto + "\\perspectiva2\\" + videoScreen + ".avi";
         } else {
-            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2\\"+videoScreen+".avi";
+            path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva2\\" + videoScreen + ".avi";
         }
         Reproductor preview = new Reproductor(new File(path));
         preview.setVisible(true);
@@ -1797,11 +1830,11 @@ public class ProyectoMain extends javax.swing.JFrame {
             activityRenderCheck.setForeground(Color.black);
         }
 
-        if ("".equals(txtRutaReconocedor.getText())) {
+        if ("Seleccione reconocedor".equals(comboReconocedor.getSelectedItem())) {
             respuesta = true;
-            txtRutaReconocedor.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
+            comboReconocedor.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
         } else {
-            txtRutaReconocedor.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
+            comboReconocedor.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
         }
 
         if (agregarPerspectiva) {
@@ -1905,6 +1938,8 @@ public class ProyectoMain extends javax.swing.JFrame {
     private String videoFace = "";
     private String videoScreen = "";
     private String videoExt = "";
+    private String rutaHaarcascades = "";
+    private int experimentos = 0;
 
     //Log
     private final static Logger log = Logger.getLogger(ProyectoMain.class.getName());
@@ -1918,6 +1953,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JButton buscarButton;
     private javax.swing.JProgressBar buscarProgressBar;
     private javax.swing.JComboBox<String> comboDispositivos;
+    private javax.swing.JComboBox<String> comboReconocedor;
     private javax.swing.JPanel confPerspectivaPanel;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton crearProyectoButton;
@@ -1951,7 +1987,6 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JLabel labelPerspExt;
     private javax.swing.JLabel labelPerspExtIcon;
     private javax.swing.JLabel labelRutaProyecto;
-    private javax.swing.JLabel labelRutaReconocedor;
     private javax.swing.JMenuBar menuBarPrincipal;
     private javax.swing.JMenu menuProyecto;
     private javax.swing.JProgressBar perspExtGrabando;
@@ -1961,7 +1996,6 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JPanel proyectoPanel;
     private javax.swing.JPanel reconocedorPanel;
     private javax.swing.JButton rutaProyectoButton;
-    private javax.swing.JButton rutaReconocedorButton;
     private javax.swing.JPopupMenu.Separator separadorMenuArchivo;
     private javax.swing.JPanel simbolosPanel;
     private javax.swing.JPanel statusBarPanel;
@@ -1970,7 +2004,6 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JTextField txtDirIP;
     private javax.swing.JTextField txtNombreProyecto;
     private javax.swing.JTextField txtRutaProyecto;
-    private javax.swing.JTextField txtRutaReconocedor;
     private javax.swing.JPanel visualizacionPanel;
     // End of variables declaration//GEN-END:variables
 }

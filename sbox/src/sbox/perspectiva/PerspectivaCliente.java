@@ -32,6 +32,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     private List<String> dispositivos = new ArrayList<>();
     public static boolean listaDispositivos = false;
     public static boolean listaFrames = false;
+    public static boolean video = false;
     private String path;
     private final static Logger log = Logger.getLogger(PerspectivaCliente.class.getName());
     public static boolean con = false;
@@ -51,6 +52,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     }
 
     public void setNombreVideo(String nombreVideo) {
+        video = true;
         this.nombreVideo = nombreVideo;
     }
 
@@ -66,6 +68,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public PerspectivaCliente(String servidor) {
         listaDispositivos = false;
         listaFrames = false;
+        video = false;
         try {
             cliente = new Socket(InetAddress.getByName(servidor), port);
 
@@ -112,7 +115,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public void recibirArchivo() {
         byte[] content = (byte[]) recibirObj();
         try {
-            Files.write(new File(path + getNombreProyecto()+"_"+getNombreVideo()+".avi").toPath(), content);
+            Files.write(new File(path + getNombreProyecto() + "_" + getNombreVideo() + ".avi").toPath(), content);
         } catch (IOException ex) {
             log.error(ex);
         }
@@ -131,11 +134,11 @@ public class PerspectivaCliente extends Thread implements Serializable {
                         }
                     }
                     if (o instanceof String) {
-                        
+
                         if (o.toString().contains("nombreVideo:")) {
                             String[] arr = o.toString().split(":");
                             setNombreVideo(arr[1]);
-                        }else{
+                        } else {
                             log.info("Recibiendo respuesta del servidor: " + o);
                         }
 //                        if (instruccion.contains("FRAMES")) {

@@ -60,7 +60,7 @@ public class WebcamAndMicrophoneCapture {
 
     }
 
-    public void startCamera(String path,String nombreProyecto) throws Exception, org.bytedeco.javacv.FrameGrabber.Exception {
+    public void startCamera(String path, String nombreProyecto, int experimentos) throws Exception, org.bytedeco.javacv.FrameGrabber.Exception {
 //    public static void main(String[] args) throws Exception, org.bytedeco.javacv.FrameGrabber.Exception {
         int captureWidth = 800;
         int captureHeight = 600;
@@ -88,8 +88,8 @@ public class WebcamAndMicrophoneCapture {
         // audioChannels = 2, because we like stereo
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy'_'HH.mm.ss.ms");
         dateFormat.format(new Date());
-        videoFace = nombreProyecto + "_faceRecorder_"+dateFormat.format(new Date());
-        recorder = new FFmpegFrameRecorder(path + videoFace+".avi", captureWidth, captureHeight, 2);
+        videoFace = nombreProyecto + "_faceRecorder_" + dateFormat.format(new Date()) + "_" + String.valueOf(experimentos);
+        recorder = new FFmpegFrameRecorder(path + videoFace + ".avi", captureWidth, captureHeight, 2);
         recorder.setInterleaved(true);
 
         // decrease "startup" latency in FFMPEG (see:

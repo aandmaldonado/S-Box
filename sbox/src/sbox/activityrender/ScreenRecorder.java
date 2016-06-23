@@ -234,6 +234,7 @@ public class ScreenRecorder extends AbstractStateModel {
     private Mixer mixer;
     
     public static String nombreProyecto = "";
+    public static int experimentos = 0;
 
     /**
      * Creates a screen recorder.
@@ -465,7 +466,7 @@ public class ScreenRecorder extends AbstractStateModel {
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH.mm.ss");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy'_'HH.mm.ss.ms");
         dateFormat.format(new Date());
-        videoScreen = nombreProyecto + "_activityRender_"+dateFormat.format(new Date());
+        videoScreen = nombreProyecto + "_activityRender_"+dateFormat.format(new Date())+"_"+experimentos;
 
         File f = new File(movieFolder,//
                 //                "ScreenRecording " + dateFormat.format(new Date()) + "." + Registry.getInstance().getExtension(fileFormat

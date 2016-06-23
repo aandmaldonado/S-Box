@@ -52,8 +52,10 @@ public class Reproductor extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (file != null) {
                     if ("Iniciar".equals(btnPlay.getText())) {
-                        player.getMediaPlayer().playMedia(file.getAbsolutePath());
-                        player.getMediaPlayer().saveSnapshot(new File(""));
+                        player.getMediaPlayer().playMedia(file.getAbsolutePath()); 
+//                        player.getMediaPlayer().parseMedia();
+//                        player.getMediaPlayer().start();
+                        System.out.println(player.getMediaPlayer().getLength());
                         sldProgress.setEnabled(true);
                         btnPlay.setText("Pausar");
                     } else if ("Pausar".equals(btnPlay.getText())) {

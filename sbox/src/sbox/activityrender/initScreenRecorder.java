@@ -135,7 +135,7 @@ public class initScreenRecorder extends javax.swing.JFrame {
         }
     }
 
-    public void start(String path,String nombreProyecto) throws IOException, AWTException {
+    public void start(String path, String nombreProyecto, int experimentos) throws IOException, AWTException {
         GraphicsConfiguration cfg = getGraphicsConfiguration();
         Rectangle areaRect = null;
         Dimension outputDimension = null;
@@ -191,7 +191,8 @@ public class initScreenRecorder extends javax.swing.JFrame {
                 //
                 // the storage location of the movie
                 movieFolder);
-        ScreenRecorder.nombreProyecto=nombreProyecto;
+        ScreenRecorder.nombreProyecto = nombreProyecto;
+        ScreenRecorder.experimentos = experimentos;
 
         screenRecorder.start();
 
@@ -200,7 +201,7 @@ public class initScreenRecorder extends javax.swing.JFrame {
     public static void main(String[] args) throws IOException, AWTException {
 
         initScreenRecorder init = new initScreenRecorder();
-        init.start("","");
+        init.start("", "", 0);
     }
 
     public String stop() throws IOException {
