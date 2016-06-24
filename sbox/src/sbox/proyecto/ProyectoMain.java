@@ -1422,6 +1422,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             } else if ("Cámara externa".equals(comboDispositivos.getSelectedItem().toString())) {
                 device = "1";
             }
+            perspExtGrabando.setString("Grabando...");
             perspExtGrabando.setVisible(true);
             perspExtGrabando.setIndeterminate(true);
             perspExt = true;
@@ -1440,7 +1441,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         }
 
         if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva1"))) {
-            faceRecorderGrabando.setString("Grabando...");
             faceRecorder = true;
             String nombreProyecto = txtNombreProyecto.getText();
             String rutaProyecto = txtRutaProyecto.getText();
@@ -1555,7 +1555,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         }
 
         if (perspExt) {
-            perspExtGrabando.setString("Transfiriendo");
+            perspExtGrabando.setString("Transfiriendo...");
             String nombreProyecto = txtNombreProyecto.getText();
             String rutaProyecto = txtRutaProyecto.getText();
             String path = "";
