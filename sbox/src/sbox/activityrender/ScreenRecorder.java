@@ -608,9 +608,9 @@ public class ScreenRecorder extends AbstractStateModel {
         private volatile long stopTime = Long.MAX_VALUE;
         private ScheduledFuture future;
         private long sequenceNumber;
-        private StringBuilder cronometro = new StringBuilder();
-        private Timer t;
-        private int h, m, s, cs;
+//        private StringBuilder cronometro = new StringBuilder();
+//        private Timer t;
+//        private int h, m, s, cs;
 
         public void setFuture(ScheduledFuture future) {
             this.future = future;
@@ -667,44 +667,44 @@ public class ScreenRecorder extends AbstractStateModel {
             }
         }
 
-        public String initReloj() {
-            Date ahora = new Date();
-            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-            final String date = formateador.format(ahora);
-            t = new Timer(1, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent ae) {
-                    ++cs;
-                    if (cs == 1000) {
-                        cs = 0;
-                        ++s;
-                    }
-                    if (s == 60) {
-                        s = 0;
-                        ++m;
-                    }
-                    if (m == 60) {
-                        m = 0;
-                        ++h;
-                    }
-                    cronometro = new StringBuilder();
-                    cronometro.append(date)
-                            .append(" ")
-                            .append((h <= 9 ? "0" : ""))
-                            .append(h)
-                            .append(":")
-                            .append((m <= 9 ? "0" : ""))
-                            .append(m)
-                            .append(":")
-                            .append((s <= 9 ? "0" : ""))
-                            .append(s)
-                            .append(":")
-                            .append((cs <= 9 ? "0" : ""))
-                            .append(cs);
-                }
-            });
-            return cronometro.toString();
-        }
+//        public String initReloj() {
+//            Date ahora = new Date();
+//            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+//            final String date = formateador.format(ahora);
+//            t = new Timer(1, new java.awt.event.ActionListener() {
+//                @Override
+//                public void actionPerformed(java.awt.event.ActionEvent ae) {
+//                    ++cs;
+//                    if (cs == 1000) {
+//                        cs = 0;
+//                        ++s;
+//                    }
+//                    if (s == 60) {
+//                        s = 0;
+//                        ++m;
+//                    }
+//                    if (m == 60) {
+//                        m = 0;
+//                        ++h;
+//                    }
+//                    cronometro = new StringBuilder();
+//                    cronometro.append(date)
+//                            .append(" ")
+//                            .append((h <= 9 ? "0" : ""))
+//                            .append(h)
+//                            .append(":")
+//                            .append((m <= 9 ? "0" : ""))
+//                            .append(m)
+//                            .append(":")
+//                            .append((s <= 9 ? "0" : ""))
+//                            .append(s)
+//                            .append(":")
+//                            .append((cs <= 9 ? "0" : ""))
+//                            .append(cs);
+//                }
+//            });
+//            return cronometro.toString();
+//        }
 
         /**
          * Grabs a screen, generates video images with pending mouse captures
@@ -736,9 +736,9 @@ public class ScreenRecorder extends AbstractStateModel {
             }
             
             videoGraphics.drawImage(previousScreenCapture, 0, 0, null);
-            initReloj();
-            t.start();
-            videoGraphics.drawString(initReloj(), x, y);
+//            initReloj();
+//            t.start();
+//            videoGraphics.drawString(initReloj(), x, y);
 
             Buffer buf = new Buffer();
             buf.format = new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, ENCODING_BUFFERED_IMAGE);
@@ -751,7 +751,7 @@ public class ScreenRecorder extends AbstractStateModel {
                         if (mouseCapture.timeStamp.compareTo(new Rational(timeBeforeCapture, 1000)) < 0) {
                             previousScreenCapture = screenCapture;
                             videoGraphics.drawImage(previousScreenCapture, 0, 0, null);
-                            videoGraphics.drawString(initReloj(), x, y);
+//                            videoGraphics.drawString(initReloj(), x, y);
                         }
 
                         Point mcp = (Point) mouseCapture.data;
@@ -769,10 +769,10 @@ public class ScreenRecorder extends AbstractStateModel {
                             // draw cursor
                             if (prevMousePressed) {
                                 videoGraphics.drawImage(cursorImgPressed, p.x + cursorOffset.x, p.y + cursorOffset.y, null);
-                                videoGraphics.drawString(initReloj(), x, y);
+//                                videoGraphics.drawString(initReloj(), x, y);
                             } else {
                                 videoGraphics.drawImage(cursorImg, p.x + cursorOffset.x, p.y + cursorOffset.y, null);
-                                videoGraphics.drawString(initReloj(), x, y);
+//                                videoGraphics.drawString(initReloj(), x, y);
                             }
                             buf.clearFlags();
                             buf.data = videoImg;
@@ -793,7 +793,7 @@ public class ScreenRecorder extends AbstractStateModel {
                                     p.x + cursorOffset.x, p.y + cursorOffset.y,//
                                     p.x + cursorOffset.x + cursorImg.getWidth() - 1, p.y + cursorOffset.y + cursorImg.getHeight() - 1,//
                                     null);
-                            videoGraphics.drawString(initReloj(), x, y);
+//                            videoGraphics.drawString(initReloj(), x, y);
                         }
 
                     }
@@ -804,10 +804,10 @@ public class ScreenRecorder extends AbstractStateModel {
                     if (p != null) {
                         if (prevMousePressed) {
                             videoGraphics.drawImage(cursorImgPressed, p.x + cursorOffset.x, p.y + cursorOffset.y, null);
-                            videoGraphics.drawString(initReloj(), x, y);
+//                            videoGraphics.drawString(initReloj(), x, y);
                         } else {
                             videoGraphics.drawImage(cursorImg, p.x + cursorOffset.x, p.y + cursorOffset.y, null);
-                            videoGraphics.drawString(initReloj(), x, y);
+//                            videoGraphics.drawString(initReloj(), x, y);
                         }
                     }
 
@@ -826,7 +826,7 @@ public class ScreenRecorder extends AbstractStateModel {
                                 p.x + cursorOffset.x, p.y + cursorOffset.y,//
                                 p.x + cursorOffset.x + cursorImg.getWidth() - 1, p.y + cursorOffset.y + cursorImg.getHeight() - 1,//
                                 null);
-                        videoGraphics.drawString(initReloj(), x, y);
+//                        videoGraphics.drawString(initReloj(), x, y);
                     }
                 }
             } else if (prevScreenCaptureTime.compareTo(new Rational(getStopTime(), 1000)) < 0) {

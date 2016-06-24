@@ -40,6 +40,7 @@ public class PerspectivaServidor {
     private String device = "";
     private File temp = null;
     private String nombreVideo = "";
+    public static boolean grab = false;
     private final static Logger log = Logger.getLogger(PerspectivaServidor.class.getName());
 
     class CameraSwingWorker extends SwingWorker<String, Object> {
@@ -52,7 +53,6 @@ public class PerspectivaServidor {
         public String doInBackground() throws Exception {
             try {
                 _video = new Video(temp.getAbsolutePath());
-                enviarObj("Canal externo: Inicio de grabacion");
                 _video.startCamera(Integer.parseInt(device));
             } catch (FrameGrabber.Exception | FrameRecorder.Exception | IOException | URISyntaxException | URIReferenceException e) {
                 log.error(e);
@@ -81,12 +81,12 @@ public class PerspectivaServidor {
         VideoCapture cap1 = new VideoCapture(1);
         if (cap.isOpened()) {
             cap.release();
-            dispositivos.add("Cámara por defecto");
+            dispositivos.add("Cámara integrada");
         }
 
         if (cap1.isOpened()) {
             cap1.release();
-            dispositivos.add("Cámara");
+            dispositivos.add("Cámara externa");
         }
 
         if (dispositivos.isEmpty()) {
@@ -103,11 +103,15 @@ public class PerspectivaServidor {
         device = a[1];
         CameraSwingWorker cameraSwingWorker = new CameraSwingWorker();
         cameraSwingWorker.execute();
+        while (!PerspectivaServidor.grab) {
+            System.out.println("Esperando grabación");
+        }
+        enviarObj("Canal externo: Inicio de grabacion");
     }
 
     public void enviarArchivo(File f) {
         try {
-            enviarObj("nombreVideo:"+nombreVideo);
+            enviarObj("nombreVideo:" + nombreVideo);
             enviarObj("Canal externo: Transfiriendo video");
             byte[] readAllBytes = Files.readAllBytes(f.toPath());
             enviarObj(readAllBytes);
@@ -119,10 +123,10 @@ public class PerspectivaServidor {
 
     public void detenerGrabacion() {
         try {
-            
+            PerspectivaServidor.grab = false;
             nombreVideo = _video.stopCamera();
             enviarObj("Canal externo: Fin de grabacion");
-            enviarArchivo(new File("C:\\temp\\"+nombreVideo+".avi"));
+            enviarArchivo(new File("C:\\temp\\" + nombreVideo + ".avi"));
             //Eliminar temporales
             if (temp.exists()) {
                 if (temp.listFiles().length == 0) {
@@ -168,7 +172,7 @@ public class PerspectivaServidor {
     }
 
     public void enviarObj(Object o) {
-        log.info("Enviando respuesta a cliente: "+o);
+        log.info("Enviando respuesta a cliente: " + o);
         try {
             salida.writeObject(o);
             salida.flush();

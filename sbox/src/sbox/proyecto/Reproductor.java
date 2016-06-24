@@ -23,6 +23,10 @@ public class Reproductor extends javax.swing.JFrame {
     //bandera para controlar la reproduccion de video y el cambio en el avance de video
     private boolean band = true;
 
+    public Reproductor() {
+        NativeLibrary.addSearchPath("libvlc", vlcInstallPath.getAbsolutePath());
+    }
+
     /**
      * Creates new form Reproductor
      *
@@ -52,10 +56,10 @@ public class Reproductor extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (file != null) {
                     if ("Iniciar".equals(btnPlay.getText())) {
-                        player.getMediaPlayer().playMedia(file.getAbsolutePath()); 
+                        player.getMediaPlayer().playMedia(file.getAbsolutePath());
 //                        player.getMediaPlayer().parseMedia();
 //                        player.getMediaPlayer().start();
-                        System.out.println(player.getMediaPlayer().getLength());
+//                        System.out.println(player.getMediaPlayer().getLength());
                         sldProgress.setEnabled(true);
                         btnPlay.setText("Pausar");
                     } else if ("Pausar".equals(btnPlay.getText())) {
@@ -228,7 +232,9 @@ public class Reproductor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnStopActionPerformed
 
     /**
+     * @param f
      * @param args the command line arguments
+     * @return
      */
 //    public static void main(String args[]) {
 //        /* Set the Nimbus look and feel */
@@ -262,6 +268,31 @@ public class Reproductor extends javax.swing.JFrame {
 //            }
 //        });
 //    }
+    
+    /**
+     * @param file
+     * @return
+     */
+    public String getDuration(File file) {
+        player = new EmbeddedMediaPlayerComponent();
+        //se añade reproductor 
+        initComponents();
+        jPanel2.add(player);
+        player.setSize(jPanel2.getSize());
+        player.setVisible(true);
+        player.getMediaPlayer().playMedia(file.getAbsolutePath());
+        player.getMediaPlayer().parseMedia();
+        player.getMediaPlayer().start();
+        long milisegundos = player.getMediaPlayer().getLength();
+        long hora = milisegundos / 3600000;
+        long restohora = milisegundos % 3600000;
+        long minuto = restohora / 60000;
+        long restominuto = restohora % 60000;
+        long segundo = restominuto / 1000;
+//        long restosegundo = restominuto % 1000;
+        return hora + ":" + minuto + ":" + segundo;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnStop;

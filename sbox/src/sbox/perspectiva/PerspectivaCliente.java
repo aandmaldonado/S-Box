@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import sbox.proyecto.ProyectoMain;
 
 /**
  *
@@ -38,6 +39,15 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public static boolean con = false;
     private String nombreVideo = "";
     private String nombreProyecto = "";
+    private String experimentos = "";
+
+    public String getExperimentos() {
+        return experimentos;
+    }
+
+    public void setExperimentos(String experimentos) {
+        this.experimentos = experimentos;
+    }
 
     public String getNombreProyecto() {
         return nombreProyecto;
@@ -115,7 +125,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public void recibirArchivo() {
         byte[] content = (byte[]) recibirObj();
         try {
-            Files.write(new File(path + getNombreProyecto() + "_" + getNombreVideo() + ".avi").toPath(), content);
+            Files.write(new File(path + getNombreProyecto() + "_" + getNombreVideo() + "_" + getExperimentos() + ".avi").toPath(), content);
         } catch (IOException ex) {
             log.error(ex);
         }
@@ -138,6 +148,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
                         if (o.toString().contains("nombreVideo:")) {
                             String[] arr = o.toString().split(":");
                             setNombreVideo(arr[1]);
+
                         } else {
                             log.info("Recibiendo respuesta del servidor: " + o);
                         }
@@ -147,10 +158,13 @@ public class PerspectivaCliente extends Thread implements Serializable {
                         if (o.toString().equalsIgnoreCase("Canal externo: Transfiriendo video")) {
                             recibirArchivo();
                         }
+
+                        if (o.toString().equalsIgnoreCase("Canal externo: Inicio de grabacion")) {
+                            ProyectoMain.ScreenGo = true;
+                        }
 //                        if (instruccion.contains("DETENER")) {
 //                            log.info("Canal externo: Fin de grabacion");
 //                        }
-
                     }
                 }
             } else {

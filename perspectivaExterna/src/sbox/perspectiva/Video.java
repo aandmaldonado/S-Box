@@ -44,12 +44,12 @@ public class Video extends JFrame {
     private static long startTime = 0;
     private static long videoTS = 0;
     //Cronometro    
-    private StringBuilder cronometro = new StringBuilder();
-    private Timer t;
-    private int h, m, s, cs;
-    
+//    private StringBuilder cronometro = new StringBuilder();
+//    private Timer t;
+//    private int h, m, s, cs;
+
     private String nombreVideo = "";
-   
+
     public Boolean getIsVisibleDefault() {
         return isVisibleDefault;
     }
@@ -66,8 +66,8 @@ public class Video extends JFrame {
             throws Exception, org.bytedeco.javacv.FrameRecorder.Exception, IOException, URISyntaxException,
             URIReferenceException, MalformedURLException {
 
-        int captureWidth = 800;
-        int captureHeight = 600;
+        int captureWidth = 1366;
+        int captureHeight = 768;
         grabber = new OpenCVFrameGrabber(decive);
         grabber.setImageWidth(captureWidth);
         grabber.setImageHeight(captureHeight);
@@ -76,8 +76,8 @@ public class Video extends JFrame {
         grabbedImage = converter.convert(grabber.grab());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy'_'HH.mm.ss.ms");
         dateFormat.format(new Date());
-        nombreVideo = "canalExterno_"+dateFormat.format(new Date());
-        recorder = new FFmpegFrameRecorder(localPath + "\\"+nombreVideo+".avi", captureWidth, captureHeight, 2);
+        nombreVideo = "canalExterno_" + dateFormat.format(new Date());
+        recorder = new FFmpegFrameRecorder(localPath + "\\" + nombreVideo + ".avi", captureWidth, captureHeight, 2);
         recorder.setInterleaved(true);
         recorder.setVideoOption("tune", "zerolatency");
         recorder.setVideoOption("preset", "ultrafast");
@@ -88,6 +88,7 @@ public class Video extends JFrame {
         recorder.setFrameRate(FRAME_RATE);
         recorder.setGopSize(GOP_LENGTH_IN_FRAMES);
         recorder.start();
+        PerspectivaServidor.grab = true;
         canvasFrame = new CanvasFrame("", CanvasFrame.getDefaultGamma() / grabber.getGamma());
         canvasFrame.setAlwaysOnTop(true);
         canvasFrame.pack();
@@ -96,15 +97,15 @@ public class Video extends JFrame {
         canvasFrame.setLocation(450, 0);
         CvMemStorage storage = CvMemStorage.create();
         isVisibleDefault = true;
-        initReloj();
-        t.start();
+//        initReloj();
+//        t.start();
         while (isVisibleDefault && (grabbedImage = converter.convert(grabber.grab())) != null) {
             cvClearMemStorage(storage);
-            opencv_core.CvFont mCvFont = new opencv_core.CvFont();
-            cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
-            int x = 400;
-            int y = 450;
-            cvPutText(grabbedImage, initReloj(), cvPoint(x, y), mCvFont, opencv_core.CvScalar.RED);
+//            opencv_core.CvFont mCvFont = new opencv_core.CvFont();
+//            cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
+//            int x = 400;
+//            int y = 450;
+//            cvPutText(grabbedImage, initReloj(), cvPoint(x, y), mCvFont, opencv_core.CvScalar.RED);
             canvasFrame.setCanvasSize(grabber.getImageWidth(), grabber.getImageHeight());
             if (startTime == 0) {
                 startTime = System.currentTimeMillis();
@@ -125,49 +126,49 @@ public class Video extends JFrame {
         canvasFrame.dispose();
         recorder.stop();
         grabber.stop();
-        if (t.isRunning()) {
-            t.stop();
-        }
-        
+//        if (t.isRunning()) {
+//            t.stop();
+//        }
+
         return nombreVideo;
     }
 
-    public String initReloj() {
-        Date ahora = new Date();
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-        final String date = formateador.format(ahora);
-        t = new Timer(10, new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent ae) {
-                ++cs;
-                if (cs == 100) {
-                    cs = 0;
-                    ++s;
-                }
-                if (s == 60) {
-                    s = 0;
-                    ++m;
-                }
-                if (m == 60) {
-                    m = 0;
-                    ++h;
-                }
-                cronometro = new StringBuilder();
-                cronometro.append(date)
-                        .append(" ")
-                        .append((h <= 9 ? "0" : ""))
-                        .append(h)
-                        .append(":")
-                        .append((m <= 9 ? "0" : ""))
-                        .append(m)
-                        .append(":")
-                        .append((s <= 9 ? "0" : ""))
-                        .append(s)
-                        .append(":")
-                        .append((cs <= 9 ? "0" : ""))
-                        .append(cs);
-            }
-        });
-        return cronometro.toString();
-    }
+//    public String initReloj() {
+//        Date ahora = new Date();
+//        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+//        final String date = formateador.format(ahora);
+//        t = new Timer(10, new java.awt.event.ActionListener() {
+//            @Override
+//            public void actionPerformed(java.awt.event.ActionEvent ae) {
+//                ++cs;
+//                if (cs == 100) {
+//                    cs = 0;
+//                    ++s;
+//                }
+//                if (s == 60) {
+//                    s = 0;
+//                    ++m;
+//                }
+//                if (m == 60) {
+//                    m = 0;
+//                    ++h;
+//                }
+//                cronometro = new StringBuilder();
+//                cronometro.append(date)
+//                        .append(" ")
+//                        .append((h <= 9 ? "0" : ""))
+//                        .append(h)
+//                        .append(":")
+//                        .append((m <= 9 ? "0" : ""))
+//                        .append(m)
+//                        .append(":")
+//                        .append((s <= 9 ? "0" : ""))
+//                        .append(s)
+//                        .append(":")
+//                        .append((cs <= 9 ? "0" : ""))
+//                        .append(cs);
+//            }
+//        });
+//        return cronometro.toString();
+//    }
 }
