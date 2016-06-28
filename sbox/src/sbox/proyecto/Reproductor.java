@@ -268,19 +268,19 @@ public class Reproductor extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-    
     /**
      * @param file
      * @return
      */
     public String getDuration(File file) {
         player = new EmbeddedMediaPlayerComponent();
-        //se añade reproductor 
         initComponents();
         jPanel2.add(player);
         player.setSize(jPanel2.getSize());
         player.setVisible(true);
         player.getMediaPlayer().playMedia(file.getAbsolutePath());
+//        player.getMediaPlayer().setVolume(0);
+        player.getMediaPlayer().mute(true);
         player.getMediaPlayer().parseMedia();
         player.getMediaPlayer().start();
         long milisegundos = player.getMediaPlayer().getLength();
@@ -291,6 +291,26 @@ public class Reproductor extends javax.swing.JFrame {
         long segundo = restominuto / 1000;
 //        long restosegundo = restominuto % 1000;
         return hora + ":" + minuto + ":" + segundo;
+    }
+
+    /**
+     *
+     * @param fileOld
+     * @param fileNew
+     * @param mute
+     * @return
+     */
+    public boolean cutVideo(File fileOld, File fileNew, boolean mute, String ini, String fin) {
+        boolean resp = false;
+        player = new EmbeddedMediaPlayerComponent();
+        initComponents();
+        jPanel2.add(player);
+        player.setSize(jPanel2.getSize());
+        player.setVisible(true);
+//        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time=3", ":stop-time=10",":sout=#transcode{vcodec=h264,venc=x264{cfr=28},vb=2000000,fps=30,scale=1,acodec=aac,ab=192000,channels=2,samplerate=44100}:file{dst="+fileNew.getAbsolutePath()+"}");
+        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time="+ini, ":stop-time="+fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + fileNew.getAbsolutePath() + "}");
+        player.getMediaPlayer().mute(mute);
+        return resp;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
