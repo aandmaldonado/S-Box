@@ -126,6 +126,7 @@ public class Video extends JFrame {
         canvasFrame.dispose();
         recorder.stop();
         grabber.stop();
+        PerspectivaServidor.grab = false;
 //        if (t.isRunning()) {
 //            t.stop();
 //        }

@@ -106,7 +106,7 @@ public class PerspectivaServidor {
         while (!PerspectivaServidor.grab) {
             System.out.println("Esperando grabación");
         }
-        enviarObj("Canal externo: Inicio de grabacion");
+        enviarObj("Canal externo: Inicio de grabación");
     }
 
     public void enviarArchivo(File f) {
@@ -123,9 +123,11 @@ public class PerspectivaServidor {
 
     public void detenerGrabacion() {
         try {
-            PerspectivaServidor.grab = false;
             nombreVideo = _video.stopCamera();
-            enviarObj("Canal externo: Fin de grabacion");
+            while (PerspectivaServidor.grab) {                
+                System.out.println("Deteniendo grabación");  
+            }
+            enviarObj("Canal externo: Fin de grabación");
             enviarArchivo(new File("C:\\temp\\" + nombreVideo + ".avi"));
             //Eliminar temporales
             if (temp.exists()) {

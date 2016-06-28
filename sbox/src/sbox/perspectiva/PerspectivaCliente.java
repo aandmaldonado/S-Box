@@ -159,9 +159,15 @@ public class PerspectivaCliente extends Thread implements Serializable {
                             recibirArchivo();
                         }
 
-                        if (o.toString().equalsIgnoreCase("Canal externo: Inicio de grabacion")) {
+                        if (o.toString().equalsIgnoreCase("Canal externo: Inicio de grabación")) {
                             ProyectoMain.ScreenGo = true;
                         }
+                        
+                        if (o.toString().equalsIgnoreCase("Canal externo: Fin de grabación")) {
+                            ProyectoMain.ScreenStop = true;
+                        }
+                        
+                        
 //                        if (instruccion.contains("DETENER")) {
 //                            log.info("Canal externo: Fin de grabacion");
 //                        }

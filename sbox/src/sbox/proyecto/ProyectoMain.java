@@ -1459,11 +1459,10 @@ public class ProyectoMain extends javax.swing.JFrame {
         while (!ProyectoMain.ScreenGo && faceRecorder) {
             System.out.println("Esperando que inicie faceRecorder");
         }
-        
+
         while (!ProyectoMain.ScreenGo && perspExt) {
             System.out.println("Esperando que inicie canal externo");
         }
-
 
         if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva2"))) {
             try {
@@ -1491,7 +1490,35 @@ public class ProyectoMain extends javax.swing.JFrame {
         detenerButton.setEnabled(false);
         Reproductor r = new Reproductor();
         String duration = "";
-        ProyectoMain.ScreenGo = false;
+
+        if (perspExt) {
+            perspExtGrabando.setString("Transfiriendo...");
+            String nombreProyecto = txtNombreProyecto.getText();
+            String rutaProyecto = txtRutaProyecto.getText();
+            String path = "";
+            if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
+                path = rutaProyecto + nombreProyecto + "\\perspectiva3\\";
+            } else {
+                path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva3\\";
+            }
+            pc.setPath(path);
+            pc.setNombreProyecto(nombreProyecto);
+            pc.setExperimentos(String.valueOf(experimentos));
+            pc.enviarInstruccion("DETENER");
+            perspExtGrabando.setVisible(false);
+            perspExtVerButton.setVisible(true);
+            while (!PerspectivaCliente.video) {
+                System.out.println("Esperando video externo...");
+            }
+            videoExt = pc.getNombreProyecto() + "_" + pc.getNombreVideo() + "_" + pc.getExperimentos();
+
+            PerspectivaCliente.video = false;
+//            duration = r.getDuration(new File(path + videoExt + ".avi"));
+//            log.info("Se ha generado el archivo '" + videoExt + ".avi' - Duración: " + duration);
+            log.info("Se ha generado el archivo '" + videoExt + ".avi'");
+            ProyectoMain.ScreenStop = true;
+        }
+
         if (faceRecorder) {
             try {
                 faceRecorderGrabando.setVisible(false);
@@ -1519,13 +1546,18 @@ public class ProyectoMain extends javax.swing.JFrame {
 //                    }
 //                }
                 faceRecorderVerButton.setVisible(true);
-                duration = r.getDuration(new File(path + videoFace + ".avi"));
-                log.info("Se ha generado el archivo '" + videoFace + ".avi' - Duración: " + duration);
+//                duration = r.getDuration(new File(path + videoFace + ".avi"));
+//                log.info("Se ha generado el archivo '" + videoFace + ".avi' - Duración: " + duration);
+                log.info("Se ha generado el archivo '" + videoFace + ".avi'");
+                ProyectoMain.ScreenStop = true;
             } catch (FrameRecorder.Exception | FrameGrabber.Exception ex) {
                 log.error(ex);
             }
         }
 
+        while (!ProyectoMain.ScreenStop && perspExt) {
+            System.out.println("Esperando que termine canal externo");
+        }
         if (activityRender) {
             activityRenderGrabando.setVisible(false);
             actRenderVerButton.setVisible(true);
@@ -1547,37 +1579,12 @@ public class ProyectoMain extends javax.swing.JFrame {
 //                        archivo.renameTo(rename);
 //                    }
 //                }
-                duration = r.getDuration(new File(path + videoScreen + ".avi"));
-                log.info("Se ha generado el archivo '" + videoScreen + ".avi' - Duración: " + duration);
+//                duration = r.getDuration(new File(path + videoScreen + ".avi"));
+//                log.info("Se ha generado el archivo '" + videoScreen + ".avi' - Duración: " + duration);
+                log.info("Se ha generado el archivo '" + videoScreen + ".avi'");
             } catch (IOException ex) {
                 log.error(ex);
             }
-        }
-
-        if (perspExt) {
-            perspExtGrabando.setString("Transfiriendo...");
-            String nombreProyecto = txtNombreProyecto.getText();
-            String rutaProyecto = txtRutaProyecto.getText();
-            String path = "";
-            if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
-                path = rutaProyecto + nombreProyecto + "\\perspectiva3\\";
-            } else {
-                path = rutaProyecto + "\\" + nombreProyecto + "\\perspectiva3\\";
-            }
-            pc.setPath(path);
-            pc.setNombreProyecto(nombreProyecto);
-            pc.setExperimentos(String.valueOf(experimentos));
-            pc.enviarInstruccion("DETENER");
-            perspExtGrabando.setVisible(false);
-            perspExtVerButton.setVisible(true);
-            while (!PerspectivaCliente.video) {
-                System.out.println("Esperando video externo...");
-            }
-            videoExt = pc.getNombreProyecto() + "_" + pc.getNombreVideo() + "_" + pc.getExperimentos();
-
-            PerspectivaCliente.video = false;
-            duration = r.getDuration(new File(path + videoExt + ".avi"));
-            log.info("Se ha generado el archivo '" + videoExt + ".avi' - Duración: " + duration);
         }
 
         guardarFuentesButton.setEnabled(true);
@@ -1586,6 +1593,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         descartarFuentesButton.setVisible(true);
         descartarFuentesButton.setText("Descartar Fuentes");
         guardarFuentesButton.setText("Guardar Fuentes");
+        ProyectoMain.ScreenGo = false;
 
         log.info("******************** Experimento finalizado ********************");
         String nombreProyecto = txtNombreProyecto.getText();
@@ -1950,6 +1958,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private int experimentos = 0;
 
     public static boolean ScreenGo = false;
+    public static boolean ScreenStop = false;
 
     //Log
     private final static Logger log = Logger.getLogger(ProyectoMain.class.getName());
