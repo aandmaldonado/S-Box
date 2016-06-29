@@ -33,6 +33,7 @@ import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_CANNY_PRUNING;
 import org.bytedeco.javacpp.opencv_objdetect.CvHaarClassifierCascade;
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameGrabber;
@@ -44,7 +45,7 @@ public class VideoDetection extends JFrame {
     private String localPath = "";
     final private static int FRAME_RATE = 30;
     final private static int GOP_LENGTH_IN_FRAMES = 60;
-    private OpenCVFrameGrabber grabber = null;
+    private FrameGrabber grabber = null;
     private OpenCVFrameConverter.ToIplImage converter = null;
     private IplImage grabbedImage = null;
     private FFmpegFrameRecorder recorder = null;
@@ -71,7 +72,6 @@ public class VideoDetection extends JFrame {
         grabber.setImageHeight(captureHeight);
         grabber.start();
         converter = new OpenCVFrameConverter.ToIplImage();
-        grabbedImage = converter.convert(grabber.grab());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy'_'HH.mm.ss.ms");
         dateFormat.format(new Date());
         nombreVideo = "videoDetection_" + dateFormat.format(new Date());
@@ -92,15 +92,16 @@ public class VideoDetection extends JFrame {
         canvasFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         canvasFrame.setVisible(false);
         canvasFrame.setLocation(450, 0);
-        CvMemStorage storage = CvMemStorage.create();
+//        CvMemStorage storage = CvMemStorage.create();
 
 //        loadClassifier(classifier);
 //        classifierFrontalFace = getClassifier();
 //
 //        loadClassifier(classifier2);
 //        classifierFrontalFaceSmile = getClassifier();
-        while (null !=(grabbedImage = converter.convert(grabber.grab()))) {
-            cvClearMemStorage(storage);
+        while (true) {
+//            cvClearMemStorage(storage);
+            grabbedImage = converter.convert(grabber.grab());
 
 //            IplImage grayImage = IplImage.create(grabbedImage.width(), grabbedImage.height(), IPL_DEPTH_8U, 1);
 //
@@ -129,7 +130,6 @@ public class VideoDetection extends JFrame {
 //                    }
 //                }
 //            }
-
             canvasFrame.setCanvasSize(grabber.getImageWidth(), grabber.getImageHeight());
             if (startTime == 0) {
                 startTime = System.currentTimeMillis();
@@ -137,12 +137,17 @@ public class VideoDetection extends JFrame {
 
             videoTS = 1000 * (System.currentTimeMillis() - startTime);
             if (videoTS > recorder.getTimestamp()) {
-
                 recorder.setTimestamp(videoTS);
             }
-            recorder.record(converter.convert(grabbedImage));
+            if (grabbedImage != null) {
+                recorder.record(converter.convert(grabbedImage));
+            } else {
+                recorder.stop();
+                canvasFrame.dispose();
+            }
+
         }
-        stopCamera();
+
     }
 
     public void stopCamera() throws org.bytedeco.javacv.FrameRecorder.Exception, Exception {

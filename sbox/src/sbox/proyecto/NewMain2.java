@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import javax.xml.crypto.URIReferenceException;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
-import org.bytedeco.javacv.OpenCVFrameGrabber;
 import sbox.detection.VideoDetection;
+import sbox.detection.WebcamAndMicrophoneCapture;
 
 /**
  *
@@ -28,8 +28,12 @@ public class NewMain2 {
     public static void main(String[] args) {
         try {
             VideoDetection a = new VideoDetection("C:\\prueba\\perspectiva1");
-            a.startCamera(new File("C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_21.48.09.489_1.avi"), new File("C:\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_default.xml"), new File("C:\\opencv\\sources\\data\\haarcascades\\haarcascade_smile.xml"));
-        } catch (FrameGrabber.Exception | FrameRecorder.Exception | IOException | URISyntaxException | URIReferenceException ex) {
+            try {
+                a.startCamera(new File("C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi"), new File("C:\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_default.xml"), new File("C:\\opencv\\sources\\data\\haarcascades\\haarcascade_smile.xml"));
+            } catch (IOException | URISyntaxException | URIReferenceException ex) {
+                Logger.getLogger(NewMain2.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FrameGrabber.Exception | FrameRecorder.Exception ex) {
             Logger.getLogger(NewMain2.class.getName()).log(Level.SEVERE, null, ex);
         }
         
