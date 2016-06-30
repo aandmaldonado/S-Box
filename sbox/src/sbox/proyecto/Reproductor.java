@@ -265,23 +265,24 @@ public class Reproductor extends javax.swing.JFrame {
 //    }
     /**
      *
-     * @param fileOld
-     * @param fileNew
-     * @param mute
+     * @param videoMaster
+     * @param videoSec
      * @param ini
      * @param fin
      * @return
      */
-    public boolean cutVideo(File fileOld, File fileNew, boolean mute, String ini, String fin) {
+    public boolean cutVideo(File videoMaster, File videoSec, String ini, String fin) {
         boolean resp = false;
         player = new EmbeddedMediaPlayerComponent();
         initComponents();
         jPanel2.add(player);
         player.setSize(jPanel2.getSize());
-        player.setVisible(true);
+        player.setVisible(false);
 //        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time=3", ":stop-time=10",":sout=#transcode{vcodec=h264,venc=x264{cfr=28},vb=2000000,fps=30,scale=1,acodec=aac,ab=192000,channels=2,samplerate=44100}:file{dst="+fileNew.getAbsolutePath()+"}");
-        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time=" + ini, ":stop-time=" + fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + fileNew.getAbsolutePath() + "}");
-        player.getMediaPlayer().mute(mute);
+//        resp = player.getMediaPlayer().playMedia(videoMaster.getAbsolutePath(), ":start-time=" + ini, ":stop-time=" + fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + videoSec.getAbsolutePath() + "}");
+        String[] opts = {":start-time=" + ini, ":stop-time=" + fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + videoSec.getAbsolutePath() + "}"};
+        resp = player.getMediaPlayer().playMedia(videoMaster.getAbsolutePath(), opts);
+        player.getMediaPlayer().mute(true);
         return resp;
     }
 
@@ -315,4 +316,5 @@ public class Reproductor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JSlider sldProgress;
     // End of variables declaration//GEN-END:variables
+
 }
