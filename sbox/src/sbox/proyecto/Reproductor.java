@@ -231,11 +231,6 @@ public class Reproductor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnStopActionPerformed
 
-    /**
-     * @param f
-     * @param args the command line arguments
-     * @return
-     */
 //    public static void main(String args[]) {
 //        /* Set the Nimbus look and feel */
 //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -269,35 +264,12 @@ public class Reproductor extends javax.swing.JFrame {
 //        });
 //    }
     /**
-     * @param file
-     * @return
-     */
-    public String getDuration(File file) {
-        player = new EmbeddedMediaPlayerComponent();
-        initComponents();
-        jPanel2.add(player);
-        player.setSize(jPanel2.getSize());
-        player.setVisible(true);
-        player.getMediaPlayer().playMedia(file.getAbsolutePath());
-//        player.getMediaPlayer().setVolume(0);
-        player.getMediaPlayer().mute(true);
-        player.getMediaPlayer().parseMedia();
-        player.getMediaPlayer().start();
-        long milisegundos = player.getMediaPlayer().getLength();
-        long hora = milisegundos / 3600000;
-        long restohora = milisegundos % 3600000;
-        long minuto = restohora / 60000;
-        long restominuto = restohora % 60000;
-        long segundo = restominuto / 1000;
-//        long restosegundo = restominuto % 1000;
-        return hora + ":" + minuto + ":" + segundo;
-    }
-
-    /**
      *
      * @param fileOld
      * @param fileNew
      * @param mute
+     * @param ini
+     * @param fin
      * @return
      */
     public boolean cutVideo(File fileOld, File fileNew, boolean mute, String ini, String fin) {
@@ -308,10 +280,31 @@ public class Reproductor extends javax.swing.JFrame {
         player.setSize(jPanel2.getSize());
         player.setVisible(true);
 //        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time=3", ":stop-time=10",":sout=#transcode{vcodec=h264,venc=x264{cfr=28},vb=2000000,fps=30,scale=1,acodec=aac,ab=192000,channels=2,samplerate=44100}:file{dst="+fileNew.getAbsolutePath()+"}");
-        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time="+ini, ":stop-time="+fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + fileNew.getAbsolutePath() + "}");
+        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time=" + ini, ":stop-time=" + fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + fileNew.getAbsolutePath() + "}");
         player.getMediaPlayer().mute(mute);
         return resp;
     }
+
+//    public String getDuration(File file) {
+//        player = new EmbeddedMediaPlayerComponent();
+//        initComponents();
+//        jPanel2.add(player);
+//        player.setSize(jPanel2.getSize());
+//        player.setVisible(true);
+//        player.getMediaPlayer().playMedia(file.getAbsolutePath());
+////        player.getMediaPlayer().setVolume(0);
+//        player.getMediaPlayer().mute(true);
+//        player.getMediaPlayer().parseMedia();
+//        player.getMediaPlayer().start();
+//        long milisegundos = player.getMediaPlayer().getLength();
+//        long hora = milisegundos / 3600000;
+//        long restohora = milisegundos % 3600000;
+//        long minuto = restohora / 60000;
+//        long restominuto = restohora % 60000;
+//        long segundo = restominuto / 1000;
+////        long restosegundo = restominuto % 1000;
+//        return hora + ":" + minuto + ":" + segundo;
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPlay;
