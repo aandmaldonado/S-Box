@@ -16,6 +16,7 @@ public class TimeDetection {
 
     private String startTime = "";
     private String stopTime = "";
+    private String time = "";
 
     public String getStartTime() {
         return startTime;
@@ -31,6 +32,14 @@ public class TimeDetection {
 
     public void setStopTime(String stopTime) {
         this.stopTime = stopTime;
+    }
+    
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
 }

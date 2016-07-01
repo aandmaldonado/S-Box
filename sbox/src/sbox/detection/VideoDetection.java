@@ -1,16 +1,12 @@
 package sbox.detection;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import java.io.File;
 import static org.bytedeco.javacpp.opencv_core.cvLoad;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
@@ -45,9 +41,9 @@ public class VideoDetection {
 
     }
 
-    public List<TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect) {
+    public Map<Integer,TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect) {
         TimeDetection times = null;
-        List<TimeDetection> listTime = new ArrayList<TimeDetection>();
+        Map<Integer,TimeDetection> listTime = new HashMap<Integer,TimeDetection>();
         frame = new Mat();
         cap = new VideoCapture(videoMaster.getAbsolutePath());
         classifierFrontalFace = new CvHaarClassifierCascade(cvLoad(faceDetect.getAbsolutePath()));
@@ -57,7 +53,7 @@ public class VideoDetection {
         CvRect cvRectFace, cvRectMouth;
         CvMemStorage storage;
         IplImage grayImage;
-        int duracion = 0, totalFaces = 0, totalMouth = 0, xFace = 0, yFace = 0, wFace = 0, hFace = 0, xMouth = 0, yMouth = 0, wMouth = 0, hMouth = 0, timeSmileMs = 0, timeSmileMsAux = 0, timeSmileMm = 0, startTime = 0, stopTime = 0;
+        int duracion = 0, totalFaces = 0, totalMouth = 0, xFace = 0, yFace = 0, wFace = 0, hFace = 0, xMouth = 0, yMouth = 0, wMouth = 0, hMouth = 0, timeSmileMs = 0, timeSmileMmAux = 0, timeSmileMm = 0, startTime = 0, stopTime = 0;
         System.out.println("Inicio proceso detección de sonrisas: " + dateFormat.format(new Date()));
         System.out.println("Video MASTER: " + videoMaster.getAbsolutePath());
         duracion = (int) getDuration(new VideoCapture(videoMaster.getAbsolutePath())) / 1000;
@@ -88,38 +84,36 @@ public class VideoDetection {
                         if (yMouth > yFace + hFace * 3 / 5 && yMouth + hMouth < yFace + hFace && Math.abs((xMouth + wMouth / 2)) - (xFace + wFace / 2) < wFace / 10) {
 //                            System.out.println("Frame con sonrisa detectada: " + getTimeDetect((long) cap.get(CV_CAP_PROP_POS_MSEC)));
                             timeSmileMs = (int) cap.get(CV_CAP_PROP_POS_MSEC);
-                                    
-                            if (timeSmileMs < 1000) {
-                                timeSmileMm = 0;
-                            } else {
-                                timeSmileMm = timeSmileMs / 1000;
-                            }
+                            timeSmileMm = timeSmileMs / 1000;
 
-                            if (timeSmileMm < 6) {
-                                startTime = 0;
-                                stopTime = 10;
-                            } else if (timeSmileMm > (duracion - 5)) {
-                                startTime = duracion - 10;
-                                stopTime = duracion;
-                            } else {
-                                startTime = timeSmileMm - 5;
-                                stopTime = timeSmileMm + 5;
+                            if (timeSmileMmAux < timeSmileMm || timeSmileMm == 0) {
+                                if (timeSmileMm < 6) {
+                                    startTime = 0;
+                                    stopTime = 10;
+                                } else if (timeSmileMm > (duracion - 6)) {//25
+                                    startTime = duracion - 10;
+                                    stopTime = duracion;
+                                } else {
+                                    startTime = timeSmileMmAux + 1;
+                                    if ((startTime + 1) > duracion) {
+                                        stopTime = duracion;
+                                    } else {
+                                        stopTime = startTime + 10;
+                                    }
+                                }
+                                times = new TimeDetection();
+                                times.setTime(String.valueOf(timeSmileMm));
+                                times.setStartTime(String.valueOf(startTime));
+                                times.setStopTime(String.valueOf(stopTime));
+                                listTime.put(timeSmileMm, times);
+                                timeSmileMmAux = stopTime;
                             }
-
-                            times = new TimeDetection();
-                            times.setStartTime(String.valueOf(startTime));
-                            times.setStopTime(String.valueOf(stopTime));
-                            listTime.add(times);
                         }
-//                        else {
-//                            System.out.println("Frame sin sonrisa detectada");
-//                        }
                     }
                 }
             }
         }
         cap.release();
-        listTime = limpiarLista(listTime);
         System.out.println("Fin proceso detección de sonrisas: " + dateFormat.format(new Date()));
         return listTime;
     }
@@ -144,18 +138,6 @@ public class VideoDetection {
         long segundo = restominuto / 1000;
         duracion = hora + ":" + minuto + ":" + segundo;
         return duracion;
-    }
-
-    private List<TimeDetection> limpiarLista(List<TimeDetection> list) {
-        List<TimeDetection> listaLimpia = new ArrayList<TimeDetection>();
-        Map<Integer, TimeDetection> mapPersonas = new HashMap<Integer, TimeDetection>(list.size());
-        for (TimeDetection p : list) {
-            mapPersonas.put(Integer.parseInt(p.getStartTime()), p);
-        }
-        for (Entry<Integer, TimeDetection> p : mapPersonas.entrySet()) {
-            listaLimpia.add(p.getValue());
-        }
-        return listaLimpia;
     }
 
 }

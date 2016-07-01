@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -271,19 +273,16 @@ public class Reproductor extends javax.swing.JFrame {
      * @param fin
      * @return
      */
-    public boolean cutVideo(File videoMaster, File videoSec, String ini, String fin) {
-        boolean resp = false;
+    public void cutVideo(File videoMaster, File videoSec, String ini, String fin) {
         player = new EmbeddedMediaPlayerComponent();
         initComponents();
         jPanel2.add(player);
         player.setSize(jPanel2.getSize());
         player.setVisible(false);
-//        resp = player.getMediaPlayer().playMedia(fileOld.getAbsolutePath(), ":start-time=3", ":stop-time=10",":sout=#transcode{vcodec=h264,venc=x264{cfr=28},vb=2000000,fps=30,scale=1,acodec=aac,ab=192000,channels=2,samplerate=44100}:file{dst="+fileNew.getAbsolutePath()+"}");
-//        resp = player.getMediaPlayer().playMedia(videoMaster.getAbsolutePath(), ":start-time=" + ini, ":stop-time=" + fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + videoSec.getAbsolutePath() + "}");
         String[] opts = {":start-time=" + ini, ":stop-time=" + fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + videoSec.getAbsolutePath() + "}"};
-        resp = player.getMediaPlayer().playMedia(videoMaster.getAbsolutePath(), opts);
+        player.getMediaPlayer().playMedia(videoMaster.getAbsolutePath(), opts);
         player.getMediaPlayer().mute(true);
-        return resp;
+        System.out.println("Se ha generado secuencia: " + videoSec.getName());
     }
 
 //    public String getDuration(File file) {
