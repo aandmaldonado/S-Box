@@ -117,7 +117,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         labelDescPerspectiva = new javax.swing.JLabel();
         descPerspectivaScrollPanel = new javax.swing.JScrollPane();
         txtDescPerspectiva = new javax.swing.JTextArea();
-        buscarProgressBar = new javax.swing.JProgressBar();
         faceRecorderIcon = new javax.swing.JLabel();
         activityRenderIcon = new javax.swing.JLabel();
         reconocedorPanel = new javax.swing.JPanel();
@@ -145,7 +144,37 @@ public class ProyectoMain extends javax.swing.JFrame {
         guardarFuentesButton = new javax.swing.JButton();
         descartarFuentesButton = new javax.swing.JButton();
         procesamientoPanel = new javax.swing.JPanel();
+        preliminarPanel = new javax.swing.JPanel();
+        labelVxGen = new javax.swing.JLabel();
+        txtVxGen = new javax.swing.JTextField();
+        tableScrollPane1 = new javax.swing.JScrollPane();
+        deteccionTable = new javax.swing.JTable();
+        labelDetTabla = new javax.swing.JLabel();
+        marcadoPanel = new javax.swing.JPanel();
+        labelVideoMaster = new javax.swing.JLabel();
+        txtVideoMaster = new javax.swing.JTextField();
+        txtReconecedor = new javax.swing.JTextField();
+        labelReconocedor = new javax.swing.JLabel();
+        marcadorButton = new javax.swing.JButton();
+        labelTimeProc = new javax.swing.JLabel();
+        videoMasterButton = new javax.swing.JButton();
+        txtTimeProc = new javax.swing.JTextField();
         visualizacionPanel = new javax.swing.JPanel();
+        infoPanel = new javax.swing.JPanel();
+        labelMaster = new javax.swing.JLabel();
+        txtMaster = new javax.swing.JTextField();
+        labelReco = new javax.swing.JLabel();
+        txtReco = new javax.swing.JTextField();
+        cortarButton = new javax.swing.JButton();
+        labeltiempoProc = new javax.swing.JLabel();
+        txtTiempoProc = new javax.swing.JTextField();
+        secuenciasPanel = new javax.swing.JPanel();
+        labelVidGen = new javax.swing.JLabel();
+        secScrollPane = new javax.swing.JScrollPane();
+        secList = new javax.swing.JList<>();
+        visualizarButton = new javax.swing.JButton();
+        txtVidGen = new javax.swing.JTextField();
+        labelSecMaster = new javax.swing.JLabel();
         statusBarPanel = new javax.swing.JPanel();
         labelDondeEstoy = new javax.swing.JLabel();
         menuBarPrincipal = new javax.swing.JMenuBar();
@@ -289,9 +318,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         txtDescPerspectiva.setRows(5);
         descPerspectivaScrollPanel.setViewportView(txtDescPerspectiva);
 
-        buscarProgressBar.setString("Conectando...");
-        buscarProgressBar.setStringPainted(true);
-
         javax.swing.GroupLayout perspectivaPanelLayout = new javax.swing.GroupLayout(perspectivaPanel);
         perspectivaPanel.setLayout(perspectivaPanelLayout);
         perspectivaPanelLayout.setHorizontalGroup(
@@ -307,9 +333,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                             .addGroup(perspectivaPanelLayout.createSequentialGroup()
                                 .addComponent(labelDirIP)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(perspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(buscarProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtDirIP, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                                .addComponent(txtDirIP, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(buscarButton)))
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -324,9 +348,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     .addComponent(labelDirIP)
                     .addComponent(txtDirIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buscarButton))
-                .addGap(2, 2, 2)
-                .addComponent(buscarProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addGap(21, 21, 21)
                 .addComponent(labelDispositivos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(comboDispositivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -435,7 +457,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tabPanelPrincipal.addTab("Creación de Proyecto", new javax.swing.ImageIcon(getClass().getResource("/resources/project.png")), proyectoPanel); // NOI18N
+        tabPanelPrincipal.addTab("Crear Proyecto", new javax.swing.ImageIcon(getClass().getResource("/resources/project.png")), proyectoPanel); // NOI18N
 
         fuentesPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -681,7 +703,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        tabPanelPrincipal.addTab("Experimentos", new javax.swing.ImageIcon(getClass().getResource("/resources/video-record.png")), fuentesPanel); // NOI18N
+        tabPanelPrincipal.addTab("Grabar Experimentos", new javax.swing.ImageIcon(getClass().getResource("/resources/video-record.png")), fuentesPanel); // NOI18N
 
         procesamientoPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -689,18 +711,160 @@ public class ProyectoMain extends javax.swing.JFrame {
             }
         });
 
+        preliminarPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información preliminar"));
+
+        labelVxGen.setText("Videos por generar:");
+
+        txtVxGen.setText("3");
+        txtVxGen.setEnabled(false);
+
+        deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"5", "0", "10"},
+                {"15", "10", "20"},
+                {"25", "20", "30"}
+            },
+            new String [] {
+                "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tableScrollPane1.setViewportView(deteccionTable);
+
+        labelDetTabla.setText("Detalle de detecciones:");
+
+        javax.swing.GroupLayout preliminarPanelLayout = new javax.swing.GroupLayout(preliminarPanel);
+        preliminarPanel.setLayout(preliminarPanelLayout);
+        preliminarPanelLayout.setHorizontalGroup(
+            preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(preliminarPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(preliminarPanelLayout.createSequentialGroup()
+                        .addComponent(labelVxGen)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtVxGen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tableScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelDetTabla))
+                .addGap(0, 291, Short.MAX_VALUE))
+        );
+        preliminarPanelLayout.setVerticalGroup(
+            preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(preliminarPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelVxGen)
+                    .addComponent(txtVxGen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(labelDetTabla)
+                .addGap(18, 18, 18)
+                .addComponent(tableScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(87, Short.MAX_VALUE))
+        );
+
+        marcadoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información de marcado"));
+
+        labelVideoMaster.setText("Seleccione video master:");
+
+        txtVideoMaster.setText("C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi");
+
+        txtReconecedor.setText("haarcascade_smile");
+        txtReconecedor.setEnabled(false);
+
+        labelReconocedor.setText("Reconocedor:");
+
+        marcadorButton.setText("Marcar Video ");
+        marcadorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                marcadorButtonActionPerformed(evt);
+            }
+        });
+
+        labelTimeProc.setText("Tiempo de proceso:");
+
+        videoMasterButton.setText("...");
+
+        txtTimeProc.setText("00:02:34");
+        txtTimeProc.setEnabled(false);
+        txtTimeProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimeProcActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout marcadoPanelLayout = new javax.swing.GroupLayout(marcadoPanel);
+        marcadoPanel.setLayout(marcadoPanelLayout);
+        marcadoPanelLayout.setHorizontalGroup(
+            marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(marcadoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(marcadorButton)
+                    .addGroup(marcadoPanelLayout.createSequentialGroup()
+                        .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelVideoMaster)
+                            .addComponent(labelReconocedor)
+                            .addComponent(labelTimeProc))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTimeProc, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(marcadoPanelLayout.createSequentialGroup()
+                                .addComponent(txtVideoMaster, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(videoMasterButton))
+                            .addComponent(txtReconecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(159, Short.MAX_VALUE))
+        );
+        marcadoPanelLayout.setVerticalGroup(
+            marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(marcadoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelVideoMaster)
+                    .addComponent(txtVideoMaster, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(videoMasterButton))
+                .addGap(18, 18, 18)
+                .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtReconecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelReconocedor))
+                .addGap(18, 18, 18)
+                .addComponent(marcadorButton)
+                .addGap(18, 18, 18)
+                .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelTimeProc)
+                    .addComponent(txtTimeProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout procesamientoPanelLayout = new javax.swing.GroupLayout(procesamientoPanel);
         procesamientoPanel.setLayout(procesamientoPanelLayout);
         procesamientoPanelLayout.setHorizontalGroup(
             procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 817, Short.MAX_VALUE)
+            .addGroup(procesamientoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(marcadoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(preliminarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         procesamientoPanelLayout.setVerticalGroup(
             procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 487, Short.MAX_VALUE)
+            .addGroup(procesamientoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(marcadoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(preliminarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        tabPanelPrincipal.addTab("Sincronización de Fuentes", new javax.swing.ImageIcon(getClass().getResource("/resources/arrow_refresh.png")), procesamientoPanel); // NOI18N
+        tabPanelPrincipal.addTab("Marcar Videos", new javax.swing.ImageIcon(getClass().getResource("/resources/arrow_refresh.png")), procesamientoPanel); // NOI18N
 
         visualizacionPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -708,18 +872,159 @@ public class ProyectoMain extends javax.swing.JFrame {
             }
         });
 
+        infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información preliminar"));
+
+        labelMaster.setText("Video master:");
+
+        txtMaster.setText("C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi");
+        txtMaster.setEnabled(false);
+
+        labelReco.setText("Reconocedor:");
+
+        txtReco.setText("haarcascade_smile");
+        txtReco.setEnabled(false);
+
+        cortarButton.setText("Cortar Video");
+        cortarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cortarButtonActionPerformed(evt);
+            }
+        });
+
+        labeltiempoProc.setText("Tiempo de proceso:");
+
+        txtTiempoProc.setText("00:02:34");
+        txtTiempoProc.setEnabled(false);
+        txtTiempoProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTiempoProcActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout infoPanelLayout = new javax.swing.GroupLayout(infoPanel);
+        infoPanel.setLayout(infoPanelLayout);
+        infoPanelLayout.setHorizontalGroup(
+            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(infoPanelLayout.createSequentialGroup()
+                        .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelMaster)
+                            .addComponent(labelReco))
+                        .addGap(31, 31, 31)
+                        .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtReco, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMaster, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(cortarButton)
+                    .addGroup(infoPanelLayout.createSequentialGroup()
+                        .addComponent(labeltiempoProc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTiempoProc, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(265, Short.MAX_VALUE))
+        );
+        infoPanelLayout.setVerticalGroup(
+            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelMaster)
+                    .addComponent(txtMaster, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtReco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelReco))
+                .addGap(18, 18, 18)
+                .addComponent(cortarButton)
+                .addGap(18, 18, 18)
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labeltiempoProc)
+                    .addComponent(txtTiempoProc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        secuenciasPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información de secuencias"));
+
+        labelVidGen.setText("Videos generados:");
+
+        secList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "C:\\prueba\\videoDetect\\videoDetect_1.avi", "C:\\prueba\\videoDetect\\videoDetect_2.avi", "C:\\prueba\\videoDetect\\videoDetect_3.avi", " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        secScrollPane.setViewportView(secList);
+
+        visualizarButton.setText("Visualizar");
+        visualizarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                visualizarButtonActionPerformed(evt);
+            }
+        });
+
+        txtVidGen.setText("3");
+        txtVidGen.setEnabled(false);
+        txtVidGen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtVidGenActionPerformed(evt);
+            }
+        });
+
+        labelSecMaster.setText("Secuencias master:");
+
+        javax.swing.GroupLayout secuenciasPanelLayout = new javax.swing.GroupLayout(secuenciasPanel);
+        secuenciasPanel.setLayout(secuenciasPanelLayout);
+        secuenciasPanelLayout.setHorizontalGroup(
+            secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(secuenciasPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(secuenciasPanelLayout.createSequentialGroup()
+                        .addComponent(labelVidGen)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtVidGen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(visualizarButton)
+                    .addComponent(secScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelSecMaster))
+                .addContainerGap(493, Short.MAX_VALUE))
+        );
+        secuenciasPanelLayout.setVerticalGroup(
+            secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(secuenciasPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelVidGen)
+                    .addComponent(txtVidGen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(labelSecMaster)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(secScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(visualizarButton)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout visualizacionPanelLayout = new javax.swing.GroupLayout(visualizacionPanel);
         visualizacionPanel.setLayout(visualizacionPanelLayout);
         visualizacionPanelLayout.setHorizontalGroup(
             visualizacionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 817, Short.MAX_VALUE)
+            .addGroup(visualizacionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(visualizacionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(secuenciasPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         visualizacionPanelLayout.setVerticalGroup(
             visualizacionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 487, Short.MAX_VALUE)
+            .addGroup(visualizacionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(infoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(secuenciasPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        tabPanelPrincipal.addTab("Visualización de Secuencias", new javax.swing.ImageIcon(getClass().getResource("/resources/video.png")), visualizacionPanel); // NOI18N
+        tabPanelPrincipal.addTab("Generar Secuencias", new javax.swing.ImageIcon(getClass().getResource("/resources/video.png")), visualizacionPanel); // NOI18N
 
         statusBarPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -835,7 +1140,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         rutaProyectoButton.setVisible(true);
         setLocationRelativeTo(null);
         setBounds(0, 0, 842, 643);
-        buscarProgressBar.setVisible(false);
 
     }//GEN-LAST:event_itemMenuNuevoActionPerformed
 
@@ -899,7 +1203,6 @@ public class ProyectoMain extends javax.swing.JFrame {
                 comboReconocedor.setSelectedItem(p.getProperty("sbox.proyecto.reconocedor.origen"));
                 crearProyectoButton.setText("Guardar Cambios");
                 rutaProyectoButton.setVisible(false);
-                buscarProgressBar.setVisible(false);
                 JOptionPane.showMessageDialog(this, "Proyecto cargado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
                 proyectoCargado = true;
                 creacionProyecto = true;
@@ -1176,7 +1479,6 @@ public class ProyectoMain extends javax.swing.JFrame {
                 comboDispositivos.setEnabled(true);
                 txtDescPerspectiva.setEnabled(true);
             } else {
-                buscarProgressBar.setVisible(false);
                 JOptionPane.showMessageDialog(this, "No se puede conectar con IP ingresada", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
@@ -1817,6 +2119,30 @@ public class ProyectoMain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowClosing
 
+    private void marcadorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_marcadorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_marcadorButtonActionPerformed
+
+    private void cortarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cortarButtonActionPerformed
+
+    private void txtTiempoProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTiempoProcActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTiempoProcActionPerformed
+
+    private void visualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_visualizarButtonActionPerformed
+
+    private void txtVidGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVidGenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtVidGenActionPerformed
+
+    private void txtTimeProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimeProcActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimeProcActionPerformed
+
     /**
      *
      * @return
@@ -1970,14 +2296,15 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JLabel activityRenderIcon;
     private javax.swing.JButton agregarPerspectivaButton;
     private javax.swing.JButton buscarButton;
-    private javax.swing.JProgressBar buscarProgressBar;
     private javax.swing.JComboBox<String> comboDispositivos;
     private javax.swing.JComboBox<String> comboReconocedor;
     private javax.swing.JPanel confPerspectivaPanel;
     private javax.swing.JPanel controlPanel;
+    private javax.swing.JButton cortarButton;
     private javax.swing.JButton crearProyectoButton;
     private javax.swing.JScrollPane descPerspectivaScrollPanel;
     private javax.swing.JButton descartarFuentesButton;
+    private javax.swing.JTable deteccionTable;
     private javax.swing.JButton detenerButton;
     private javax.swing.JCheckBox faceRecorderCheck;
     private javax.swing.JProgressBar faceRecorderGrabando;
@@ -1985,6 +2312,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JButton faceRecorderVerButton;
     private javax.swing.JPanel fuentesPanel;
     private javax.swing.JButton guardarFuentesButton;
+    private javax.swing.JPanel infoPanel;
     private javax.swing.JPanel informacionPerspectivaPanel;
     private javax.swing.JPanel informacionProyectoPanel;
     private javax.swing.JButton iniciarButton;
@@ -1995,34 +2323,61 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JLabel labelActivityRenderIcon;
     private javax.swing.JLabel labelDescCheck;
     private javax.swing.JLabel labelDescPerspectiva;
+    private javax.swing.JLabel labelDetTabla;
     private javax.swing.JLabel labelDirIP;
     private javax.swing.JLabel labelDispositivos;
     private javax.swing.JLabel labelDondeEstoy;
     private javax.swing.JLabel labelFaceRecorder;
     private javax.swing.JLabel labelFaceRecorderIcon;
+    private javax.swing.JLabel labelMaster;
     private javax.swing.JLabel labelNok;
     private javax.swing.JLabel labelNombreProyecto;
     private javax.swing.JLabel labelOk;
     private javax.swing.JLabel labelPerspExt;
     private javax.swing.JLabel labelPerspExtIcon;
+    private javax.swing.JLabel labelReco;
+    private javax.swing.JLabel labelReconocedor;
     private javax.swing.JLabel labelRutaProyecto;
+    private javax.swing.JLabel labelSecMaster;
+    private javax.swing.JLabel labelTimeProc;
+    private javax.swing.JLabel labelVidGen;
+    private javax.swing.JLabel labelVideoMaster;
+    private javax.swing.JLabel labelVxGen;
+    private javax.swing.JLabel labeltiempoProc;
+    private javax.swing.JPanel marcadoPanel;
+    private javax.swing.JButton marcadorButton;
     private javax.swing.JMenuBar menuBarPrincipal;
     private javax.swing.JMenu menuProyecto;
     private javax.swing.JProgressBar perspExtGrabando;
     private javax.swing.JButton perspExtVerButton;
     private javax.swing.JPanel perspectivaPanel;
+    private javax.swing.JPanel preliminarPanel;
     private javax.swing.JPanel procesamientoPanel;
     private javax.swing.JPanel proyectoPanel;
     private javax.swing.JPanel reconocedorPanel;
     private javax.swing.JButton rutaProyectoButton;
+    private javax.swing.JList<String> secList;
+    private javax.swing.JScrollPane secScrollPane;
+    private javax.swing.JPanel secuenciasPanel;
     private javax.swing.JPopupMenu.Separator separadorMenuArchivo;
     private javax.swing.JPanel simbolosPanel;
     private javax.swing.JPanel statusBarPanel;
     private javax.swing.JTabbedPane tabPanelPrincipal;
+    private javax.swing.JScrollPane tableScrollPane1;
     private javax.swing.JTextArea txtDescPerspectiva;
     private javax.swing.JTextField txtDirIP;
+    private javax.swing.JTextField txtMaster;
     private javax.swing.JTextField txtNombreProyecto;
+    private javax.swing.JTextField txtReco;
+    private javax.swing.JTextField txtReconecedor;
     private javax.swing.JTextField txtRutaProyecto;
+    private javax.swing.JTextField txtTiempoProc;
+    private javax.swing.JTextField txtTimeProc;
+    private javax.swing.JTextField txtVidGen;
+    private javax.swing.JTextField txtVideoMaster;
+    private javax.swing.JTextField txtVxGen;
+    private javax.swing.JButton videoMasterButton;
     private javax.swing.JPanel visualizacionPanel;
+    private javax.swing.JButton visualizarButton;
     // End of variables declaration//GEN-END:variables
 }
