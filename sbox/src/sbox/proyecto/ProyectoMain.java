@@ -14,20 +14,27 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
 import org.jdesktop.swingworker.SwingWorker;
 import sbox.activityrender.initScreenRecorder;
+import sbox.detection.TimeDetection;
+import sbox.detection.VideoDetection;
 import sbox.facerecorder.*;
 
 /**
@@ -715,14 +722,11 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         labelVxGen.setText("Videos por generar:");
 
-        txtVxGen.setText("3");
         txtVxGen.setEnabled(false);
 
         deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"5", "0", "10"},
-                {"15", "10", "20"},
-                {"25", "20", "30"}
+
             },
             new String [] {
                 "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
@@ -753,7 +757,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                         .addComponent(txtVxGen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(tableScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelDetTabla))
-                .addGap(0, 291, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         preliminarPanelLayout.setVerticalGroup(
             preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -766,16 +770,13 @@ public class ProyectoMain extends javax.swing.JFrame {
                 .addComponent(labelDetTabla)
                 .addGap(18, 18, 18)
                 .addComponent(tableScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         marcadoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información de marcado"));
 
         labelVideoMaster.setText("Seleccione video master:");
 
-        txtVideoMaster.setText("C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi");
-
-        txtReconecedor.setText("haarcascade_smile");
         txtReconecedor.setEnabled(false);
 
         labelReconocedor.setText("Reconocedor:");
@@ -790,8 +791,12 @@ public class ProyectoMain extends javax.swing.JFrame {
         labelTimeProc.setText("Tiempo de proceso:");
 
         videoMasterButton.setText("...");
+        videoMasterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                videoMasterButtonActionPerformed(evt);
+            }
+        });
 
-        txtTimeProc.setText("00:02:34");
         txtTimeProc.setEnabled(false);
         txtTimeProc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -820,7 +825,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(videoMasterButton))
                             .addComponent(txtReconecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap(189, Short.MAX_VALUE))
         );
         marcadoPanelLayout.setVerticalGroup(
             marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -850,9 +855,9 @@ public class ProyectoMain extends javax.swing.JFrame {
             .addGroup(procesamientoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(marcadoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(preliminarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                    .addComponent(marcadoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(preliminarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         procesamientoPanelLayout.setVerticalGroup(
             procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -876,12 +881,10 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         labelMaster.setText("Video master:");
 
-        txtMaster.setText("C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi");
         txtMaster.setEnabled(false);
 
         labelReco.setText("Reconocedor:");
 
-        txtReco.setText("haarcascade_smile");
         txtReco.setEnabled(false);
 
         cortarButton.setText("Cortar Video");
@@ -893,7 +896,6 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         labeltiempoProc.setText("Tiempo de proceso:");
 
-        txtTiempoProc.setText("00:02:34");
         txtTiempoProc.setEnabled(false);
         txtTiempoProc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -961,7 +963,6 @@ public class ProyectoMain extends javax.swing.JFrame {
             }
         });
 
-        txtVidGen.setText("3");
         txtVidGen.setEnabled(false);
         txtVidGen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1555,11 +1556,14 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void procesamientoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_procesamientoPanelComponentShown
         // TODO add your handling code here:
         labelDondeEstoy.setText("Usted está en pestaña Sincronización de Fuentes");
+        txtReconecedor.setText(comboReconocedor.getSelectedItem().toString());
     }//GEN-LAST:event_procesamientoPanelComponentShown
 
     private void visualizacionPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_visualizacionPanelComponentShown
         // TODO add your handling code here:
         labelDondeEstoy.setText("Usted está en pestaña Visualización de Secuencias");
+        txtReco.setText(txtReconecedor.getText());
+        txtMaster.setText(txtVideoMaster.getText());
     }//GEN-LAST:event_visualizacionPanelComponentShown
 
     private void proyectoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_proyectoPanelComponentShown
@@ -2121,6 +2125,27 @@ public class ProyectoMain extends javax.swing.JFrame {
 
     private void marcadorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_marcadorButtonActionPerformed
         // TODO add your handling code here:
+        VideoDetection videoDetection = new VideoDetection();
+        File videoMaster = new File(txtVideoMaster.getText());
+        File faceDetect = new File("C:\\Users\\aandmaldonado\\Documents\\GitHub\\S-Box\\sbox\\src\\resources\\haarcascades\\haarcascade_frontalface_default.xml");
+        File smileDetect = new File("C:\\Users\\aandmaldonado\\Documents\\GitHub\\S-Box\\sbox\\src\\resources\\haarcascades\\" + txtReconecedor.getText());
+        long ini = System.currentTimeMillis();
+        listTimeDetection = videoDetection.getDetection(videoMaster, faceDetect, smileDetect);
+        long fin = System.currentTimeMillis();
+        txtTimeProc.setText(videoDetection.getTimeDetect(fin - ini));
+        txtVxGen.setText(String.valueOf(listTimeDetection.size()));
+        Object[][] data = new Object[listTimeDetection.size()][3];
+        int i = 0;
+        for (Map.Entry<Integer, TimeDetection> entry : listTimeDetection.entrySet()) {
+            data[i][0] = entry.getKey();
+            data[i][1] = entry.getValue().getStartTime();
+            data[i][2] = entry.getValue().getStopTime();
+            i++;
+        }
+        DefaultTableModel model = new DefaultTableModel();
+        String columnNames[] = {"Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"};
+        model.setDataVector(data, columnNames);
+        deteccionTable.setModel(model);
     }//GEN-LAST:event_marcadorButtonActionPerformed
 
     private void cortarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarButtonActionPerformed
@@ -2133,6 +2158,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 
     private void visualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarButtonActionPerformed
         // TODO add your handling code here:
+        ReproductorSec rSec = new ReproductorSec(new File(""), new File(""), new File(""));
     }//GEN-LAST:event_visualizarButtonActionPerformed
 
     private void txtVidGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVidGenActionPerformed
@@ -2142,6 +2168,11 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void txtTimeProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimeProcActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTimeProcActionPerformed
+
+    private void videoMasterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_videoMasterButtonActionPerformed
+        // TODO add your handling code here:
+        seleccionarArchivo(JFileChooser.DIRECTORIES_ONLY, "Guardar", txtVideoMaster, "");
+    }//GEN-LAST:event_videoMasterButtonActionPerformed
 
     /**
      *
@@ -2285,6 +2316,8 @@ public class ProyectoMain extends javax.swing.JFrame {
 
     public static boolean ScreenGo = false;
     public static boolean ScreenStop = false;
+
+    private Map<Integer, TimeDetection> listTimeDetection = new HashMap<Integer, TimeDetection>();
 
     //Log
     private final static Logger log = Logger.getLogger(ProyectoMain.class.getName());

@@ -974,10 +974,10 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="marcadoPanel" min="-2" max="-2" attributes="0"/>
-                          <Component id="preliminarPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="marcadoPanel" max="32767" attributes="0"/>
+                          <Component id="preliminarPanel" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="42" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1017,7 +1017,7 @@
                               <Component id="tableScrollPane1" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="labelDetTabla" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="291" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1033,7 +1033,7 @@
                           <Component id="labelDetTabla" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="tableScrollPane1" min="-2" pref="75" max="-2" attributes="0"/>
-                          <EmptySpace pref="87" max="32767" attributes="0"/>
+                          <EmptySpace pref="92" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1046,7 +1046,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtVxGen">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="3"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -1060,22 +1059,10 @@
                     <Component class="javax.swing.JTable" name="deteccionTable">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="3" rowCount="3">
-                            <Column editable="true" title="Tiempo Detecci&#xf3;n" type="java.lang.String">
-                              <Data value="5"/>
-                              <Data value="15"/>
-                              <Data value="25"/>
-                            </Column>
-                            <Column editable="true" title="Tiempo Inicio" type="java.lang.String">
-                              <Data value="0"/>
-                              <Data value="10"/>
-                              <Data value="20"/>
-                            </Column>
-                            <Column editable="true" title="Tiempo Termino" type="java.lang.String">
-                              <Data value="10"/>
-                              <Data value="20"/>
-                              <Data value="30"/>
-                            </Column>
+                          <Table columnCount="3" rowCount="0">
+                            <Column editable="true" title="Tiempo Detecci&#xf3;n" type="java.lang.String"/>
+                            <Column editable="true" title="Tiempo Inicio" type="java.lang.String"/>
+                            <Column editable="true" title="Tiempo Termino" type="java.lang.String"/>
                           </Table>
                         </Property>
                       </Properties>
@@ -1123,7 +1110,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="159" max="32767" attributes="0"/>
+                          <EmptySpace pref="189" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1160,13 +1147,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtVideoMaster">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="C:\u005cprueba\u005cperspectiva1\u005cprueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi" containsInvalidXMLChars="true"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtReconecedor">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="haarcascade_smile"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -1192,10 +1175,12 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="..."/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="videoMasterButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtTimeProc">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="00:02:34"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -1317,7 +1302,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtMaster">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="C:\u005cprueba\u005cperspectiva1\u005cprueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi" containsInvalidXMLChars="true"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -1328,7 +1312,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtReco">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="haarcascade_smile"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
@@ -1347,7 +1330,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtTiempoProc">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="00:02:34"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
@@ -1443,7 +1425,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtVidGen">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="3"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
