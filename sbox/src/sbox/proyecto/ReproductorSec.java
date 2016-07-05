@@ -6,6 +6,7 @@
 package sbox.proyecto;
 
 import com.sun.jna.NativeLibrary;
+import java.awt.Color;
 import java.io.File;
 import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
@@ -51,6 +52,27 @@ public class ReproductorSec extends javax.swing.JFrame {
         canalExtPanel.add(playerCanalExt);
         playerCanalExt.setSize(canalExtPanel.getSize());
         playerCanalExt.setVisible(true);
+
+        if (null != faceRecorder) {
+            labelPathFR.setText(faceRecorder.getAbsolutePath());
+        } else {
+            labelPathFR.setText("Perspectiva no configurada para este experimento");
+            faceRecorderPanel.setBackground(Color.BLACK);
+        }
+        
+        if (null != activityRender) {
+            labelPathAR.setText(activityRender.getAbsolutePath());
+        } else {
+            labelPathAR.setText("Perspectiva no configurada para este experimento");
+            activityRenderPanel.setBackground(Color.BLACK);
+        }
+        
+        if (null != canalExt) {
+            labelPathCE.setText(canalExt.getAbsolutePath());
+        } else {
+            labelPathCE.setText("Perspectiva no configurada para este experimento");
+            canalExtPanel.setBackground(Color.BLACK);
+        }
     }
 
     /**
@@ -70,6 +92,9 @@ public class ReproductorSec extends javax.swing.JFrame {
         labelCanalExt = new javax.swing.JLabel();
         detButton = new javax.swing.JButton();
         iniButton = new javax.swing.JButton();
+        labelPathFR = new javax.swing.JLabel();
+        labelPathAR = new javax.swing.JLabel();
+        labelPathCE = new javax.swing.JLabel();
 
         setResizable(false);
 
@@ -139,6 +164,12 @@ public class ReproductorSec extends javax.swing.JFrame {
             }
         });
 
+        labelPathFR.setText("jLabel1");
+
+        labelPathAR.setText("jLabel2");
+
+        labelPathCE.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -146,23 +177,26 @@ public class ReproductorSec extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(faceRecorderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelFaceRecorder))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelActRender))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelCanalExt)
-                            .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(323, 323, 323)
                         .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(216, 216, 216)
-                        .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(faceRecorderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelFaceRecorder)
+                            .addComponent(labelPathFR))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelActRender)
+                            .addComponent(labelPathAR))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelPathCE)
+                            .addComponent(labelCanalExt)
+                            .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -178,7 +212,12 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(faceRecorderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPathFR)
+                    .addComponent(labelPathAR)
+                    .addComponent(labelPathCE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -191,28 +230,54 @@ public class ReproductorSec extends javax.swing.JFrame {
     private void iniButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniButtonActionPerformed
         // TODO add your handling code here:
         if ("Iniciar".equals(iniButton.getText())) {
-            playerFaceRecorder.getMediaPlayer().playMedia(faceRecorder.getAbsolutePath());
-            playerActivityRender.getMediaPlayer().playMedia(activityRender.getAbsolutePath());
-            playerCanalExt.getMediaPlayer().playMedia(canalExt.getAbsolutePath());
+            if (null != faceRecorder) {
+                playerFaceRecorder.getMediaPlayer().playMedia(faceRecorder.getAbsolutePath());
+            }
+            if (null != activityRender) {
+                playerActivityRender.getMediaPlayer().playMedia(activityRender.getAbsolutePath());
+            }
+            if (null != canalExt) {
+                playerCanalExt.getMediaPlayer().playMedia(canalExt.getAbsolutePath());
+            }
+
             iniButton.setText("Pausar");
         } else if ("Pausar".equals(iniButton.getText())) {
-            playerFaceRecorder.getMediaPlayer().setPause(playerFaceRecorder.getMediaPlayer().isPlaying() ? true : false);
-            playerActivityRender.getMediaPlayer().setPause(playerActivityRender.getMediaPlayer().isPlaying() ? true : false);
-            playerCanalExt.getMediaPlayer().setPause(playerCanalExt.getMediaPlayer().isPlaying() ? true : false);
+            if (null != faceRecorder) {
+                playerFaceRecorder.getMediaPlayer().setPause(playerFaceRecorder.getMediaPlayer().isPlaying() ? true : false);
+            }
+            if (null != activityRender) {
+                playerActivityRender.getMediaPlayer().setPause(playerActivityRender.getMediaPlayer().isPlaying() ? true : false);
+            }
+            if (null != canalExt) {
+                playerCanalExt.getMediaPlayer().setPause(playerCanalExt.getMediaPlayer().isPlaying() ? true : false);
+            }
             iniButton.setText("Reanudar");
         } else if ("Reanudar".equals(iniButton.getText())) {
-            playerFaceRecorder.getMediaPlayer().setPause(playerFaceRecorder.getMediaPlayer().isPlaying() ? true : false);
-            playerActivityRender.getMediaPlayer().setPause(playerActivityRender.getMediaPlayer().isPlaying() ? true : false);
-            playerCanalExt.getMediaPlayer().setPause(playerCanalExt.getMediaPlayer().isPlaying() ? true : false);
+            if (null != faceRecorder) {
+                playerFaceRecorder.getMediaPlayer().setPause(playerFaceRecorder.getMediaPlayer().isPlaying() ? true : false);
+            }
+            if (null != activityRender) {
+                playerActivityRender.getMediaPlayer().setPause(playerActivityRender.getMediaPlayer().isPlaying() ? true : false);
+            }
+            if (null != canalExt) {
+                playerCanalExt.getMediaPlayer().setPause(playerCanalExt.getMediaPlayer().isPlaying() ? true : false);
+            }
             iniButton.setText("Pausar");
         }
     }//GEN-LAST:event_iniButtonActionPerformed
 
     private void detButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detButtonActionPerformed
         // TODO add your handling code here:
-        playerFaceRecorder.getMediaPlayer().stop();
-        playerActivityRender.getMediaPlayer().stop();
-        playerCanalExt.getMediaPlayer().stop();
+        if (null != faceRecorder) {
+            playerFaceRecorder.getMediaPlayer().stop();
+        }
+        if (null != activityRender) {
+            playerActivityRender.getMediaPlayer().stop();
+        }
+        if (null != canalExt) {
+            playerCanalExt.getMediaPlayer().stop();
+        }
+
         iniButton.setText("Iniciar");
     }//GEN-LAST:event_detButtonActionPerformed
 
@@ -260,5 +325,8 @@ public class ReproductorSec extends javax.swing.JFrame {
     private javax.swing.JLabel labelActRender;
     private javax.swing.JLabel labelCanalExt;
     private javax.swing.JLabel labelFaceRecorder;
+    private javax.swing.JLabel labelPathAR;
+    private javax.swing.JLabel labelPathCE;
+    private javax.swing.JLabel labelPathFR;
     // End of variables declaration//GEN-END:variables
 }

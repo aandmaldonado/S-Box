@@ -23,30 +23,33 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="faceRecorderPanel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="labelFaceRecorder" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="activityRenderPanel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="labelActRender" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="labelCanalExt" min="-2" max="-2" attributes="0"/>
-                          <Component id="canalExtPanel" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="323" max="-2" attributes="0"/>
                       <Component id="iniButton" min="-2" pref="224" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="216" max="-2" attributes="0"/>
                       <Component id="detButton" min="-2" pref="224" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="faceRecorderPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelFaceRecorder" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelPathFR" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="activityRenderPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelActRender" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelPathAR" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="labelPathCE" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelCanalExt" min="-2" max="-2" attributes="0"/>
+                          <Component id="canalExtPanel" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -68,7 +71,13 @@
                   <Component id="activityRenderPanel" min="-2" max="-2" attributes="0"/>
                   <Component id="faceRecorderPanel" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="63" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelPathFR" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelPathAR" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelPathCE" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="43" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="detButton" alignment="3" min="-2" pref="67" max="-2" attributes="0"/>
                   <Component id="iniButton" alignment="3" min="-2" pref="67" max="-2" attributes="0"/>
@@ -196,6 +205,21 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="iniButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelPathFR">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelPathAR">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelPathCE">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel3"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

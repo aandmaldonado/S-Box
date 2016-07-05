@@ -395,7 +395,10 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="labelDirIP" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtDirIP" min="-2" pref="204" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="buscarProgressBar" max="32767" attributes="0"/>
+                                                  <Component id="txtDirIP" pref="204" max="32767" attributes="0"/>
+                                              </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="buscarButton" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -417,7 +420,9 @@
                                   <Component id="txtDirIP" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buscarButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <Component id="buscarProgressBar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="labelDispositivos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="comboDispositivos" min="-2" max="-2" attributes="0"/>
@@ -489,6 +494,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
+                    <Component class="javax.swing.JProgressBar" name="buscarProgressBar">
+                      <Properties>
+                        <Property name="string" type="java.lang.String" value="Conectando"/>
+                        <Property name="stringPainted" type="boolean" value="true"/>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Component class="javax.swing.JLabel" name="faceRecorderIcon">
@@ -983,10 +994,10 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="marcadoPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="preliminarPanel" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1009,13 +1020,13 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="labelVxGen" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="txtVxGen" min="-2" max="-2" attributes="0"/>
-                              </Group>
                               <Component id="tableScrollPane1" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="labelDetTabla" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="labelVxGen" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                  <Component id="txtVxGen" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -1029,11 +1040,11 @@
                               <Component id="labelVxGen" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtVxGen" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="labelDetTabla" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="tableScrollPane1" min="-2" pref="75" max="-2" attributes="0"/>
-                          <EmptySpace pref="92" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="tableScrollPane1" pref="142" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1041,7 +1052,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="labelVxGen">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Videos por generar:"/>
+                    <Property name="text" type="java.lang.String" value="Secuencias por generar:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtVxGen">
@@ -1091,26 +1102,27 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="labelVideoMaster" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelReconocedor" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelTimeProc" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelVideoSec" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelVideoExt" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="marcadorButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="labelVideoMaster" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="labelReconocedor" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="labelTimeProc" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtTimeProc" min="-2" pref="59" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="txtVideoMaster" min="-2" pref="410" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="videoMasterButton" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="txtReconecedor" min="-2" pref="151" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
                           </Group>
-                          <EmptySpace pref="189" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="procesandoProgressBar" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtVideoExt" min="-2" pref="410" max="-2" attributes="0"/>
+                              <Component id="txtVideoSec" min="-2" pref="410" max="-2" attributes="0"/>
+                              <Component id="txtTimeProc" min="-2" pref="59" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="txtVideoMaster" min="-2" pref="410" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="videoMasterButton" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="txtReconecedor" min="-2" pref="151" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="191" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1123,17 +1135,30 @@
                               <Component id="txtVideoMaster" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="videoMasterButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelVideoSec" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtVideoSec" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelVideoExt" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtVideoExt" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="txtReconecedor" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelReconocedor" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="marcadorButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="marcadorButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="procesandoProgressBar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="labelTimeProc" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtTimeProc" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelTimeProc" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -1147,6 +1172,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtVideoMaster">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtReconecedor">
                   <Properties>
@@ -1187,6 +1215,32 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTimeProcActionPerformed"/>
                   </Events>
                 </Component>
+                <Component class="javax.swing.JLabel" name="labelVideoSec">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Video secundario:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtVideoSec">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelVideoExt">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Video externo:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtVideoExt">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JProgressBar" name="procesandoProgressBar">
+                  <Properties>
+                    <Property name="string" type="java.lang.String" value="Procesando..."/>
+                    <Property name="stringPainted" type="boolean" value="true"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -1223,9 +1277,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="infoPanel" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="secuenciasPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="infoPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="secuenciasPanel" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1247,25 +1301,33 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="labelMaster" min="-2" max="-2" attributes="0"/>
-                                      <Component id="labelReco" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtReco" min="-2" pref="151" max="-2" attributes="0"/>
-                                      <Component id="txtMaster" min="-2" pref="410" max="-2" attributes="0"/>
-                                  </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="cortarButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="cortandoProgressBar" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="cortarButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="labeltiempoProc" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtTiempoProc" min="-2" pref="59" max="-2" attributes="0"/>
                               </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="labelExt" min="-2" max="-2" attributes="0"/>
+                                      <Component id="labelReco" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="labelSec" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="labelMaster" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtMaster" min="-2" pref="410" max="-2" attributes="0"/>
+                                      <Component id="txtSec" min="-2" pref="410" max="-2" attributes="0"/>
+                                      <Component id="txtReco" min="-2" pref="151" max="-2" attributes="0"/>
+                                      <Component id="txtExt" min="-2" pref="410" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
-                          <EmptySpace pref="265" max="32767" attributes="0"/>
+                          <EmptySpace pref="264" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1277,19 +1339,32 @@
                               <Component id="labelMaster" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtMaster" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelSec" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtSec" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelExt" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtExt" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="txtReco" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelReco" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="cortarButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="cortarButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="cortandoProgressBar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="labeltiempoProc" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtTiempoProc" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="16" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1336,6 +1411,32 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTiempoProcActionPerformed"/>
                   </Events>
                 </Component>
+                <Component class="javax.swing.JLabel" name="labelSec">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Video secundario:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtSec">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelExt">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Video externo:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtExt">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JProgressBar" name="cortandoProgressBar">
+                  <Properties>
+                    <Property name="string" type="java.lang.String" value="Cortando..."/>
+                    <Property name="stringPainted" type="boolean" value="true"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="secuenciasPanel">
@@ -1353,16 +1454,16 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
+                              <Component id="visualizarButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelSecMaster" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
                                   <Component id="labelVidGen" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="txtVidGen" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="visualizarButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="secScrollPane" alignment="0" min="-2" pref="280" max="-2" attributes="0"/>
-                              <Component id="labelSecMaster" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="secScrollPane" alignment="0" min="-2" pref="515" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="493" max="32767" attributes="0"/>
+                          <EmptySpace pref="258" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1374,11 +1475,11 @@
                               <Component id="labelVidGen" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtVidGen" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="22" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="labelSecMaster" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="secScrollPane" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="secScrollPane" pref="121" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="visualizarButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1388,7 +1489,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="labelVidGen">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Videos generados:"/>
+                    <Property name="text" type="java.lang.String" value="Secuencias generadas:"/>
                   </Properties>
                 </Component>
                 <Container class="javax.swing.JScrollPane" name="secScrollPane">
@@ -1401,11 +1502,8 @@
                     <Component class="javax.swing.JList" name="secList">
                       <Properties>
                         <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="C:\prueba\videoDetect\videoDetect_1.avi"/>
-                            <StringItem index="1" value="C:\prueba\videoDetect\videoDetect_2.avi"/>
-                            <StringItem index="2" value="C:\prueba\videoDetect\videoDetect_3.avi"/>
-                            <StringItem index="3" value=" "/>
+                          <StringArray count="1">
+                            <StringItem index="0" value=" "/>
                           </StringArray>
                         </Property>
                       </Properties>

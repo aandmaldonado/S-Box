@@ -6,11 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.apache.log4j.Logger;
+import sbox.detection.VideoDetection;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
@@ -21,6 +21,7 @@ public class Reproductor extends javax.swing.JFrame {
     private File file;
     private final String ruta = System.getProperty("user.dir") + "\\lib";
     private final File vlcInstallPath = new File(ruta);
+    private final static Logger log = Logger.getLogger(VideoDetection.class.getName());
 
     //bandera para controlar la reproduccion de video y el cambio en el avance de video
     private boolean band = true;
@@ -59,9 +60,6 @@ public class Reproductor extends javax.swing.JFrame {
                 if (file != null) {
                     if ("Iniciar".equals(btnPlay.getText())) {
                         player.getMediaPlayer().playMedia(file.getAbsolutePath());
-//                        player.getMediaPlayer().parseMedia();
-//                        player.getMediaPlayer().start();
-//                        System.out.println(player.getMediaPlayer().getLength());
                         sldProgress.setEnabled(true);
                         btnPlay.setText("Pausar");
                     } else if ("Pausar".equals(btnPlay.getText())) {
@@ -273,16 +271,22 @@ public class Reproductor extends javax.swing.JFrame {
      * @param fin
      * @return
      */
-    public void cutVideo(File videoMaster, File videoSec, String ini, String fin) {
+    public boolean cutVideo(File videoMaster, File videoSec, String ini, String fin) {
         player = new EmbeddedMediaPlayerComponent();
+        boolean resp = false;
         initComponents();
         jPanel2.add(player);
         player.setSize(jPanel2.getSize());
         player.setVisible(false);
         String[] opts = {":start-time=" + ini, ":stop-time=" + fin, ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},fps=30,scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}:file{dst=" + videoSec.getAbsolutePath() + "}"};
-        player.getMediaPlayer().playMedia(videoMaster.getAbsolutePath(), opts);
+        resp = player.getMediaPlayer().playMedia(videoMaster.getAbsolutePath(), opts);
+        player.getMediaPlayer().start();
         player.getMediaPlayer().mute(true);
-        System.out.println("Se ha generado secuencia: " + videoSec.getName());
+        while (player.getMediaPlayer().isPlaying()) {
+            System.out.println("Esperando secuencia...");
+        }
+        log.info("Se ha generado secuencia: " + videoSec.getName());
+        return resp;
     }
 
 //    public String getDuration(File file) {
