@@ -2222,8 +2222,8 @@ public class ProyectoMain extends javax.swing.JFrame {
                 public void run() {
                     VideoDetection videoDetection = new VideoDetection();
                     File videoMaster = new File(txtVideoMaster.getText());
-                    File faceDetect = new File("C:\\Users\\aandmaldonado\\Documents\\GitHub\\S-Box\\sbox\\src\\resources\\haarcascades\\haarcascade_frontalface_default.xml");
-                    File smileDetect = new File("C:\\Users\\aandmaldonado\\Documents\\GitHub\\S-Box\\sbox\\src\\resources\\haarcascades\\" + txtReconecedor.getText());
+                    File faceDetect = new File(System.getProperty("user.dir")+"\\src\\resources\\haarcascades\\haarcascade_frontalface_default.xml");
+                    File smileDetect = new File(System.getProperty("user.dir")+"\\src\\resources\\haarcascades\\" + txtReconecedor.getText());
                     long ini = System.currentTimeMillis();
                     listTimeDetection = videoDetection.getDetection(videoMaster, faceDetect, smileDetect);
                     long fin = System.currentTimeMillis();

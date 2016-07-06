@@ -5,6 +5,7 @@ import static org.bytedeco.javacpp.opencv_core.cvLoad;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
@@ -22,7 +23,9 @@ import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
 import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_CANNY_PRUNING;
 import org.bytedeco.javacpp.opencv_objdetect.CvHaarClassifierCascade;
+import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameGrabber;
 
 public class VideoDetection {
 
@@ -37,9 +40,9 @@ public class VideoDetection {
 
     }
 
-    public Map<Integer,TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect) {
+    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect) {
         TimeDetection times = null;
-        Map<Integer,TimeDetection> listTime = new HashMap<Integer,TimeDetection>();
+        Map<Integer, TimeDetection> listTime = new HashMap<Integer, TimeDetection>();
         frame = new Mat();
         cap = new VideoCapture(videoMaster.getAbsolutePath());
         classifierFrontalFace = new CvHaarClassifierCascade(cvLoad(faceDetect.getAbsolutePath()));
@@ -53,7 +56,9 @@ public class VideoDetection {
         log.info("Inicio proceso detección de sonrisas");
         log.info("Video MASTER: " + videoMaster.getAbsolutePath());
         duracion = (int) getDuration(new VideoCapture(videoMaster.getAbsolutePath())) / 1000;
+//duracion = (int) getDuration(videoMaster) / 1000;
         log.info("Duracion video: " + getTimeDetect(getDuration(new VideoCapture(videoMaster.getAbsolutePath()))));
+//log.info("Duracion video: " + getTimeDetect(getDuration(videoMaster)));
         while (cap.grab()) {
             if (cap.retrieve(frame)) {
                 storage = CvMemStorage.create();
@@ -123,6 +128,18 @@ public class VideoDetection {
         cap.release();
         return duracion;
     }
+
+//    private long getDuration(File cap) {
+//        long duracion = 0;
+//        try {
+//            OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(cap);
+//            grabber.start();
+//            duracion = grabber.getLengthInTime() / 1000;
+//        } catch (FrameGrabber.Exception ex) {
+//            log.error(ex);
+//        }
+//        return duracion;
+//    }
 
     public String getTimeDetect(long time) {
         String duracion = "";
