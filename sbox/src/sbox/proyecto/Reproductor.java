@@ -309,6 +309,20 @@ public class Reproductor extends javax.swing.JFrame {
 ////        long restosegundo = restominuto % 1000;
 //        return hora + ":" + minuto + ":" + segundo;
 //    }
+    
+        public String getDuration(File file) {
+        player = new EmbeddedMediaPlayerComponent();
+        initComponents();
+        jPanel2.add(player);
+        player.setSize(jPanel2.getSize());
+        player.setVisible(true);
+        player.getMediaPlayer().playMedia(file.getAbsolutePath());
+        player.getMediaPlayer().mute(true);
+        player.getMediaPlayer().parseMedia();
+        player.getMediaPlayer().start();
+        float fps = player.getMediaPlayer().getFps();
+        return String.valueOf(fps);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPlay;

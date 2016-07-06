@@ -17,6 +17,33 @@ public class TimeDetection {
     private String startTime = "";
     private String stopTime = "";
     private String time = "";
+    private String startFrame = "";
+    private String stopFrame = "";
+
+    public String getStartFrame() {
+        return startFrame;
+    }
+
+    public void setStartFrame(String startFrame) {
+        this.startFrame = startFrame;
+    }
+
+    public String getStopFrame() {
+        return stopFrame;
+    }
+
+    public void setStopFrame(String stopFrame) {
+        this.stopFrame = stopFrame;
+    }
+
+    public String getFrame() {
+        return frame;
+    }
+
+    public void setFrame(String frame) {
+        this.frame = frame;
+    }
+    private String frame = "";
 
     public String getStartTime() {
         return startTime;

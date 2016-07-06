@@ -5,6 +5,7 @@ import static org.bytedeco.javacpp.opencv_core.cvLoad;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
@@ -16,13 +17,16 @@ import static org.bytedeco.javacpp.opencv_core.cvClearMemStorage;
 import static org.bytedeco.javacpp.opencv_core.cvGetSeqElem;
 import static org.bytedeco.javacpp.opencv_core.cvPoint;
 import static org.bytedeco.javacpp.opencv_core.cvRectangle;
+import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FPS;
 import org.bytedeco.javacpp.opencv_highgui.VideoCapture;
 import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_POS_MSEC;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
 import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_CANNY_PRUNING;
 import org.bytedeco.javacpp.opencv_objdetect.CvHaarClassifierCascade;
+import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameGrabber;
 
 public class VideoDetection {
 
@@ -37,9 +41,9 @@ public class VideoDetection {
 
     }
 
-    public Map<Integer,TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect) {
+    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect) {
         TimeDetection times = null;
-        Map<Integer,TimeDetection> listTime = new HashMap<Integer,TimeDetection>();
+        Map<Integer, TimeDetection> listTime = new HashMap<Integer, TimeDetection>();
         frame = new Mat();
         cap = new VideoCapture(videoMaster.getAbsolutePath());
         classifierFrontalFace = new CvHaarClassifierCascade(cvLoad(faceDetect.getAbsolutePath()));
@@ -133,6 +137,30 @@ public class VideoDetection {
         long segundo = restominuto / 1000;
         duracion = hora + ":" + minuto + ":" + segundo;
         return duracion;
+    }
+
+    public String getFps(File f) {
+        String resp = "";
+        OpenCVFrameGrabber grabber = null;
+        try {
+            grabber = new OpenCVFrameGrabber(f);
+            grabber.start();
+            resp = String.valueOf((int) grabber.getFrameRate());
+            grabber.stop();
+        } catch (FrameGrabber.Exception ex) {
+            log.error(ex);
+        }      
+        return resp;
+
+    }
+
+    public String getFps(VideoCapture cap) {
+        String resp = "";
+        cap.grab();
+        resp = String.valueOf((int) cap.get(CV_CAP_PROP_FPS));
+        cap.release();
+        return resp;
+
     }
 
 }
