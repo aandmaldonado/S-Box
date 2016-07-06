@@ -310,7 +310,7 @@ public class Reproductor extends javax.swing.JFrame {
 //        return hora + ":" + minuto + ":" + segundo;
 //    }
     
-        public String getDuration(File file) {
+        public String getFps(File file) {
         player = new EmbeddedMediaPlayerComponent();
         initComponents();
         jPanel2.add(player);
@@ -320,7 +320,7 @@ public class Reproductor extends javax.swing.JFrame {
         player.getMediaPlayer().mute(true);
         player.getMediaPlayer().parseMedia();
         player.getMediaPlayer().start();
-        float fps = player.getMediaPlayer().getFps();
+        long fps = (long)player.getMediaPlayer().getFps();
         return String.valueOf(fps);
     }
 

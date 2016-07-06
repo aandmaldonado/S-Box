@@ -36,12 +36,12 @@ public class VideoDetection {
     private OpenCVFrameConverter.ToIplImage converter;
     private Mat frame;
     private final static Logger log = Logger.getLogger(VideoDetection.class.getName());
-
+    
     public VideoDetection() {
 
     }
 
-    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect) {
+    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect,int holgura) {
         TimeDetection times = null;
         Map<Integer, TimeDetection> listTime = new HashMap<Integer, TimeDetection>();
         frame = new Mat();
@@ -88,18 +88,18 @@ public class VideoDetection {
                             timeSmileMm = timeSmileMs / 1000;
 
                             if (timeSmileMmAux < timeSmileMm || timeSmileMm == 0) {
-                                if (timeSmileMm < 6) {
+                                if (timeSmileMm < (holgura+1)) {
                                     startTime = 0;
                                     stopTime = 10;
-                                } else if (timeSmileMm > (duracion - 6)) {//25
-                                    startTime = duracion - 10;
+                                } else if (timeSmileMm > (duracion - (holgura+1))) {//25
+                                    startTime = duracion - (holgura+holgura);
                                     stopTime = duracion;
                                 } else {
                                     startTime = timeSmileMmAux + 1;
                                     if ((startTime + 1) > duracion) {
                                         stopTime = duracion;
                                     } else {
-                                        stopTime = startTime + 10;
+                                        stopTime = startTime + (holgura+holgura);
                                     }
                                 }
                                 times = new TimeDetection();
@@ -119,7 +119,7 @@ public class VideoDetection {
         return listTime;
     }
 
-    private long getDuration(VideoCapture cap) {
+    public long getDuration(VideoCapture cap) {
         long duracion = 0;
         while (cap.grab()) {
             if (cap.retrieve(frame)) {
@@ -130,17 +130,17 @@ public class VideoDetection {
         return duracion;
     }
 
-//    private long getDuration(File cap) {
-//        long duracion = 0;
-//        try {
-//            OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(cap);
-//            grabber.start();
-//            duracion = grabber.getLengthInTime() / 1000;
-//        } catch (FrameGrabber.Exception ex) {
-//            log.error(ex);
-//        }
-//        return duracion;
-//    }
+    public long getDuration(File cap) {
+        long duracion = 0;
+        try {
+            OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(cap);
+            grabber.start();
+            duracion = grabber.getLengthInTime() / 1000;
+        } catch (FrameGrabber.Exception ex) {
+            log.error(ex);
+        }
+        return duracion;
+    }
 
     public String getTimeDetect(long time) {
         String duracion = "";
@@ -153,28 +153,28 @@ public class VideoDetection {
         return duracion;
     }
 
-    public String getFps(File f) {
-        String resp = "";
-        OpenCVFrameGrabber grabber = null;
-        try {
-            grabber = new OpenCVFrameGrabber(f);
-            grabber.start();
-            resp = String.valueOf((int) grabber.getFrameRate());
-            grabber.stop();
-        } catch (FrameGrabber.Exception ex) {
-            log.error(ex);
-        }      
-        return resp;
-
-    }
-
-    public String getFps(VideoCapture cap) {
-        String resp = "";
-        cap.grab();
-        resp = String.valueOf((int) cap.get(CV_CAP_PROP_FPS));
-        cap.release();
-        return resp;
-
-    }
+//    public String getFps(File f) {
+//        String resp = "";
+//        OpenCVFrameGrabber grabber = null;
+//        try {
+//            grabber = new OpenCVFrameGrabber(f);
+//            grabber.start();
+//            resp = String.valueOf((int) grabber.getFrameRate());
+//            grabber.stop();
+//        } catch (FrameGrabber.Exception ex) {
+//            log.error(ex);
+//        }      
+//        return resp;
+//
+//    }
+//
+//    public String getFps(VideoCapture cap) {
+//        String resp = "";
+//        cap.grab();
+//        resp = String.valueOf((int) cap.get(CV_CAP_PROP_FPS));
+//        cap.release();
+//        return resp;
+//
+//    }
 
 }

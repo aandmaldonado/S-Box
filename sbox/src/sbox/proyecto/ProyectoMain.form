@@ -1000,12 +1000,15 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="filtroPanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                           <Component id="marcadoPanel" max="32767" attributes="0"/>
-                          <Component id="filtroPanel" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="preliminarPanel" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="preliminarPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1035,7 +1038,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="tableScrollPane1" pref="236" max="32767" attributes="0"/>
+                          <Component id="tableScrollPane1" pref="202" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1084,14 +1087,25 @@
                               <Component id="labelVideoSec" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="labelVideoExt" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="marcadorButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelHolgura" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
+                                  <Component id="procesandoProgressBar" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="263" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Component id="txtVideoSec" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtVideoMaster" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtVideoExt" alignment="0" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="txtHolgura" min="-2" pref="28" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="labelSeg" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="videoMasterButton" min="-2" max="-2" attributes="0"/>
@@ -1102,10 +1116,6 @@
                                       <Component id="txtFPS2" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtFPS3" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
                                   </Group>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="procesandoProgressBar" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1145,7 +1155,13 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="11" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="txtHolgura" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelHolgura" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelSeg" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="7" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="procesandoProgressBar" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="marcadorButton" min="-2" max="-2" attributes="0"/>
@@ -1228,6 +1244,18 @@
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
+                <Component class="javax.swing.JLabel" name="labelHolgura">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Holgura:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtHolgura">
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelSeg">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="segundos"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="filtroPanel">
@@ -1259,7 +1287,7 @@
                               <Component id="labelReconocedor" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtReconecedor" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="121" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>

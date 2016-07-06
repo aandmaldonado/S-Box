@@ -169,6 +169,9 @@ public class ProyectoMain extends javax.swing.JFrame {
         txtFPS1 = new javax.swing.JTextField();
         txtFPS2 = new javax.swing.JTextField();
         txtFPS3 = new javax.swing.JTextField();
+        labelHolgura = new javax.swing.JLabel();
+        txtHolgura = new javax.swing.JTextField();
+        labelSeg = new javax.swing.JLabel();
         filtroPanel = new javax.swing.JPanel();
         labelReconocedor = new javax.swing.JLabel();
         txtReconecedor = new javax.swing.JTextField();
@@ -770,7 +773,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(preliminarPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                .addComponent(tableScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -814,6 +817,10 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         txtFPS3.setEnabled(false);
 
+        labelHolgura.setText("Holgura:");
+
+        labelSeg.setText("segundos");
+
         javax.swing.GroupLayout marcadoPanelLayout = new javax.swing.GroupLayout(marcadoPanel);
         marcadoPanel.setLayout(marcadoPanelLayout);
         marcadoPanelLayout.setHorizontalGroup(
@@ -824,14 +831,23 @@ public class ProyectoMain extends javax.swing.JFrame {
                     .addComponent(labelVideoMaster)
                     .addComponent(labelVideoSec)
                     .addComponent(labelVideoExt)
-                    .addComponent(marcadorButton))
+                    .addComponent(marcadorButton)
+                    .addComponent(labelHolgura))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(marcadoPanelLayout.createSequentialGroup()
+                        .addComponent(procesandoProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 263, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, marcadoPanelLayout.createSequentialGroup()
                         .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtVideoSec, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtVideoMaster, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtVideoExt, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(txtVideoExt, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, marcadoPanelLayout.createSequentialGroup()
+                                .addComponent(txtHolgura, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelSeg)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(videoMasterButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -839,10 +855,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                             .addComponent(labelFPS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtFPS1)
                             .addComponent(txtFPS2)
-                            .addComponent(txtFPS3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(marcadoPanelLayout.createSequentialGroup()
-                        .addComponent(procesandoProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(txtFPS3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         marcadoPanelLayout.setVerticalGroup(
@@ -871,7 +884,12 @@ public class ProyectoMain extends javax.swing.JFrame {
                         .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labelVideoExt)
                             .addComponent(txtVideoExt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtHolgura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelHolgura)
+                    .addComponent(labelSeg))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(procesandoProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(marcadorButton))
@@ -907,7 +925,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 .addGroup(filtroPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelReconocedor)
                     .addComponent(txtReconecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout procesamientoPanelLayout = new javax.swing.GroupLayout(procesamientoPanel);
@@ -928,11 +946,13 @@ public class ProyectoMain extends javax.swing.JFrame {
             procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(procesamientoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(marcadoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(filtroPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(preliminarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(procesamientoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(procesamientoPanelLayout.createSequentialGroup()
+                        .addComponent(filtroPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(marcadoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(preliminarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -2315,7 +2335,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void marcadorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_marcadorButtonActionPerformed
         // TODO add your handling code here:
         if ("Filtrar".equals(marcadorButton.getText())) {
-            if (!"".equals(txtVideoMaster.getText())) {
+            if (!"".equals(txtVideoMaster.getText()) && !"".equals(txtHolgura.getText())) {
                 marcadorButton.setText("Abortar");
                 procesandoProgressBar.setVisible(true);
                 procesandoProgressBar.setIndeterminate(true);
@@ -2324,10 +2344,10 @@ public class ProyectoMain extends javax.swing.JFrame {
                     public void run() {
                         VideoDetection videoDetection = new VideoDetection();
                         File videoMaster = new File(txtVideoMaster.getText());
-                        File faceDetect = new File("C:\\Users\\aandmaldonado\\Documents\\GitHub\\S-Box\\sbox\\src\\resources\\haarcascades\\haarcascade_frontalface_default.xml");
-                        File smileDetect = new File("C:\\Users\\aandmaldonado\\Documents\\GitHub\\S-Box\\sbox\\src\\resources\\haarcascades\\" + txtReconecedor.getText());
+                        File faceDetect = new File(System.getProperty("user.dir") + "\\src\\resources\\haarcascades\\haarcascade_frontalface_default.xml");
+                        File smileDetect = new File(System.getProperty("user.dir") + "\\src\\resources\\haarcascades\\" + txtReconecedor.getText());
                         long ini = System.currentTimeMillis();
-                        listTimeDetection = videoDetection.getDetection(videoMaster, faceDetect, smileDetect);
+                        listTimeDetection = videoDetection.getDetection(videoMaster, faceDetect, smileDetect, Integer.parseInt(txtHolgura.getText()));
                         long fin = System.currentTimeMillis();
                         log.info("Duración proceso: " + videoDetection.getTimeDetect(fin - ini));
                         Object[][] data = new Object[listTimeDetection.size()][3];
@@ -2352,18 +2372,20 @@ public class ProyectoMain extends javax.swing.JFrame {
                     }
                 }).start();
 
-            } else {
+            } else if ("".equals(txtVideoMaster.getText())) {
                 JOptionPane.showMessageDialog(this, "Debe ingresar video master", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if ("".equals(txtHolgura.getText())) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar holgura", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else if ("Abortar".equals(marcadorButton.getText())) {
-
+            marcadorButton.setText("Filtrar");
         }
     }//GEN-LAST:event_marcadorButtonActionPerformed
 
     private void cortarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarButtonActionPerformed
         // TODO add your handling code here:
         if ("Generar".equals(cortarButton.getText())) {
-
+            cortarButton.setText("Abortar");
             cortandoProgressBar.setIndeterminate(true);
             cortandoProgressBar.setVisible(true);
             new Thread(new Runnable() {
@@ -2458,7 +2480,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 }
             }).start();
         } else if ("Abortar".equals(cortarButton.getText())) {
-
+            cortarButton.setText("Generar");
         }
     }//GEN-LAST:event_cortarButtonActionPerformed
 
@@ -2529,6 +2551,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             VideoDetection vd = new VideoDetection();
+            Reproductor r = new Reproductor();
             File f;
             File[] archivos;
             String nombreProyecto = txtNombreProyecto.getText(), rutaProyecto = txtRutaProyecto.getText(), fileSec, perspectiva;
@@ -2538,7 +2561,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 fileSec = rutaProyecto + "\\" + nombreProyecto;
             }
             seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtVideoMaster, "avi", fileSec + "\\perspectiva1");
-            txtFPS1.setText(vd.getFps(new File(txtVideoMaster.getText())));
+            txtFPS1.setText(r.getFps(new File(txtVideoMaster.getText())));
             File videoMaster = new File(txtVideoMaster.getText());
             String[] a = videoMaster.getName().split(".avi");
             String[] b = a[0].split("_");
@@ -2559,7 +2582,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     l = b.length;
                     if (b[l - 1].equals(experimento)) {
                         txtVideoSec.setText(s.getAbsolutePath());
-                        txtFPS2.setText(vd.getFps(new opencv_highgui.VideoCapture(s.getAbsolutePath())));
+                        txtFPS2.setText(r.getFps(new File(s.getAbsolutePath())));
                     }
                 }
                 if ("".equals(txtVideoSec.getText())) {
@@ -2580,7 +2603,8 @@ public class ProyectoMain extends javax.swing.JFrame {
                     l = b.length;
                     if (b[l - 1].equals(experimento)) {
                         txtVideoExt.setText(s.getAbsolutePath());
-                        txtFPS3.setText(vd.getFps(new File(txtVideoExt.getText())));
+                        txtFPS3.setText(r.getFps(new File(s.getAbsolutePath())));
+
                     }
                 }
                 if ("".equals(txtVideoExt.getText())) {
@@ -2795,6 +2819,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JLabel labelFPS2;
     private javax.swing.JLabel labelFaceRecorder;
     private javax.swing.JLabel labelFaceRecorderIcon;
+    private javax.swing.JLabel labelHolgura;
     private javax.swing.JLabel labelMaster;
     private javax.swing.JLabel labelNok;
     private javax.swing.JLabel labelNombreProyecto;
@@ -2806,6 +2831,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JLabel labelRutaProyecto;
     private javax.swing.JLabel labelSec;
     private javax.swing.JLabel labelSecMaster;
+    private javax.swing.JLabel labelSeg;
     private javax.swing.JLabel labelVideoExt;
     private javax.swing.JLabel labelVideoMaster;
     private javax.swing.JLabel labelVideoSec;
@@ -2839,6 +2865,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private javax.swing.JTextField txtFPS4;
     private javax.swing.JTextField txtFPS5;
     private javax.swing.JTextField txtFPS6;
+    private javax.swing.JTextField txtHolgura;
     private javax.swing.JTextField txtMaster;
     private javax.swing.JTextField txtNombreProyecto;
     private javax.swing.JTextField txtReco;
