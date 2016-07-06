@@ -57,7 +57,9 @@ public class VideoDetection {
         log.info("Inicio proceso detección de sonrisas");
         log.info("Video MASTER: " + videoMaster.getAbsolutePath());
         duracion = (int) getDuration(new VideoCapture(videoMaster.getAbsolutePath())) / 1000;
+//duracion = (int) getDuration(videoMaster) / 1000;
         log.info("Duracion video: " + getTimeDetect(getDuration(new VideoCapture(videoMaster.getAbsolutePath()))));
+//log.info("Duracion video: " + getTimeDetect(getDuration(videoMaster)));
         while (cap.grab()) {
             if (cap.retrieve(frame)) {
                 storage = CvMemStorage.create();
@@ -127,6 +129,18 @@ public class VideoDetection {
         cap.release();
         return duracion;
     }
+
+//    private long getDuration(File cap) {
+//        long duracion = 0;
+//        try {
+//            OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(cap);
+//            grabber.start();
+//            duracion = grabber.getLengthInTime() / 1000;
+//        } catch (FrameGrabber.Exception ex) {
+//            log.error(ex);
+//        }
+//        return duracion;
+//    }
 
     public String getTimeDetect(long time) {
         String duracion = "";
