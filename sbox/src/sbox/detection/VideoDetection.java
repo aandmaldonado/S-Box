@@ -1,11 +1,13 @@
 package sbox.detection;
 
+import java.awt.Event;
 import java.io.File;
 import static org.bytedeco.javacpp.opencv_core.cvLoad;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import javax.swing.JProgressBar;
 
 import org.apache.log4j.Logger;
 import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
@@ -36,12 +38,12 @@ public class VideoDetection {
     private OpenCVFrameConverter.ToIplImage converter;
     private Mat frame;
     private final static Logger log = Logger.getLogger(VideoDetection.class.getName());
-    
+
     public VideoDetection() {
 
     }
 
-    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect,int holgura) {
+    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect, int holgura, JProgressBar prog) {
         TimeDetection times = null;
         Map<Integer, TimeDetection> listTime = new HashMap<Integer, TimeDetection>();
         frame = new Mat();
@@ -53,13 +55,18 @@ public class VideoDetection {
         CvRect cvRectFace, cvRectMouth;
         CvMemStorage storage;
         IplImage grayImage;
-        int duracion = 0, totalFaces = 0, totalMouth = 0, xFace = 0, yFace = 0, wFace = 0, hFace = 0, xMouth = 0, yMouth = 0, wMouth = 0, hMouth = 0, timeSmileMs = 0, timeSmileMmAux = 0, timeSmileMm = 0, startTime = 0, stopTime = 0;
+        int duracion = 0, totalFaces = 0, totalMouth = 0, xFace = 0, yFace = 0, wFace = 0, hFace = 0, xMouth = 0, yMouth = 0, wMouth = 0, hMouth = 0, timeSmileMs = 0, timeSmileMmAux = 0, timeSmileMm = 0, startTime = 0, stopTime = 0, n = 0;
         log.info("Inicio proceso detección de sonrisas");
         log.info("Video MASTER: " + videoMaster.getAbsolutePath());
-        duracion = (int) getDuration(new VideoCapture(videoMaster.getAbsolutePath())) / 1000;
-//duracion = (int) getDuration(videoMaster) / 1000;
-        log.info("Duracion video: " + getTimeDetect(getDuration(new VideoCapture(videoMaster.getAbsolutePath()))));
-//log.info("Duracion video: " + getTimeDetect(getDuration(videoMaster)));
+        log.info("Reconocedor: " + smileDetect.getName());
+        log.info("Holgura: " + String.valueOf(holgura));
+//        duracion = (int) getDuration(new VideoCapture(videoMaster.getAbsolutePath())) / 1000;
+        duracion = (int) getDuration(videoMaster) / 1000;
+//        log.info("Duracion video: " + getTimeDetect(getDuration(new VideoCapture(videoMaster.getAbsolutePath()))));
+        log.info("Duracion video: " + getTimeDetect(getDuration(videoMaster)));
+        prog.setIndeterminate(false);
+        prog.setValue(n);
+        prog.setString(String.valueOf(n) + "%");
         while (cap.grab()) {
             if (cap.retrieve(frame)) {
                 storage = CvMemStorage.create();
@@ -87,19 +94,22 @@ public class VideoDetection {
                             timeSmileMs = (int) cap.get(CV_CAP_PROP_POS_MSEC);
                             timeSmileMm = timeSmileMs / 1000;
 
+                            prog.setValue(timeSmileMm * 100 / duracion);
+                            prog.setString(String.valueOf(timeSmileMm * 100 / duracion) + "%");
+
                             if (timeSmileMmAux < timeSmileMm || timeSmileMm == 0) {
-                                if (timeSmileMm < (holgura+1)) {
+                                if (timeSmileMm < (holgura + 1)) {
                                     startTime = 0;
                                     stopTime = 10;
-                                } else if (timeSmileMm > (duracion - (holgura+1))) {//25
-                                    startTime = duracion - (holgura+holgura);
+                                } else if (timeSmileMm > (duracion - (holgura + 1))) {//25
+                                    startTime = duracion - (holgura + holgura);
                                     stopTime = duracion;
                                 } else {
                                     startTime = timeSmileMmAux + 1;
                                     if ((startTime + 1) > duracion) {
                                         stopTime = duracion;
                                     } else {
-                                        stopTime = startTime + (holgura+holgura);
+                                        stopTime = startTime + (holgura + holgura);
                                     }
                                 }
                                 times = new TimeDetection();
@@ -114,9 +124,15 @@ public class VideoDetection {
                 }
             }
         }
+        prog.setVisible(false);
         cap.release();
         log.info("Fin proceso detección de sonrisas");
         return listTime;
+    }
+    
+    public void stop(){
+        cap.release();
+        log.info("Proceso abortado");
     }
 
     public long getDuration(VideoCapture cap) {
@@ -176,5 +192,4 @@ public class VideoDetection {
 //        return resp;
 //
 //    }
-
 }

@@ -26,7 +26,7 @@ public class PruebasOpenCV {
     public static void main(String[] args) {
         // TODO code application logic here
         //C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi
-        String sFile = "C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi";
+        String sFile = "prueba_faceRecorder_28-06-2016_21.48.09.489_1.avi";
         File fFile = new File(sFile);
         //video capture
         opencv_highgui.VideoCapture cap = new opencv_highgui.VideoCapture(sFile);
@@ -42,7 +42,7 @@ public class PruebasOpenCV {
             System.out.println("OpenCVFrameGrabber:");
             System.out.println(grabber.getFrameRate());
             System.out.println(grabber.getLengthInFrames());
-            System.out.println(grabber.getLengthInTime());
+            System.out.println(grabber.getSampleRate());
         } catch (FrameGrabber.Exception ex) {
             Logger.getLogger(PruebasOpenCV.class.getName()).log(Level.SEVERE, null, ex);
         }
