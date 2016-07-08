@@ -6,13 +6,9 @@
 package sbox.proyecto;
 
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bytedeco.javacpp.opencv_highgui;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FPS;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FRAME_COUNT;
-import org.bytedeco.javacv.FrameGrabber;
-import org.bytedeco.javacv.OpenCVFrameGrabber;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.Timer;
 
 /**
  *
@@ -20,32 +16,44 @@ import org.bytedeco.javacv.OpenCVFrameGrabber;
  */
 public class PruebasOpenCV {
 
+    private static int hora = 0, min = 0, seg = 0, ds = 0;//unidades de medida
+    private static Thread hilo = null;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        //C:\\prueba\\perspectiva1\\prueba_faceRecorder_28-06-2016_17.26.22.2622_3.avi
-        String sFile = "prueba_faceRecorder_28-06-2016_21.48.09.489_1.avi";
-        File fFile = new File(sFile);
-        //video capture
-        opencv_highgui.VideoCapture cap = new opencv_highgui.VideoCapture(sFile);
-        cap.grab();
-        System.out.println("opencv:");
-        System.out.println(cap.get(CV_CAP_PROP_FPS ));
-        System.out.println(cap.get(CV_CAP_PROP_FRAME_COUNT ));
+
+        hilo = new Thread() {//declaramos el hilo
+
+            @Override
+            public void run() {
+                try {
+                    while (true) {//ciclo infinito
+                        if (ds == 99) {//si los decisegundos son iguales a 99
+                            ds = 0;//decisegundo vuelve a empezar en cero
+                            seg++;//y aumenta un segundo
+                        }
+                        if (seg == 59) {//si los segundos son iguales a 59
+                            seg = 0;//segundo vuelve a empezar en cero
+                            min++;//y aumenta un minuto
+                        }
+                        if (min == 59) {//si los minutos son iguales a 59
+                            min = 0;//minuto vuelve a empezar en cero
+                            hora++;//y aumenta una hora
+                        }
+                        ds++;//aumentan las decimas de segundo
+
+                        System.out.println(hora + ":" + min + ":" + seg + ":" + ds);//se muestra en el jlabel
+
+                        hilo.sleep(10);//que duerma una decima de segundo
+                    }
+                } catch (java.lang.InterruptedException ie) {
+                    System.out.println(ie.getMessage());
+                }
+            }
+        };
+        hilo.start();
         
-        //OpenCVFrameGrabber
-        OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(fFile);
-        try {
-            grabber.start();
-            System.out.println("OpenCVFrameGrabber:");
-            System.out.println(grabber.getFrameRate());
-            System.out.println(grabber.getLengthInFrames());
-            System.out.println(grabber.getSampleRate());
-        } catch (FrameGrabber.Exception ex) {
-            Logger.getLogger(PruebasOpenCV.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
-    
 }
