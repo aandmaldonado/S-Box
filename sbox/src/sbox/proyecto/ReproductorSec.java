@@ -95,10 +95,13 @@ public class ReproductorSec extends javax.swing.JFrame {
         labelPathFR = new javax.swing.JLabel();
         labelPathAR = new javax.swing.JLabel();
         labelPathCE = new javax.swing.JLabel();
+        PauseButton = new javax.swing.JButton();
+        repetirCheckBox = new javax.swing.JCheckBox();
 
         setResizable(false);
 
         faceRecorderPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        faceRecorderPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout faceRecorderPanelLayout = new javax.swing.GroupLayout(faceRecorderPanel);
         faceRecorderPanel.setLayout(faceRecorderPanelLayout);
@@ -170,6 +173,10 @@ public class ReproductorSec extends javax.swing.JFrame {
 
         labelPathCE.setText("jLabel3");
 
+        PauseButton.setText("jButton1");
+
+        repetirCheckBox.setText("Repetir");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -179,8 +186,12 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(323, 323, 323)
                         .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(216, 216, 216)
-                        .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(71, 71, 71)
+                        .addComponent(PauseButton)
+                        .addGap(72, 72, 72)
+                        .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(repetirCheckBox))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,10 +229,16 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addComponent(labelPathAR)
                     .addComponent(labelPathCE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(repetirCheckBox))
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(PauseButton)
+                        .addGap(74, 74, 74))))
         );
 
         pack();
@@ -317,6 +334,7 @@ public class ReproductorSec extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton PauseButton;
     private javax.swing.JPanel activityRenderPanel;
     private javax.swing.JPanel canalExtPanel;
     private javax.swing.JButton detButton;
@@ -328,5 +346,6 @@ public class ReproductorSec extends javax.swing.JFrame {
     private javax.swing.JLabel labelPathAR;
     private javax.swing.JLabel labelPathCE;
     private javax.swing.JLabel labelPathFR;
+    private javax.swing.JCheckBox repetirCheckBox;
     // End of variables declaration//GEN-END:variables
 }

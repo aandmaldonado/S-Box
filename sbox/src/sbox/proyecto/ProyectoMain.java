@@ -13,22 +13,37 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.bytedeco.javacpp.avcodec;
+import org.bytedeco.javacpp.opencv_core;
+import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_COMPLEX_SMALL;
+import static org.bytedeco.javacpp.opencv_core.cvClearMemStorage;
+import static org.bytedeco.javacpp.opencv_core.cvInitFont;
+import static org.bytedeco.javacpp.opencv_core.cvPoint;
+import static org.bytedeco.javacpp.opencv_core.cvPutText;
+import org.bytedeco.javacpp.opencv_highgui.VideoCapture;
+import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
+import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameGrabber;
 import org.jdesktop.swingworker.SwingWorker;
 import sbox.activityrender.initScreenRecorder;
 import sbox.detection.TimeDetection;
@@ -40,17 +55,17 @@ import sbox.facerecorder.*;
  * @author Álvaro Andrés Maldonado Pinto
  */
 public class ProyectoMain extends javax.swing.JFrame {
-    
+
     class CameraSwingWorker extends SwingWorker<String, Object> {
-        
+
         private String path = "";
         private String nombreProyecto = "";
-        
+
         public CameraSwingWorker(String path, String nombreProyecto) {
             this.path = path;
             this.nombreProyecto = nombreProyecto;
         }
-        
+
         @Override
         public String doInBackground() throws Exception {
             try {
@@ -61,9 +76,9 @@ public class ProyectoMain extends javax.swing.JFrame {
             }
             return null;
         }
-        
+
     }
-    
+
     public ProyectoMain() {
         initComponents();
         tabPanelPrincipal.setVisible(false);
@@ -547,13 +562,13 @@ public class ProyectoMain extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        faceRecorderGrabando.setString("Grabando...");
+        faceRecorderGrabando.setString("");
         faceRecorderGrabando.setStringPainted(true);
 
-        activityRenderGrabando.setString("Grabando...");
+        activityRenderGrabando.setString("");
         activityRenderGrabando.setStringPainted(true);
 
-        perspExtGrabando.setString("Grabando...");
+        perspExtGrabando.setString("");
         perspExtGrabando.setStringPainted(true);
 
         faceRecorderVerButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -630,15 +645,11 @@ public class ProyectoMain extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelActivityRender)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
-                        .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelActivityRenderIcon)
-                            .addComponent(actRenderVerButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confPerspectivaPanelLayout.createSequentialGroup()
-                        .addComponent(activityRenderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)))
+                .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelActivityRenderIcon)
+                    .addComponent(actRenderVerButton)
+                    .addComponent(activityRenderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelPerspExt)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -993,7 +1004,7 @@ public class ProyectoMain extends javax.swing.JFrame {
 
         txtExt.setEnabled(false);
 
-        cortandoProgressBar.setString("Cortando...");
+        cortandoProgressBar.setString("");
         cortandoProgressBar.setStringPainted(true);
 
         labelFPS2.setText("FPS:");
@@ -1264,7 +1275,10 @@ public class ProyectoMain extends javax.swing.JFrame {
         txtDescPerspectiva.setText("");
         txtNombreProyecto.setText("");
         txtRutaProyecto.setText("");
-        
+        txtFPS1.setText("");
+        txtFPS2.setText("");
+        txtFPS3.setText("");
+        txtHolgura.setText("");
         txtVideoMaster.setText("");
         txtVideoSec.setText("");
         txtVideoExt.setText("");
@@ -1277,30 +1291,32 @@ public class ProyectoMain extends javax.swing.JFrame {
             Class[] types = new Class[]{
                 java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
-            
+
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
         });
-        
+        txtFPS4.setText("");
+        txtFPS5.setText("");
+        txtFPS6.setText("");
         txtMaster.setText("");
         txtSec.setText("");
         txtExt.setText("");
         secList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {" "};
-            
+
             public int getSize() {
                 return strings.length;
             }
-            
+
             public String getElementAt(int i) {
                 return strings[i];
             }
         });
-        
+
         rutaProyectoButton.setEnabled(true);
         crearProyectoButton.setText("Crear Proyecto");
-        
+
         labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
         tabPanelPrincipal.setVisible(true);
         tabPanelPrincipal.setSelectedIndex(0);
@@ -1323,11 +1339,15 @@ public class ProyectoMain extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
-        
+
         if (!txtRutaProyecto.getText().endsWith(".sbox")) {
             JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
             seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
         } else {
+            txtFPS1.setText("");
+            txtFPS2.setText("");
+            txtFPS3.setText("");
+            txtHolgura.setText("");
             txtVideoMaster.setText("");
             txtVideoSec.setText("");
             txtVideoExt.setText("");
@@ -1340,28 +1360,30 @@ public class ProyectoMain extends javax.swing.JFrame {
                 Class[] types = new Class[]{
                     java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
-                
+
                 public Class getColumnClass(int columnIndex) {
                     return types[columnIndex];
                 }
             });
-            
+            txtFPS4.setText("");
+            txtFPS5.setText("");
+            txtFPS6.setText("");
             txtMaster.setText("");
             txtSec.setText("");
             txtExt.setText("");
             secList.setModel(new javax.swing.AbstractListModel<String>() {
                 String[] strings = {" "};
-                
+
                 public int getSize() {
                     return strings.length;
                 }
-                
+
                 public String getElementAt(int i) {
                     return strings[i];
                 }
             });
             try {
-                
+
                 labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
                 tabPanelPrincipal.setVisible(true);
                 tabPanelPrincipal.setSelectedIndex(0);
@@ -1421,7 +1443,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 propLog.store(outLog, null);
                 PropertyConfigurator.configure("log4j.properties");
                 log.info("***************** Proyecto retomado con exito *****************");
-                
+
             } catch (IOException ex) {
                 log.error(ex);
                 JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1457,7 +1479,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 propLog.setProperty("log4j.appender.ARCHIVO.File", path + "\\" + nombreProyecto + ".log");
                 FileOutputStream outLog = new FileOutputStream("log4j.properties");
                 propLog.store(outLog, null);
-                
+
                 carpetaPrincipal = new File(path);
                 File prop = new File(path, "properties.sbox");
                 Properties p = new Properties();
@@ -1466,14 +1488,14 @@ public class ProyectoMain extends javax.swing.JFrame {
                 File perspectiva3 = new File(path + "\\perspectiva3");
                 rutaProperties = prop.getAbsolutePath();
                 if ("Crear Proyecto".equals(crearProyectoButton.getText())) {
-                    
+
                     if (!carpetaPrincipal.exists()) {
                         if (carpetaPrincipal.mkdirs()) {
-                            
+
                             prop.createNewFile();
-                            
+
                             p.load(new FileInputStream(prop.getAbsolutePath()));
-                            
+
                             try {
                                 PropertyConfigurator.configure("log4j.properties");
                                 p.setProperty("sbox.proyecto.experimentos", "0");
@@ -1490,7 +1512,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                     p.setProperty("sbox.proyecto.perspectiva1", "false");
                                     log.info("FaceRecoder: Deshabilitado");
                                 }
-                                
+
                                 if (activityRenderCheck.isSelected()) {
                                     if (perspectiva2.mkdirs()) {
                                         p.setProperty("sbox.proyecto.perspectiva2", "true");
@@ -1500,7 +1522,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                     p.setProperty("sbox.proyecto.perspectiva2", "false");
                                     log.info("ActivityRender: Deshabilitado");
                                 }
-                                
+
                                 if (agregarPerspectiva) {
                                     if (perspectiva3.mkdirs()) {
                                         p.setProperty("sbox.proyecto.perspectiva3", "true");
@@ -1516,13 +1538,13 @@ public class ProyectoMain extends javax.swing.JFrame {
                                     p.setProperty("sbox.proyecto.perspectiva3", "false");
                                     log.info("Canal de grabacion externo: Deshabilitado");
                                 }
-                                
+
                                 p.setProperty("sbox.proyecto.reconocedor.origen", (String) comboReconocedor.getSelectedItem());
                                 log.info("Reconocedor: " + comboReconocedor.getSelectedItem());
                                 p.setProperty("sbox.fuentes.obtener", "false");
                                 FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                                 p.store(out, null);
-                                
+
                                 obtencionFuentes = false;
                                 JOptionPane.showMessageDialog(this, "Proyecto creado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
                                 setTitle(txtNombreProyecto.getText());
@@ -1531,7 +1553,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 tabPanelPrincipal.setEnabledAt(2, false);
                                 tabPanelPrincipal.setEnabledAt(3, false);
                                 log.info("****************** Proyecto creado con exito ******************");
-                                
+
                                 if (agregarPerspectiva) {
                                     agregarPerspectivaButton.setText("Modificar Perspectiva");
                                     agregarPerspectivaButton.setToolTipText("Presione si desea modificar una nueva perspectiva");
@@ -1547,7 +1569,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 } else {
                                     agregarPerspectivaButton.setText("Agregar Perspectiva");
                                 }
-                                
+
                                 crearProyectoButton.setText("Guardar Cambios");
                                 txtNombreProyecto.setEnabled(false);
                                 rutaProyectoButton.setVisible(false);
@@ -1564,13 +1586,13 @@ public class ProyectoMain extends javax.swing.JFrame {
                         txtNombreProyecto.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
                         JOptionPane.showMessageDialog(this, "Ya existe un proyecto con el mismo nombre", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    
+
                 } else if ("Guardar Cambios".equals(crearProyectoButton.getText())) {
                     if (!prop.exists()) {
                         prop.createNewFile();
                     }
                     p.load(new FileInputStream(prop.getAbsolutePath()));
-                    
+
                     if (faceRecorderCheck.isSelected()) {
                         p.setProperty("sbox.proyecto.perspectiva1", "true");
                         if (!perspectiva1.exists()) {
@@ -1599,9 +1621,9 @@ public class ProyectoMain extends javax.swing.JFrame {
                                     break;
                             }
                         }
-                        
+
                     }
-                    
+
                     if (activityRenderCheck.isSelected()) {
                         p.setProperty("sbox.proyecto.perspectiva2", "true");
                         if (!perspectiva2.exists()) {
@@ -1629,10 +1651,10 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 default:
                                     break;
                             }
-                            
+
                         }
                     }
-                    
+
                     if ("Bloquear Perspectiva".equals(agregarPerspectivaButton.getText()) || "Quitar Perspectiva".equals(agregarPerspectivaButton.getText())) {
                         p.setProperty("sbox.proyecto.perspectiva3", "true");
                         p.setProperty("sbox.proyecto.perspectiva3.ip", txtDirIP.getText());
@@ -1641,14 +1663,14 @@ public class ProyectoMain extends javax.swing.JFrame {
                         if (!perspectiva3.exists()) {
                             perspectiva3.mkdirs();
                         }
-                        
+
                     }
-                    
+
                     p.setProperty("sbox.proyecto.reconocedor.origen", (String) comboReconocedor.getSelectedItem());
                     FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                     p.store(out, null);
                     JOptionPane.showMessageDialog(this, "Proyecto modificado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    
+
                     agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
                     agregarPerspectivaButton.setText("Modificar Perspectiva");
                     agregarPerspectivaButton.setToolTipText("Presione si desea modificar la perspectiva");
@@ -1660,7 +1682,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             } catch (IOException ex) {
                 log.error(ex);
             }
-            
+
         }
     }//GEN-LAST:event_crearProyectoButtonActionPerformed
 
@@ -1695,12 +1717,12 @@ public class ProyectoMain extends javax.swing.JFrame {
                         buscarProgressBar.setIndeterminate(false);
                         buscarProgressBar.setVisible(false);
                         JOptionPane.showMessageDialog(null, "No se puede conectar con IP ingresada", "Error", JOptionPane.ERROR_MESSAGE);
-                        
+
                     }
-                    
+
                 }
             }).start();
-            
+
         } else if ("".equals(txtDirIP.getText())) {
             JOptionPane.showMessageDialog(this, "Debe ingresar IP", "Error", JOptionPane.ERROR_MESSAGE);
         } else if (ipOld.equals(txtDirIP.getText())) {
@@ -1713,7 +1735,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     }//GEN-LAST:event_comboDispositivosActionPerformed
 
     private void agregarPerspectivaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarPerspectivaButtonActionPerformed
-        
+
         if (null != agregarPerspectivaButton.getText()) // TODO add your handling code here:
         {
             switch (agregarPerspectivaButton.getText()) {
@@ -1794,7 +1816,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (tabPanelPrincipal.isVisible()) {
             labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
-            
+
         }
     }//GEN-LAST:event_proyectoPanelComponentShown
 
@@ -1807,7 +1829,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         labelDondeEstoy.setText("Usted está en pestaña Experimentos");
-        
+
         Properties p = new Properties();
         try {
             p.load(new FileInputStream(rutaProperties));
@@ -1820,7 +1842,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         actRenderVerButton.setVisible(false);
         perspExtVerButton.setVisible(false);
         if ("false".equalsIgnoreCase(p.getProperty("sbox.fuentes.obtener"))) {
-            
+
             guardarFuentesButton.setVisible(false);
             descartarFuentesButton.setVisible(false);
             iniciarButton.setEnabled(true);
@@ -1905,7 +1927,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         perspExtGrabando.setVisible(false);
         confPerspectivaPanel.setVisible(true);
         controlPanel.setVisible(true);
-        
+
 
     }//GEN-LAST:event_fuentesPanelComponentShown
 
@@ -1933,7 +1955,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         }
         p.setProperty("sbox.fuentes.obtener", "false");
         obtencionFuentes = false;
-        
+
         FileOutputStream out;
         try {
             out = new FileOutputStream(rutaProperties);
@@ -1943,7 +1965,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         } catch (IOException ex) {
             log.error(ex);
         }
-        
+
         experimentos = Integer.parseInt(p.getProperty("sbox.proyecto.experimentos"));
         experimentos = experimentos + 1;
         if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva3"))) {
@@ -1967,10 +1989,10 @@ public class ProyectoMain extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "No se puede conectar con IP ingresada", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                
+
             }
         }
-        
+
         if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva1"))) {
             faceRecorder = true;
             String nombreProyecto = txtNombreProyecto.getText();
@@ -1983,20 +2005,22 @@ public class ProyectoMain extends javax.swing.JFrame {
             }
             CameraSwingWorker cameraSwingWorker = new CameraSwingWorker(path, nombreProyecto);
             cameraSwingWorker.execute();
+            faceRecorderGrabando.setString("Grabando...");
             faceRecorderGrabando.setVisible(true);
             faceRecorderGrabando.setIndeterminate(true);
         }
-        
+
         while (!ProyectoMain.ScreenGo && faceRecorder) {
             System.out.println("Esperando que inicie faceRecorder");
         }
-        
+
         while (!ProyectoMain.ScreenGo && perspExt) {
             System.out.println("Esperando que inicie canal externo");
         }
-        
+
         if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva2"))) {
             try {
+                activityRenderGrabando.setString("Grabando...");
                 activityRenderGrabando.setVisible(true);
                 activityRenderGrabando.setIndeterminate(true);
                 activityRender = true;
@@ -2021,7 +2045,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         detenerButton.setEnabled(false);
         Reproductor r = new Reproductor();
         String duration = "";
-        
+
         if (perspExt) {
             perspExtGrabando.setString("Transfiriendo...");
             String nombreProyecto = txtNombreProyecto.getText();
@@ -2042,14 +2066,14 @@ public class ProyectoMain extends javax.swing.JFrame {
                 System.out.println("Esperando video externo...");
             }
             videoExt = pc.getNombreProyecto() + "_" + pc.getNombreVideo() + "_" + pc.getExperimentos();
-            
+
             PerspectivaCliente.video = false;
 //            duration = r.getDuration(new File(path + videoExt + ".avi"));
 //            log.info("Se ha generado el archivo '" + videoExt + ".avi' - Duración: " + duration);
             log.info("Se ha generado el archivo '" + videoExt + ".avi'");
             ProyectoMain.ScreenStop = true;
         }
-        
+
         if (faceRecorder) {
             try {
                 faceRecorderGrabando.setVisible(false);
@@ -2085,7 +2109,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 log.error(ex);
             }
         }
-        
+
         while (!ProyectoMain.ScreenStop && perspExt) {
             System.out.println("Esperando que termine canal externo");
         }
@@ -2117,7 +2141,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 log.error(ex);
             }
         }
-        
+
         guardarFuentesButton.setEnabled(true);
         descartarFuentesButton.setEnabled(true);
         guardarFuentesButton.setVisible(true);
@@ -2125,7 +2149,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         descartarFuentesButton.setText("Descartar Fuentes");
         guardarFuentesButton.setText("Guardar Fuentes");
         ProyectoMain.ScreenGo = false;
-        
+
         log.info("******************** Experimento finalizado ********************");
         String nombreProyecto = txtNombreProyecto.getText();
         String rutaProyecto = txtRutaProyecto.getText();
@@ -2169,7 +2193,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         // TODO add your handling code here:
         if ("Descartar Fuentes".equals(descartarFuentesButton.getText())) {
             log.info("*************** Iniciando eliminación de fuentes ***************");
-            
+
             Properties p = new Properties();
             try {
                 p.load(new FileInputStream(rutaProperties));
@@ -2201,7 +2225,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     archivo = true;
                 }
             }
-            
+
             if (activityRender) {
                 fuentes = new File(path + "perspectiva2\\" + videoScreen + ".avi");
                 if (fuentes.delete()) {
@@ -2213,7 +2237,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     archivo = true;
                 }
             }
-            
+
             if (perspExt) {
                 fuentes = new File(path + "perspectiva3\\" + videoExt + ".avi");
                 if (fuentes.delete()) {
@@ -2265,39 +2289,86 @@ public class ProyectoMain extends javax.swing.JFrame {
         // TODO add your handling code here:
         if ("Guardar Fuentes".equals(guardarFuentesButton.getText())) {
 //            guardarFuentesButton.setText("Modificar Fuentes");
-
-            iniciarButton.setEnabled(true);
-            descartarFuentesButton.setVisible(false);
-            guardarFuentesButton.setVisible(false);
-            JOptionPane.showMessageDialog(this, "Fuentes guardadas con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
-            Properties p = new Properties();
-            try {
-                p.load(new FileInputStream(rutaProperties));
-            } catch (FileNotFoundException ex) {
-                log.error(ex);
-            } catch (IOException ex) {
-                log.error(ex);
-            }
-            p.setProperty("sbox.fuentes.obtener", "true");
-//            p.setProperty("sbox.fuentes.vista.previa", "true");
-            obtencionFuentes = true;
-            tabPanelPrincipal.setEnabledAt(0, true);
-            tabPanelPrincipal.setEnabledAt(1, true);
-            tabPanelPrincipal.setEnabledAt(2, true);
-            tabPanelPrincipal.setEnabledAt(3, false);
-            FileOutputStream out;
-            try {
-                out = new FileOutputStream(rutaProperties);
-                p.store(out, null);
-            } catch (FileNotFoundException ex) {
-                log.error(ex);
-            } catch (IOException ex) {
-                log.error(ex);
-            }
             faceRecorderVerButton.setVisible(false);
             actRenderVerButton.setVisible(false);
             perspExtVerButton.setVisible(false);
-            
+
+            if (faceRecorder) {
+                faceRecorderGrabando.setString("Alineando...");
+                faceRecorderGrabando.setIndeterminate(false);
+                faceRecorderGrabando.setVisible(true);
+            }
+            if (activityRender) {
+                activityRenderGrabando.setString("Alineando...");
+                activityRenderGrabando.setIndeterminate(false);
+                activityRenderGrabando.setVisible(true);
+            }
+            if (perspExt) {
+                perspExtGrabando.setString("Alineando...");
+                perspExtGrabando.setIndeterminate(false);
+                perspExtGrabando.setVisible(true);
+            }
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String nombreProyecto = txtNombreProyecto.getText();
+                    String rutaProyecto = txtRutaProyecto.getText();
+                    String path = "";
+                    if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
+                        path = rutaProyecto + nombreProyecto;
+                    } else {
+                        path = rutaProyecto + "\\" + nombreProyecto;
+                    }
+                    if (faceRecorder) {
+                        temporizar(new File(path + "\\perspectiva1\\" + videoFace));
+                    }
+                    if (activityRender) {
+                        temporizar(new File(path + "\\perspectiva2\\" + videoScreen));
+                    }
+                    if (perspExt) {
+                        temporizar(new File(path + "\\perspectiva3\\" + videoExt));
+                    }
+                    iniciarButton.setEnabled(true);
+                    descartarFuentesButton.setVisible(false);
+                    guardarFuentesButton.setVisible(false);
+                    Properties p = new Properties();
+                    try {
+                        p.load(new FileInputStream(rutaProperties));
+                    } catch (FileNotFoundException ex) {
+                        log.error(ex);
+                    } catch (IOException ex) {
+                        log.error(ex);
+                    }
+                    p.setProperty("sbox.fuentes.obtener", "true");
+//            p.setProperty("sbox.fuentes.vista.previa", "true");
+                    obtencionFuentes = true;
+                    tabPanelPrincipal.setEnabledAt(0, true);
+                    tabPanelPrincipal.setEnabledAt(1, true);
+                    tabPanelPrincipal.setEnabledAt(2, true);
+                    tabPanelPrincipal.setEnabledAt(3, false);
+                    FileOutputStream out;
+                    try {
+                        out = new FileOutputStream(rutaProperties);
+                        p.store(out, null);
+                    } catch (FileNotFoundException ex) {
+                        log.error(ex);
+                    } catch (IOException ex) {
+                        log.error(ex);
+                    }
+
+                    if (faceRecorder) {
+                        faceRecorderGrabando.setVisible(false);
+                    }
+                    if (activityRender) {
+                        activityRenderGrabando.setVisible(false);
+                    }
+                    if (perspExt) {
+                        perspExtGrabando.setVisible(false);
+                    }
+                    JOptionPane.showMessageDialog(null, "Fuentes guardadas con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }).start();
         }
 //        else if ("Modificar Fuentes".equals(guardarFuentesButton.getText())) {
 //            guardarFuentesButton.setText("Guardar Fuentes");
@@ -2356,7 +2427,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 procesandoProgressBar.setVisible(true);
                 procesandoProgressBar.setIndeterminate(true);
                 procesandoProgressBar.setString("Preparando los datos...");
-                
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -2392,7 +2463,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                         marcadorButton.setText("Filtrar");
                     }
                 }).start();
-                
+
             } else if ("".equals(txtVideoMaster.getText())) {
                 JOptionPane.showMessageDialog(this, "Debe ingresar video master", "Error", JOptionPane.ERROR_MESSAGE);
             } else if ("".equals(txtHolgura.getText())) {
@@ -2418,7 +2489,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     Class[] types = new Class[]{
                         java.lang.String.class, java.lang.String.class, java.lang.String.class
                     };
-                    
+
                     public Class getColumnClass(int columnIndex) {
                         return types[columnIndex];
                     }
@@ -2439,10 +2510,23 @@ public class ProyectoMain extends javax.swing.JFrame {
             cortarButton.setText("Abortar");
             cortandoProgressBar.setIndeterminate(true);
             cortandoProgressBar.setVisible(true);
+            cortandoProgressBar.setString("Preparando los datos...");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
+                        int cantPers = 0, cantSec = 0, n = 0, total = 0;
+                        if (!"".equals(txtFPS1.getText())) {
+                            cantPers++;
+                        }
+                        if (!"".equals(txtFPS2.getText())) {
+                            cantPers++;
+                        }
+                        if (!"".equals(txtFPS3.getText())) {
+                            cantPers++;
+                        }
+
+                        total = listTimeDetection.size() * cantPers;
                         long ini = System.currentTimeMillis();
                         Reproductor r = new Reproductor();
                         int i = 0;
@@ -2454,15 +2538,18 @@ public class ProyectoMain extends javax.swing.JFrame {
                         } else {
                             fileSec = rutaProyecto + "\\" + nombreProyecto;
                         }
-                        
+
                         File prop = new File(fileSec, "properties.sbox");
                         Properties p = new Properties();
                         p.load(new FileInputStream(prop.getAbsolutePath()));
-                        
+
                         fileSec = fileSec + "\\videoDetect\\" + experimento + "\\";
-                        
+
                         log.info("*************** Inicio proceso cortador de vídeos ***************");
-                        
+                        cortandoProgressBar.setIndeterminate(false);
+
+                        cortandoProgressBar.setValue(n);
+                        cortandoProgressBar.setString(String.valueOf(n) + "%");
                         if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva1"))) {
                             perspectiva = "perspectiva1\\";
                             String fileSecP = fileSec + perspectiva;
@@ -2472,12 +2559,20 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 nomVideo = nombreProyecto + "_videoDetect_faceRecorder_";
                                 fileSecP = fileSecP + nomVideo;
                                 for (Integer key : listTimeDetection.keySet()) {
-                                    i++;
-                                    r.cutVideo(videoMaster, new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                    if (!abortar) {
+                                        i++;
+                                        r.cutVideo(videoMaster, new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                        cantSec++;
+                                        n = cantSec * 100 / total;
+                                        cortandoProgressBar.setValue(n);
+                                        cortandoProgressBar.setString(String.valueOf(n) + "%");
+                                    } else {
+                                        break;
+                                    }
                                 }
                             }
                         }
-                        
+
                         if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
                             i = 0;
                             perspectiva = "perspectiva2\\";
@@ -2487,12 +2582,20 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 nomVideo = nombreProyecto + "_videoDetect_activityRender_";
                                 fileSecP = fileSecP + nomVideo;
                                 for (Integer key : listTimeDetection.keySet()) {
-                                    i++;
-                                    r.cutVideo(new File(txtSec.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                    if (!abortar) {
+                                        i++;
+                                        r.cutVideo(new File(txtSec.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                        cantSec++;
+                                        n = cantSec * 100 / total;
+                                        cortandoProgressBar.setValue(n);
+                                        cortandoProgressBar.setString(String.valueOf(n) + "%");
+                                    } else {
+                                        break;
+                                    }
                                 }
                             }
                         }
-                        
+
                         if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
                             i = 0;
                             perspectiva = "perspectiva3\\";
@@ -2502,15 +2605,23 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 nomVideo = nombreProyecto + "_videoDetect_canalExterno_";
                                 fileSecP = fileSecP + nomVideo;
                                 for (Integer key : listTimeDetection.keySet()) {
-                                    i++;
-                                    r.cutVideo(new File(txtExt.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                    if (!abortar) {
+                                        i++;
+                                        r.cutVideo(new File(txtExt.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                        cantSec++;
+                                        n = cantSec * 100 / total;
+                                        cortandoProgressBar.setValue(n);
+                                        cortandoProgressBar.setString(String.valueOf(n) + "%");
+                                    } else {
+                                        break;
+                                    }
                                 }
                             }
                         }
-                        
+
                         log.info("*************** Fin proceso cortador de vídeos ***************");
                         VideoDetection videoDetection = new VideoDetection();
-                        
+
                         f = new File(fileSecMaster);
                         File[] archivos = f.listFiles();
                         DefaultListModel<String> model = new DefaultListModel<>();
@@ -2531,7 +2642,28 @@ public class ProyectoMain extends javax.swing.JFrame {
                 }
             }).start();
         } else if ("Abortar".equals(cortarButton.getText())) {
+            abortar = true;
+            txtMaster.setText("");
+            txtSec.setText("");
+            txtExt.setText("");
+            txtFPS4.setText("");
+            txtFPS5.setText("");
+            txtFPS6.setText("");
+            secList.setModel(new javax.swing.AbstractListModel<String>() {
+                String[] strings = {" "};
+
+                public int getSize() {
+                    return strings.length;
+                }
+
+                public String getElementAt(int i) {
+                    return strings[i];
+                }
+            });
+            cortandoProgressBar.setVisible(false);
             cortarButton.setText("Generar");
+            log.info("Proceso de corte abortado");
+
         }
     }//GEN-LAST:event_cortarButtonActionPerformed
 
@@ -2585,7 +2717,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                         }
                     }
                 }
-                
+
                 rSec = new ReproductorSec(secMaster, secSecundario, secExterno);
                 rSec.setVisible(true);
             } catch (FileNotFoundException ex) {
@@ -2613,7 +2745,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 fileSec = rutaProyecto + "\\" + nombreProyecto;
             }
             seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtVideoMaster, "avi", fileSec + "\\perspectiva1");
-            
+
             File videoMaster = new File(txtVideoMaster.getText());
             String[] a = videoMaster.getName().split(".avi");
             String[] b = a[0].split("_");
@@ -2625,7 +2757,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 File prop = new File(fileSec, "properties.sbox");
                 Properties p = new Properties();
                 p.load(new FileInputStream(prop.getAbsolutePath()));
-                
+
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
                     perspectiva = "\\perspectiva2\\";
                     fileSec = fileSec + perspectiva;
@@ -2646,7 +2778,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 } else {
                     txtVideoSec.setText("Perspectiva no configurada para este experimento");
                 }
-                
+
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
                     perspectiva = "\\perspectiva3\\";
                     fileSec = fileSec + perspectiva;
@@ -2659,7 +2791,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                         if (b[l - 1].equals(experimento)) {
                             txtVideoExt.setText(s.getAbsolutePath());
                             txtFPS3.setText(r.getFps(new File(s.getAbsolutePath())));
-                            
+
                         }
                     }
                     if ("".equals(txtVideoExt.getText())) {
@@ -2671,13 +2803,13 @@ public class ProyectoMain extends javax.swing.JFrame {
             } else {
                 int ax = JOptionPane.showConfirmDialog(this, "El video que seleccionó ya ha sido procesado ¿Desea seleccionar otro?");
                 if (ax == JOptionPane.YES_OPTION) {
-                    
+
                     videoMasterButtonActionPerformed(evt);
                 } else {
                     txtVideoMaster.setText("");
                 }
             }
-            
+
         } catch (IOException ex) {
             log.info(ex);
         }
@@ -2691,7 +2823,7 @@ public class ProyectoMain extends javax.swing.JFrame {
      *
      * @return
      */
-    public boolean validarProyecto() {
+    private boolean validarProyecto() {
         boolean respuesta = false;
         if ("".equals(txtNombreProyecto.getText())) {
             respuesta = true;
@@ -2699,14 +2831,14 @@ public class ProyectoMain extends javax.swing.JFrame {
         } else {
             txtNombreProyecto.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
         }
-        
+
         if ("".equals(txtRutaProyecto.getText())) {
             respuesta = true;
             txtRutaProyecto.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
         } else {
             txtRutaProyecto.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
         }
-        
+
         if (!faceRecorderCheck.isSelected() && !activityRenderCheck.isSelected()) {
             respuesta = true;
             faceRecorderCheck.setForeground(Color.red);
@@ -2715,14 +2847,14 @@ public class ProyectoMain extends javax.swing.JFrame {
             faceRecorderCheck.setForeground(Color.black);
             activityRenderCheck.setForeground(Color.black);
         }
-        
+
         if ("Seleccione reconocedor".equals(comboReconocedor.getSelectedItem())) {
             respuesta = true;
             comboReconocedor.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
         } else {
             comboReconocedor.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
         }
-        
+
         if (agregarPerspectiva) {
             if ("Seleccione dispositivo".equals(comboDispositivos.getSelectedItem().toString()) || "".equals(comboDispositivos.getSelectedItem().toString()) || comboDispositivos.getSelectedItem() == null) {
                 respuesta = true;
@@ -2730,27 +2862,27 @@ public class ProyectoMain extends javax.swing.JFrame {
             } else {
                 comboDispositivos.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
             }
-            
+
             if ("".equals(txtDirIP.getText())) {
                 respuesta = true;
                 txtDirIP.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
             } else {
                 txtDirIP.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
             }
-            
+
             if ("".equals(txtDescPerspectiva.getText())) {
                 respuesta = true;
                 txtDescPerspectiva.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
             } else {
                 txtDescPerspectiva.setBorder(javax.swing.BorderFactory.createLoweredSoftBevelBorder());
             }
-            
+
         }
-        
+
         return respuesta;
     }
-    
-    public void seleccionarArchivo(int fileSelectionMode, String approveButtonText, JTextField field, String fileFilter, String currentDirectory) {
+
+    private void seleccionarArchivo(int fileSelectionMode, String approveButtonText, JTextField field, String fileFilter, String currentDirectory) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(fileSelectionMode);
         if (!"".equals(fileFilter)) {
@@ -2764,6 +2896,129 @@ public class ProyectoMain extends javax.swing.JFrame {
             File selectedFile = fileChooser.getSelectedFile();
             field.setText(selectedFile.getAbsolutePath());
         }
+    }
+
+    private void temporizar(VideoCapture source) {
+
+    }
+
+    public void temporizar(File source) {
+        File alineado = new File(source.getParent() + "\\Alineado");
+        int captureWidth = 1366, captureHeight = 768;
+        long startTime = 0, videoTS;
+        OpenCVFrameConverter.ToIplImage converter = null;
+        opencv_core.IplImage grabbedImage = null;
+        OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(source);
+        FFmpegFrameRecorder recorder = null;
+        try {
+            grabber = new OpenCVFrameGrabber(source);
+            grabber.setImageWidth(captureWidth);
+            grabber.setImageHeight(captureHeight);
+            grabber.start();
+            converter = new OpenCVFrameConverter.ToIplImage();
+//            grabbedImage = converter.convert(grabber.grab());
+            if (!alineado.exists()) {
+                alineado.mkdirs();
+            }
+            recorder = new FFmpegFrameRecorder(alineado.getAbsolutePath() + "\\" + source.getName(), captureWidth, captureHeight, 2);
+            recorder.setInterleaved(true);
+            recorder.setVideoOption("tune", "zerolatency");
+            recorder.setVideoOption("preset", "ultrafast");
+            recorder.setVideoOption("crf", "28");
+            recorder.setVideoBitrate(2000000);
+            recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+            recorder.setFormat("avi");
+            recorder.setFrameRate(30);
+            recorder.setGopSize(60);
+//            recorder.setAudioOption("crf", "0");
+//            recorder.setAudioQuality(0);
+//            recorder.setAudioBitrate(192000);
+//            recorder.setSampleRate(44100);
+//            recorder.setAudioChannels(2);
+//            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
+            recorder.start();
+            opencv_core.CvMemStorage storage = opencv_core.CvMemStorage.create();
+            initReloj();
+            t.start();
+            while (grabber.grab() != null) {
+                cvClearMemStorage(storage);
+                opencv_core.CvFont mCvFont = new opencv_core.CvFont();
+                cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
+                int x = 400;
+                int y = 450;
+                cvPutText(grabbedImage, initReloj(), cvPoint(x, y), mCvFont, opencv_core.CvScalar.RED);
+                if (startTime == 0) {
+                    startTime = System.currentTimeMillis();
+                }
+                videoTS = 1000 * (System.currentTimeMillis() - startTime);
+
+                if (videoTS > recorder.getTimestamp()) {
+                    recorder.setTimestamp(videoTS);
+                }
+
+                recorder.record(converter.convert(grabbedImage));
+
+            }
+            recorder.stop();
+            grabber.stop();
+            if (t.isRunning()) {
+                t.stop();
+            }
+        } catch (FrameGrabber.Exception | FrameRecorder.Exception ex) {
+//            log.error(ex);
+            ex.printStackTrace();
+        } finally {
+            try {
+                recorder.stop();
+                grabber.stop();
+                if (t.isRunning()) {
+                    t.stop();
+                }
+            } catch (FrameRecorder.Exception | FrameGrabber.Exception ex) {
+//                log.error(ex);
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    private String initReloj() {
+        Date ahora = new Date();
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+        final String date = formateador.format(ahora);
+        t = new Timer(1, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent ae) {
+                ++cs;
+                if (cs == 1000) {
+                    cs = 0;
+                    ++s;
+                }
+                if (s == 60) {
+                    s = 0;
+                    ++m;
+                }
+                if (m == 60) {
+                    m = 0;
+                    ++h;
+                }
+                cronometro = new StringBuilder();
+                cronometro.append(date)
+                        .append(" ")
+                        .append((h <= 9 ? "0" : ""))
+                        .append(h)
+                        .append(":")
+                        .append((m <= 9 ? "0" : ""))
+                        .append(m)
+                        .append(":")
+                        .append((s <= 9 ? "0" : ""))
+                        .append(s)
+                        .append(":")
+                        .append((cs <= 9 ? "0" : ""))
+                        .append(cs);
+            }
+        });
+        return cronometro.toString();
     }
 
     /**
@@ -2829,10 +3084,15 @@ public class ProyectoMain extends javax.swing.JFrame {
     private int experimentos = 0;
     private String experimento = "";
     private String secuencia = "";
-    
+
     public static boolean ScreenGo = false;
     public static boolean ScreenStop = false;
-    
+    public boolean abortar = false;
+
+    private StringBuilder cronometro = new StringBuilder();
+    private Timer t;
+    private int h, m, s, cs;
+
     private Map<Integer, TimeDetection> listTimeDetection = new HashMap<Integer, TimeDetection>();
     private VideoDetection videoDetectionM = new VideoDetection();
     //Log

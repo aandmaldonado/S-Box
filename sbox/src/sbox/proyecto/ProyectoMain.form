@@ -670,24 +670,17 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="labelActivityRender" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="labelActivityRenderIcon" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="actRenderVerButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="activityRenderGrabando" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelActivityRenderIcon" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="actRenderVerButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="activityRenderGrabando" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="labelPerspExt" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="labelPerspExtIcon" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="perspExtGrabando" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="perspExtGrabando" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="perspExtVerButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -808,19 +801,19 @@
                 </Container>
                 <Component class="javax.swing.JProgressBar" name="faceRecorderGrabando">
                   <Properties>
-                    <Property name="string" type="java.lang.String" value="Grabando..."/>
+                    <Property name="string" type="java.lang.String" value=""/>
                     <Property name="stringPainted" type="boolean" value="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JProgressBar" name="activityRenderGrabando">
                   <Properties>
-                    <Property name="string" type="java.lang.String" value="Grabando..."/>
+                    <Property name="string" type="java.lang.String" value=""/>
                     <Property name="stringPainted" type="boolean" value="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JProgressBar" name="perspExtGrabando">
                   <Properties>
-                    <Property name="string" type="java.lang.String" value="Grabando..."/>
+                    <Property name="string" type="java.lang.String" value=""/>
                     <Property name="stringPainted" type="boolean" value="true"/>
                   </Properties>
                 </Component>
@@ -1495,7 +1488,7 @@
                 </Component>
                 <Component class="javax.swing.JProgressBar" name="cortandoProgressBar">
                   <Properties>
-                    <Property name="string" type="java.lang.String" value="Cortando..."/>
+                    <Property name="string" type="java.lang.String" value=""/>
                     <Property name="stringPainted" type="boolean" value="true"/>
                   </Properties>
                 </Component>

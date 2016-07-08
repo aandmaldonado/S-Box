@@ -1,12 +1,10 @@
 package sbox.detection;
 
-import java.awt.Event;
 import java.io.File;
 import static org.bytedeco.javacpp.opencv_core.cvLoad;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.swing.JProgressBar;
 
 import org.apache.log4j.Logger;
@@ -19,7 +17,6 @@ import static org.bytedeco.javacpp.opencv_core.cvClearMemStorage;
 import static org.bytedeco.javacpp.opencv_core.cvGetSeqElem;
 import static org.bytedeco.javacpp.opencv_core.cvPoint;
 import static org.bytedeco.javacpp.opencv_core.cvRectangle;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FPS;
 import org.bytedeco.javacpp.opencv_highgui.VideoCapture;
 import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_POS_MSEC;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
@@ -132,7 +129,7 @@ public class VideoDetection {
     
     public void stop(){
         cap.release();
-        log.info("Proceso abortado");
+        log.info("Proceso de filtro abortado");
     }
 
     public long getDuration(VideoCapture cap) {
