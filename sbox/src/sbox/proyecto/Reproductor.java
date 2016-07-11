@@ -285,8 +285,13 @@ public class Reproductor extends javax.swing.JFrame {
         while (player.getMediaPlayer().isPlaying()) {
             System.out.println("Esperando secuencia...");
         }
+//        player.getMediaPlayer().release();
         log.info("Se ha generado secuencia: " + videoSec.getName());
         return resp;
+    }
+
+    public void stop() {
+        player.getMediaPlayer().release();
     }
 
 //    public String getDuration(File file) {
@@ -309,8 +314,7 @@ public class Reproductor extends javax.swing.JFrame {
 ////        long restosegundo = restominuto % 1000;
 //        return hora + ":" + minuto + ":" + segundo;
 //    }
-    
-        public String getFps(File file) {
+    public String getFps(File file) {
         player = new EmbeddedMediaPlayerComponent();
         initComponents();
         jPanel2.add(player);
@@ -320,7 +324,8 @@ public class Reproductor extends javax.swing.JFrame {
         player.getMediaPlayer().mute(true);
         player.getMediaPlayer().parseMedia();
         player.getMediaPlayer().start();
-        long fps = (long)player.getMediaPlayer().getFps();
+        long fps = (long) player.getMediaPlayer().getFps();
+//        player.getMediaPlayer().release();
         return String.valueOf(fps);
     }
 

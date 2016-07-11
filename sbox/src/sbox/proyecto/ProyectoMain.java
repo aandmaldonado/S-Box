@@ -2445,29 +2445,33 @@ public class ProyectoMain extends javax.swing.JFrame {
                         listTimeDetection = videoDetectionM.getDetection(videoMaster, faceDetect, smileDetect, Integer.parseInt(txtHolgura.getText()), procesandoProgressBar);
                         long fin = System.currentTimeMillis();
                         log.info("Duración proceso: " + videoDetectionM.getTimeDetect(fin - ini));
-                        Object[][] data = new Object[listTimeDetection.size()][3];
-                        int i = 0;
-                        for (Map.Entry<Integer, TimeDetection> entry : listTimeDetection.entrySet()) {
-                            data[i][0] = entry.getKey();
-                            data[i][1] = entry.getValue().getStartTime();
-                            data[i][2] = entry.getValue().getStopTime();
-                            i++;
-                        }
-                        DefaultTableModel model = new DefaultTableModel();
-                        String columnNames[] = {"Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"};
-                        model.setDataVector(data, columnNames);
-                        deteccionTable.setModel(model);
-                        tabPanelPrincipal.setEnabledAt(0, true);
-                        tabPanelPrincipal.setEnabledAt(1, true);
-                        tabPanelPrincipal.setEnabledAt(2, true);
-                        if (!listTimeDetection.isEmpty()) {
-                            tabPanelPrincipal.setEnabledAt(3, true);
+                        if (!abortar) {
+                            Object[][] data = new Object[listTimeDetection.size()][3];
+                            int i = 0;
+                            for (Map.Entry<Integer, TimeDetection> entry : listTimeDetection.entrySet()) {
+                                data[i][0] = entry.getKey();
+                                data[i][1] = entry.getValue().getStartTime();
+                                data[i][2] = entry.getValue().getStopTime();
+                                i++;
+                            }
+                            DefaultTableModel model = new DefaultTableModel();
+                            String columnNames[] = {"Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"};
+                            model.setDataVector(data, columnNames);
+                            deteccionTable.setModel(model);
+                            tabPanelPrincipal.setEnabledAt(0, true);
+                            tabPanelPrincipal.setEnabledAt(1, true);
+                            tabPanelPrincipal.setEnabledAt(2, true);
+                            if (!listTimeDetection.isEmpty()) {
+                                tabPanelPrincipal.setEnabledAt(3, true);
+                            } else {
+                                tabPanelPrincipal.setEnabledAt(3, false);
+                            }
+                            procesandoProgressBar.setVisible(false);
+                            procesandoProgressBar.setIndeterminate(false);
+                            marcadorButton.setText("Filtrar");
                         } else {
-                            tabPanelPrincipal.setEnabledAt(3, false);
+                            abortar = false;
                         }
-                        procesandoProgressBar.setVisible(false);
-                        procesandoProgressBar.setIndeterminate(false);
-                        marcadorButton.setText("Filtrar");
                     }
                 }).start();
 
@@ -2479,6 +2483,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         } else if ("Abortar".equals(marcadorButton.getText())) {
             int ax = JOptionPane.showConfirmDialog(this, "¿Está seguro de abortar el proceso?");
             if (ax == JOptionPane.YES_OPTION) {
+                abortar = true;
                 videoDetectionM.stop();
                 txtVideoMaster.setText("");
                 txtVideoSec.setText("");
@@ -2487,20 +2492,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                 txtFPS2.setText("");
                 txtFPS3.setText("");
                 txtHolgura.setText("");
-                deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
-                        new Object[][]{},
-                        new String[]{
-                            "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
-                        }
-                ) {
-                    Class[] types = new Class[]{
-                        java.lang.String.class, java.lang.String.class, java.lang.String.class
-                    };
 
-                    public Class getColumnClass(int columnIndex) {
-                        return types[columnIndex];
-                    }
-                });
                 marcadorButton.setText("Filtrar");
                 procesandoProgressBar.setVisible(false);
             }
@@ -2514,7 +2506,7 @@ public class ProyectoMain extends javax.swing.JFrame {
     private void cortarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cortarButtonActionPerformed
         // TODO add your handling code here:
         if ("Generar".equals(cortarButton.getText())) {
-            cortarButton.setText("Abortar");
+//            cortarButton.setText("Abortar");
             cortandoProgressBar.setIndeterminate(true);
             cortandoProgressBar.setVisible(true);
             cortandoProgressBar.setString("Preparando los datos...");
@@ -2566,16 +2558,16 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 nomVideo = nombreProyecto + "_videoDetect_faceRecorder_";
                                 fileSecP = fileSecP + nomVideo;
                                 for (Integer key : listTimeDetection.keySet()) {
-                                    if (!abortar) {
-                                        i++;
-                                        r.cutVideo(videoMaster, new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
-                                        cantSec++;
-                                        n = cantSec * 100 / total;
-                                        cortandoProgressBar.setValue(n);
-                                        cortandoProgressBar.setString(String.valueOf(n) + "%");
-                                    } else {
-                                        break;
-                                    }
+//                                    if (!abortar) {
+                                    i++;
+                                    r.cutVideo(videoMaster, new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                    cantSec++;
+                                    n = cantSec * 100 / total;
+                                    cortandoProgressBar.setValue(n);
+                                    cortandoProgressBar.setString(String.valueOf(n) + "%");
+//                                    } else {
+//                                        break;
+//                                    }
                                 }
                             }
                         }
@@ -2589,16 +2581,16 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 nomVideo = nombreProyecto + "_videoDetect_activityRender_";
                                 fileSecP = fileSecP + nomVideo;
                                 for (Integer key : listTimeDetection.keySet()) {
-                                    if (!abortar) {
-                                        i++;
-                                        r.cutVideo(new File(txtSec.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
-                                        cantSec++;
-                                        n = cantSec * 100 / total;
-                                        cortandoProgressBar.setValue(n);
-                                        cortandoProgressBar.setString(String.valueOf(n) + "%");
-                                    } else {
-                                        break;
-                                    }
+//                                    if (!abortar) {
+                                    i++;
+                                    r.cutVideo(new File(txtSec.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                    cantSec++;
+                                    n = cantSec * 100 / total;
+                                    cortandoProgressBar.setValue(n);
+                                    cortandoProgressBar.setString(String.valueOf(n) + "%");
+//                                    } else {
+//                                        break;
+//                                    }
                                 }
                             }
                         }
@@ -2612,38 +2604,64 @@ public class ProyectoMain extends javax.swing.JFrame {
                                 nomVideo = nombreProyecto + "_videoDetect_canalExterno_";
                                 fileSecP = fileSecP + nomVideo;
                                 for (Integer key : listTimeDetection.keySet()) {
-                                    if (!abortar) {
-                                        i++;
-                                        r.cutVideo(new File(txtExt.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
-                                        cantSec++;
-                                        n = cantSec * 100 / total;
-                                        cortandoProgressBar.setValue(n);
-                                        cortandoProgressBar.setString(String.valueOf(n) + "%");
-                                    } else {
-                                        break;
-                                    }
+//                                    if (!abortar) {
+                                    i++;
+                                    r.cutVideo(new File(txtExt.getText()), new File(fileSecP + i + ".avi"), listTimeDetection.get(key).getStartTime(), listTimeDetection.get(key).getStopTime());
+                                    cantSec++;
+                                    n = cantSec * 100 / total;
+                                    cortandoProgressBar.setValue(n);
+                                    cortandoProgressBar.setString(String.valueOf(n) + "%");
+//                                    } else {
+//                                        break;
+//                                    }
                                 }
                             }
                         }
 
-                        if (abortar) {
-                            //BORRAR SECUENCIAS YA GENERADAS
-                        } else {
-                            log.info("*************** Fin proceso cortador de vídeos ***************");
-                            VideoDetection videoDetection = new VideoDetection();
+//                        if (abortar) {
+//                            abortar = false;
+//                            r.stop();
+//                            //BORRAR SECUENCIAS YA GENERADAS
+//                            File pers = new File(fileSecMaster);
+//                            File[] archivos = pers.listFiles();
+//                            for (File s : archivos) {
+//                                s.delete();
+//                            }
+//                            pers.delete();
+//                            if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
+//                                pers = new File(pers.getParent() + "\\perspectiva2");
+//                                archivos = pers.listFiles();
+//                                for (File s : archivos) {
+//                                    s.delete();
+//                                }
+//                                pers.delete();
+//                            }
+//                            if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
+//                                pers = new File(pers.getParent() + "\\perspectiva3");
+//                                archivos = pers.listFiles();
+//                                for (File s : archivos) {
+//                                    s.delete();
+//                                }
+//                                pers.delete();
+//                            }
+//                            pers.getParentFile().delete();
+//                        } else {
+                        log.info("*************** Fin proceso cortador de vídeos ***************");
+                        VideoDetection videoDetection = new VideoDetection();
 
-                            f = new File(fileSecMaster);
-                            File[] archivos = f.listFiles();
-                            DefaultListModel<String> model = new DefaultListModel<>();
-                            for (File s : archivos) {
-                                model.addElement(s.getAbsolutePath());
-                            }
-                            secList.setModel(model);
-                            cortandoProgressBar.setIndeterminate(false);
-                            cortandoProgressBar.setVisible(false);
-                            long fin = System.currentTimeMillis();
-                            log.info("Duración proceso: " + videoDetection.getTimeDetect(fin - ini));
+                        f = new File(fileSecMaster);
+                        File[] archivos = f.listFiles();
+                        DefaultListModel<String> model = new DefaultListModel<>();
+                        for (File s : archivos) {
+                            model.addElement(s.getAbsolutePath());
                         }
+                        secList.setModel(model);
+                        cortandoProgressBar.setIndeterminate(false);
+                        cortandoProgressBar.setVisible(false);
+                        long fin = System.currentTimeMillis();
+                        log.info("Duración proceso: " + videoDetection.getTimeDetect(fin - ini));
+//                        }
+                        cortarButton.setText("Generar");
                     } catch (IOException ex) {
                         log.error(ex);
                     } finally {
@@ -2652,30 +2670,22 @@ public class ProyectoMain extends javax.swing.JFrame {
                     }
                 }
             }).start();
-        } else if ("Abortar".equals(cortarButton.getText())) {
-            abortar = true;
-            txtMaster.setText("");
-            txtSec.setText("");
-            txtExt.setText("");
-            txtFPS4.setText("");
-            txtFPS5.setText("");
-            txtFPS6.setText("");
-            secList.setModel(new javax.swing.AbstractListModel<String>() {
-                String[] strings = {" "};
-
-                public int getSize() {
-                    return strings.length;
-                }
-
-                public String getElementAt(int i) {
-                    return strings[i];
-                }
-            });
-            cortandoProgressBar.setVisible(false);
-            cortarButton.setText("Generar");
-            log.info("Proceso de corte abortado");
-
         }
+//        else if ("Abortar".equals(cortarButton.getText())) {
+//            int ax = JOptionPane.showConfirmDialog(this, "¿Está seguro de abortar el proceso?");
+//            if (ax == JOptionPane.YES_OPTION) {
+//                abortar = true;
+//                txtMaster.setText("");
+//                txtSec.setText("");
+//                txtExt.setText("");
+//                txtFPS4.setText("");
+//                txtFPS5.setText("");
+//                txtFPS6.setText("");
+//                cortandoProgressBar.setVisible(false);
+//                cortarButton.setText("Generar");
+//                log.info("Proceso de corte abortado");
+//            }
+//        }
     }//GEN-LAST:event_cortarButtonActionPerformed
 
     private void visualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarButtonActionPerformed
@@ -3071,12 +3081,11 @@ public class ProyectoMain extends javax.swing.JFrame {
 //        }
 //
 //    }
-    
     public String initReloj() {
         Date ahora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         final String date = formateador.format(ahora);
-        t = new Timer(1, new java.awt.event.ActionListener() {
+        t = new Timer(10, new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent ae) {
                 ++cs;
@@ -3181,7 +3190,6 @@ public class ProyectoMain extends javax.swing.JFrame {
 
     private StringBuilder cronometro = new StringBuilder();
     private Timer t;
-    private Thread timer;
     private int h, m, s, cs;
 
     private Map<Integer, TimeDetection> listTimeDetection = new HashMap<Integer, TimeDetection>();

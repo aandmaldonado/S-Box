@@ -132,16 +132,16 @@ public class VideoDetection {
         log.info("Proceso de filtro abortado");
     }
 
-    public long getDuration(VideoCapture cap) {
-        long duracion = 0;
-        while (cap.grab()) {
-            if (cap.retrieve(frame)) {
-                duracion = (long) cap.get(CV_CAP_PROP_POS_MSEC);
-            }
-        }
-        cap.release();
-        return duracion;
-    }
+//    public long getDuration(VideoCapture cap) {
+//        long duracion = 0;
+//        while (cap.grab()) {
+//            if (cap.retrieve(frame)) {
+//                duracion = (long) cap.get(CV_CAP_PROP_POS_MSEC);
+//            }
+//        }
+//        cap.release();
+//        return duracion;
+//    }
 
     public long getDuration(File cap) {
         long duracion = 0;
