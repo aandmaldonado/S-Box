@@ -59,14 +59,14 @@ public class ReproductorSec extends javax.swing.JFrame {
             labelPathFR.setText("Perspectiva no configurada para este experimento");
             faceRecorderPanel.setBackground(Color.BLACK);
         }
-        
+
         if (null != activityRender) {
             labelPathAR.setText(activityRender.getAbsolutePath());
         } else {
             labelPathAR.setText("Perspectiva no configurada para este experimento");
             activityRenderPanel.setBackground(Color.BLACK);
         }
-        
+
         if (null != canalExt) {
             labelPathCE.setText(canalExt.getAbsolutePath());
         } else {
@@ -90,13 +90,14 @@ public class ReproductorSec extends javax.swing.JFrame {
         labelFaceRecorder = new javax.swing.JLabel();
         labelActRender = new javax.swing.JLabel();
         labelCanalExt = new javax.swing.JLabel();
-        detButton = new javax.swing.JButton();
-        iniButton = new javax.swing.JButton();
         labelPathFR = new javax.swing.JLabel();
         labelPathAR = new javax.swing.JLabel();
         labelPathCE = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        iniButton = new javax.swing.JButton();
         PauseButton = new javax.swing.JButton();
-        repetirCheckBox = new javax.swing.JCheckBox();
+        detButton = new javax.swing.JButton();
+        repeatToggleButton = new javax.swing.JToggleButton();
 
         setResizable(false);
 
@@ -151,64 +152,108 @@ public class ReproductorSec extends javax.swing.JFrame {
         labelCanalExt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         labelCanalExt.setText("Perspectiva Externa");
 
-        detButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        detButton.setText("Detener");
-        detButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                detButtonActionPerformed(evt);
-            }
-        });
-
-        iniButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        iniButton.setText("Iniciar");
-        iniButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                iniButtonActionPerformed(evt);
-            }
-        });
-
         labelPathFR.setText("jLabel1");
 
         labelPathAR.setText("jLabel2");
 
         labelPathCE.setText("jLabel3");
 
-        PauseButton.setText("jButton1");
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        repetirCheckBox.setText("Repetir");
+        iniButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        iniButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668624_audio-video-outline-play.png"))); // NOI18N
+        iniButton.setBorder(null);
+        iniButton.setBorderPainted(false);
+        iniButton.setOpaque(false);
+        iniButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iniButtonActionPerformed(evt);
+            }
+        });
+
+        PauseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668628_audio-video-outline-pause.png"))); // NOI18N
+        PauseButton.setBorder(null);
+        PauseButton.setBorderPainted(false);
+        PauseButton.setOpaque(false);
+        PauseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PauseButtonActionPerformed(evt);
+            }
+        });
+
+        detButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        detButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668622_audio-video-outline-stop.png"))); // NOI18N
+        detButton.setBorder(null);
+        detButton.setBorderPainted(false);
+        detButton.setOpaque(false);
+        detButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detButtonActionPerformed(evt);
+            }
+        });
+
+        repeatToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668617_audio-video-outline-replay.png"))); // NOI18N
+        repeatToggleButton.setBorder(null);
+        repeatToggleButton.setBorderPainted(false);
+        repeatToggleButton.setOpaque(false);
+        repeatToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                repeatToggleButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(iniButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PauseButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(detButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(repeatToggleButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(repeatToggleButton)
+                    .addComponent(detButton)
+                    .addComponent(PauseButton)
+                    .addComponent(iniButton))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(323, 323, 323)
-                        .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(PauseButton)
-                        .addGap(72, 72, 72)
-                        .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(repetirCheckBox))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(faceRecorderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelFaceRecorder)
-                            .addComponent(labelPathFR))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelActRender)
-                            .addComponent(labelPathAR))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelPathCE)
-                            .addComponent(labelCanalExt)
-                            .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(faceRecorderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelFaceRecorder)
+                    .addComponent(labelPathFR))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelActRender)
+                    .addComponent(labelPathAR))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelPathCE)
+                    .addComponent(labelCanalExt)
+                    .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(369, 369, 369))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,17 +273,9 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addComponent(labelPathFR)
                     .addComponent(labelPathAR)
                     .addComponent(labelPathCE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(repetirCheckBox))
-                        .addGap(50, 50, 50))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(PauseButton)
-                        .addGap(74, 74, 74))))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -246,41 +283,17 @@ public class ReproductorSec extends javax.swing.JFrame {
 
     private void iniButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniButtonActionPerformed
         // TODO add your handling code here:
-        if ("Iniciar".equals(iniButton.getText())) {
-            if (null != faceRecorder) {
-                playerFaceRecorder.getMediaPlayer().playMedia(faceRecorder.getAbsolutePath());
-            }
-            if (null != activityRender) {
-                playerActivityRender.getMediaPlayer().playMedia(activityRender.getAbsolutePath());
-            }
-            if (null != canalExt) {
-                playerCanalExt.getMediaPlayer().playMedia(canalExt.getAbsolutePath());
-            }
-
-            iniButton.setText("Pausar");
-        } else if ("Pausar".equals(iniButton.getText())) {
-            if (null != faceRecorder) {
-                playerFaceRecorder.getMediaPlayer().setPause(playerFaceRecorder.getMediaPlayer().isPlaying() ? true : false);
-            }
-            if (null != activityRender) {
-                playerActivityRender.getMediaPlayer().setPause(playerActivityRender.getMediaPlayer().isPlaying() ? true : false);
-            }
-            if (null != canalExt) {
-                playerCanalExt.getMediaPlayer().setPause(playerCanalExt.getMediaPlayer().isPlaying() ? true : false);
-            }
-            iniButton.setText("Reanudar");
-        } else if ("Reanudar".equals(iniButton.getText())) {
-            if (null != faceRecorder) {
-                playerFaceRecorder.getMediaPlayer().setPause(playerFaceRecorder.getMediaPlayer().isPlaying() ? true : false);
-            }
-            if (null != activityRender) {
-                playerActivityRender.getMediaPlayer().setPause(playerActivityRender.getMediaPlayer().isPlaying() ? true : false);
-            }
-            if (null != canalExt) {
-                playerCanalExt.getMediaPlayer().setPause(playerCanalExt.getMediaPlayer().isPlaying() ? true : false);
-            }
-            iniButton.setText("Pausar");
+        if (null != faceRecorder) {
+            playerFaceRecorder.getMediaPlayer().playMedia(faceRecorder.getAbsolutePath());
         }
+        if (null != activityRender) {
+            playerActivityRender.getMediaPlayer().playMedia(activityRender.getAbsolutePath());
+        }
+        if (null != canalExt) {
+            playerCanalExt.getMediaPlayer().playMedia(canalExt.getAbsolutePath());
+        }
+        
+        iniButtonActionPerformed(evt);
     }//GEN-LAST:event_iniButtonActionPerformed
 
     private void detButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detButtonActionPerformed
@@ -294,9 +307,24 @@ public class ReproductorSec extends javax.swing.JFrame {
         if (null != canalExt) {
             playerCanalExt.getMediaPlayer().stop();
         }
-
-        iniButton.setText("Iniciar");
     }//GEN-LAST:event_detButtonActionPerformed
+
+    private void PauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PauseButtonActionPerformed
+        // TODO add your handling code here:
+        if (null != faceRecorder) {
+            playerFaceRecorder.getMediaPlayer().setPause(playerFaceRecorder.getMediaPlayer().isPlaying() ? true : false);
+        }
+        if (null != activityRender) {
+            playerActivityRender.getMediaPlayer().setPause(playerActivityRender.getMediaPlayer().isPlaying() ? true : false);
+        }
+        if (null != canalExt) {
+            playerCanalExt.getMediaPlayer().setPause(playerCanalExt.getMediaPlayer().isPlaying() ? true : false);
+        }
+    }//GEN-LAST:event_PauseButtonActionPerformed
+
+    private void repeatToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repeatToggleButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_repeatToggleButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -340,12 +368,13 @@ public class ReproductorSec extends javax.swing.JFrame {
     private javax.swing.JButton detButton;
     private javax.swing.JPanel faceRecorderPanel;
     private javax.swing.JButton iniButton;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelActRender;
     private javax.swing.JLabel labelCanalExt;
     private javax.swing.JLabel labelFaceRecorder;
     private javax.swing.JLabel labelPathAR;
     private javax.swing.JLabel labelPathCE;
     private javax.swing.JLabel labelPathFR;
-    private javax.swing.JCheckBox repetirCheckBox;
+    private javax.swing.JToggleButton repeatToggleButton;
     // End of variables declaration//GEN-END:variables
 }
