@@ -9,10 +9,8 @@ import static org.monte.media.FormatKeys.KeyFrameIntervalKey;
 import static org.monte.media.FormatKeys.MIME_AVI;
 import static org.monte.media.FormatKeys.MediaTypeKey;
 import static org.monte.media.FormatKeys.MimeTypeKey;
-import static org.monte.media.VideoFormatKeys.COMPRESSOR_NAME_AVI_TECHSMITH_SCREEN_CAPTURE;
 import static org.monte.media.VideoFormatKeys.CompressorNameKey;
 import static org.monte.media.VideoFormatKeys.DepthKey;
-import static org.monte.media.VideoFormatKeys.ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE;
 import static org.monte.media.VideoFormatKeys.HeightKey;
 import static org.monte.media.VideoFormatKeys.QualityKey;
 import static org.monte.media.VideoFormatKeys.WidthKey;
@@ -31,6 +29,7 @@ import org.apache.log4j.Logger;
 
 import org.monte.media.Format;
 import org.monte.media.FormatKeys.MediaType;
+import static org.monte.media.VideoFormatKeys.ENCODING_AVI_MJPG;
 import org.monte.media.math.Rational;
 import sbox.facerecorder.WebcamAndMicrophoneCapture;
 
@@ -142,18 +141,23 @@ public class initScreenRecorder extends javax.swing.JFrame {
         String mimeType, videoFormatName, compressorName, crsr;
 
         mimeType = MIME_AVI;
-        videoFormatName = ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE;
-        compressorName = COMPRESSOR_NAME_AVI_TECHSMITH_SCREEN_CAPTURE;
+//        videoFormatName = ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE;
+        videoFormatName = ENCODING_AVI_MJPG;
+//        compressorName = COMPRESSOR_NAME_AVI_TECHSMITH_SCREEN_CAPTURE;
+        compressorName = ENCODING_AVI_MJPG;
         crsr = ScreenRecorder.ENCODING_WHITE_CURSOR;
 
         float quality = 1.0f;
-        int bitDepth = 16;
+//        float quality = 0.5f;
+//        int bitDepth = 16;
+        int bitDepth = 24;
         int audioRate = 22050;
         int audioChannels = 1;
         int audioBitsPerSample = 8;
 
         int mouseRate = 30;
-        int screenRate = 20;
+//        int screenRate = 20;
+        int screenRate = 30;
 
         AreaItem item = new AreaItem("Entire Screen", null, SwingConstants.NORTH_WEST);
         areaRect = item.getBounds(cfg);

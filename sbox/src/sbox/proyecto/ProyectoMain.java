@@ -41,16 +41,12 @@ import static org.bytedeco.javacpp.opencv_core.cvClearMemStorage;
 import static org.bytedeco.javacpp.opencv_core.cvInitFont;
 import static org.bytedeco.javacpp.opencv_core.cvPoint;
 import static org.bytedeco.javacpp.opencv_core.cvPutText;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FPS;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FRAME_HEIGHT;
-import static org.bytedeco.javacpp.opencv_highgui.CV_CAP_PROP_FRAME_WIDTH;
 import org.bytedeco.javacpp.opencv_highgui.VideoCapture;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
 import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameGrabber;
 import org.jdesktop.swingworker.SwingWorker;
 import sbox.activityrender.initScreenRecorder;
 import sbox.detection.TimeDetection;
@@ -61,7 +57,71 @@ import sbox.facerecorder.*;
  *
  * @author Álvaro Andrés Maldonado Pinto
  */
-public class ProyectoMain extends javax.swing.JFrame {
+public class ProyectoMain extends javax.swing.JFrame implements Runnable {
+
+    public void iniciarCronometro() {
+        cronometroActivo = true;
+        hilo = new Thread(this);
+        hilo.start();
+    }
+
+    public void pararCronometro() {
+        cronometroActivo = false;
+    }
+
+    public void run() {
+        Integer minutos = 0, segundos = 0, milesimas = 0;
+        //min es minutos, seg es segundos y mil es milesimas de segundo
+        String min = "", seg = "", mil = "";
+        try {
+            //Mientras cronometroActivo sea verdadero entonces seguira
+            //aumentando el tiempo
+            while (cronometroActivo) {
+                Thread.sleep(20);
+                //Incrementamos 4 milesimas de segundo
+                milesimas += 20;
+
+                //Cuando llega a 1000 osea 1 segundo aumenta 1 segundo
+                //y las milesimas dmilesimase segundo de nuevo a 0
+                if (milesimas == 1000) {
+                    milesimas = 0;
+                    segundos += 1;
+                    //Si los segundos llegan a 60 entonces aumenta 1 los minutos
+                    //y los segundos vuelven a 0
+                    if (segundos == 60) {
+                        segundos = 0;
+                        minutos++;
+                    }
+                }
+
+                //Esto solamente es estetica para que siempre este en formato
+                //00:00:000
+                if (minutos < 10) {
+                    min = "0" + minutos;
+                } else {
+                    min = minutos.toString();
+                }
+                if (segundos < 10) {
+                    seg = "0" + segundos;
+                } else {
+                    seg = segundos.toString();
+                }
+
+                if (milesimas < 10) {
+                    mil = "00" + milesimas;
+                } else if (milesimas < 100) {
+                    mil = "0" + milesimas;
+                } else {
+                    mil = milesimas.toString();
+                }
+
+                //Colocamos en la etiqueta la informacion
+                setTimeText(min + ":" + seg + ":" + mil);
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
+    }
 
     class CameraSwingWorker extends SwingWorker<String, Object> {
 
@@ -2331,19 +2391,22 @@ public class ProyectoMain extends javax.swing.JFrame {
 
             if (faceRecorder) {
                 faceRecorderGrabando.setString("Alineando...");
-                faceRecorderGrabando.setIndeterminate(false);
+                faceRecorderGrabando.setIndeterminate(true);
                 faceRecorderGrabando.setVisible(true);
             }
             if (activityRender) {
                 activityRenderGrabando.setString("Alineando...");
-                activityRenderGrabando.setIndeterminate(false);
+                activityRenderGrabando.setIndeterminate(true);
                 activityRenderGrabando.setVisible(true);
             }
             if (perspExt) {
                 perspExtGrabando.setString("Alineando...");
-                perspExtGrabando.setIndeterminate(false);
+                perspExtGrabando.setIndeterminate(true);
                 perspExtGrabando.setVisible(true);
             }
+
+            guardarFuentesButton.setEnabled(false);
+            descartarFuentesButton.setEnabled(false);
 
             new Thread(new Runnable() {
                 @Override
@@ -2357,13 +2420,13 @@ public class ProyectoMain extends javax.swing.JFrame {
                         path = rutaProyecto + "\\" + nombreProyecto;
                     }
                     if (faceRecorder) {
-                        temporizar(new File(path + "\\perspectiva1\\" + videoFace + ".avi"));
+                        setTime(new File(path + "\\perspectiva1\\" + videoFace + ".avi"));
                     }
                     if (activityRender) {
-                        temporizar(new File(path + "\\perspectiva2\\" + videoScreen + ".avi"));
+                        setTime(new File(path + "\\perspectiva2\\" + videoScreen + ".avi"));
                     }
                     if (perspExt) {
-                        temporizar(new File(path + "\\perspectiva3\\" + videoExt + ".avi"));
+                        setTime(new File(path + "\\perspectiva3\\" + videoExt + ".avi"));
                     }
                     iniciarButton.setEnabled(true);
                     descartarFuentesButton.setVisible(false);
@@ -2948,7 +3011,7 @@ public class ProyectoMain extends javax.swing.JFrame {
         }
     }
 
-    public void temporizar(File source) {
+    public void setTime(File source) {
         File alineado = new File(source.getParent() + "\\Alineado");
         Mat mat = new Mat();
         Frame frame = new Frame();
@@ -2963,9 +3026,6 @@ public class ProyectoMain extends javax.swing.JFrame {
         cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
         try {
             cap = new VideoCapture(source.getAbsolutePath());
-//            cap.set(CV_CAP_PROP_FRAME_WIDTH, captureWidth);
-//            cap.set(CV_CAP_PROP_FRAME_HEIGHT, captureHeight);
-//            cap.set(CV_CAP_PROP_FPS, 30);
             converter = new OpenCVFrameConverter.ToIplImage();
             if (!alineado.exists()) {
                 alineado.mkdirs();
@@ -2978,12 +3038,12 @@ public class ProyectoMain extends javax.swing.JFrame {
             recorder.setVideoBitrate(2000000);
             recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
             recorder.setFormat("avi");
-            recorder.setFrameRate(20);
-            recorder.setGopSize(40);
+            recorder.setFrameRate(30);
+            recorder.setGopSize(60);
             recorder.start();
-            initReloj();
-            t.start();
-            System.out.println("inicio");
+//            initReloj();
+//            t.start();
+            iniciarCronometro();
             while (cap.grab()) {
                 if (cap.retrieve(mat)) {
                     frame = converter.convert(mat);
@@ -2992,7 +3052,7 @@ public class ProyectoMain extends javax.swing.JFrame {
                     cvClearMemStorage(storage);
                     int x = 400;
                     int y = 450;
-                    cvPutText(iplImage, initReloj(), cvPoint(x, y), mCvFont, CvScalar.RED);
+                    cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
                     if (startTime == 0) {
                         startTime = System.currentTimeMillis();
                     }
@@ -3004,113 +3064,30 @@ public class ProyectoMain extends javax.swing.JFrame {
                     recorder.record(converter.convert(iplImage));
                 }
             }
-            System.out.println("fin");
 
             recorder.stop();
             cap.release();
-            if (t.isRunning()) {
-                t.stop();
-            }
+            pararCronometro();
+//            if (t.isRunning()) {
+//                t.stop();
+//            }
         } catch (FrameRecorder.Exception ex) {
-//            log.error(ex);
-            ex.printStackTrace();
+            log.error(ex);
         } finally {
             try {
-                System.out.println("fin finally");
                 recorder.stop();
                 cap.release();
-                if (t.isRunning()) {
-                    t.stop();
-                }
+                pararCronometro();
+//                if (t.isRunning()) {
+//                    t.stop();
+//                }
             } catch (FrameRecorder.Exception ex) {
-//                log.error(ex);
-                ex.printStackTrace();
+                log.error(ex);
             }
         }
 
     }
 
-//    public void temporizar1(File source) {
-//        File alineado = new File(source.getParent() + "\\Alineado");
-//        int captureWidth = 1366, captureHeight = 768;
-//        long startTime = 0, videoTS;
-//        OpenCVFrameConverter.ToIplImage converter = null;
-//        IplImage grabbedImage = null;
-//        OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(source);
-//        FFmpegFrameRecorder recorder = null;
-//        try {
-//            grabber = new OpenCVFrameGrabber(source);
-//            grabber.setImageWidth(captureWidth);
-//            grabber.setImageHeight(captureHeight);
-//            grabber.setFrameRate(30);
-//            grabber.start();
-//            converter = new OpenCVFrameConverter.ToIplImage();
-////            grabbedImage = converter.convert(grabber.grab());
-//            if (!alineado.exists()) {
-//                alineado.mkdirs();
-//            }
-//            recorder = new FFmpegFrameRecorder(alineado.getAbsolutePath() + "\\" + source.getName(), captureWidth, captureHeight, 2);
-//            recorder.setInterleaved(true);
-//            recorder.setVideoOption("tune", "zerolatency");
-//            recorder.setVideoOption("preset", "ultrafast");
-//            recorder.setVideoOption("crf", "28");
-//            recorder.setVideoBitrate(2000000);
-//            recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
-//            recorder.setFormat("avi");
-//            recorder.setFrameRate(30);
-//            recorder.setGopSize(60);
-////            recorder.setAudioOption("crf", "0");
-////            recorder.setAudioQuality(0);
-////            recorder.setAudioBitrate(192000);
-////            recorder.setSampleRate(44100);
-////            recorder.setAudioChannels(2);
-////            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
-//            recorder.start();
-//            CvMemStorage storage = CvMemStorage.create();
-//            CvFont mCvFont = new CvFont();
-//            cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
-//            initReloj();
-//            t.start();
-//            while (grabber.grab() != null) {
-//                cvClearMemStorage(storage);
-//
-//                int x = 400;
-//                int y = 450;
-//                cvPutText(grabbedImage, initReloj(), cvPoint(x, y), mCvFont, CvScalar.RED);
-//                if (startTime == 0) {
-//                    startTime = System.currentTimeMillis();
-//                }
-//                videoTS = 1000 * (System.currentTimeMillis() - startTime);
-//
-//                if (videoTS > recorder.getTimestamp()) {
-//                    recorder.setTimestamp(videoTS);
-//                }
-//
-//                recorder.record(converter.convert(grabbedImage));
-//
-//            }
-//            recorder.stop();
-//            grabber.stop();
-//            if (t.isRunning()) {
-//                t.stop();
-//            }
-//        } catch (FrameGrabber.Exception | FrameRecorder.Exception ex) {
-////            log.error(ex);
-//            ex.printStackTrace();
-//        } finally {
-//            try {
-//                recorder.stop();
-//                grabber.stop();
-//                if (t.isRunning()) {
-//                    t.stop();
-//                }
-//            } catch (FrameRecorder.Exception | FrameGrabber.Exception ex) {
-////                log.error(ex);
-//                ex.printStackTrace();
-//            }
-//        }
-//
-//    }
     public String initReloj() {
         Date ahora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
@@ -3119,7 +3096,7 @@ public class ProyectoMain extends javax.swing.JFrame {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent ae) {
                 ++cs;
-                if (cs == 100) {
+                if (cs == 1000) {
                     cs = 0;
                     ++s;
                 }
@@ -3226,6 +3203,17 @@ public class ProyectoMain extends javax.swing.JFrame {
     private VideoDetection videoDetectionM = new VideoDetection();
     //Log
     private final static Logger log = Logger.getLogger(ProyectoMain.class.getName());
+    Thread hilo;
+    boolean cronometroActivo;
+    private String timeText;
+
+    public String getTimeText() {
+        return timeText;
+    }
+
+    public void setTimeText(String timeText) {
+        this.timeText = timeText;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actRenderVerButton;
