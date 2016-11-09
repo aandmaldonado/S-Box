@@ -155,9 +155,9 @@ public class initScreenRecorder extends javax.swing.JFrame {
         int audioChannels = 1;
         int audioBitsPerSample = 8;
 
-        int mouseRate = 30;
-//        int screenRate = 20;
-        int screenRate = 30;
+        int mouseRate = 20;
+        int screenRate = 20;
+//        int screenRate = 30;
 
         AreaItem item = new AreaItem("Entire Screen", null, SwingConstants.NORTH_WEST);
         areaRect = item.getBounds(cfg);

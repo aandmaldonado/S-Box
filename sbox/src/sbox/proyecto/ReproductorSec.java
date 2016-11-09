@@ -37,6 +37,7 @@ public class ReproductorSec extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setLocationRelativeTo(null);//centrar en pantalla
+        setBounds(0, 0, 1315, 675);
         playerFaceRecorder = new EmbeddedMediaPlayerComponent();
         playerActivityRender = new EmbeddedMediaPlayerComponent();
         playerCanalExt = new EmbeddedMediaPlayerComponent();
@@ -292,8 +293,6 @@ public class ReproductorSec extends javax.swing.JFrame {
         if (null != canalExt) {
             playerCanalExt.getMediaPlayer().playMedia(canalExt.getAbsolutePath());
         }
-        
-        iniButtonActionPerformed(evt);
     }//GEN-LAST:event_iniButtonActionPerformed
 
     private void detButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detButtonActionPerformed

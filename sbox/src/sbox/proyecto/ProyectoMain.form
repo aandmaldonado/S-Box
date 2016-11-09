@@ -496,7 +496,7 @@
                     </Container>
                     <Component class="javax.swing.JProgressBar" name="buscarProgressBar">
                       <Properties>
-                        <Property name="string" type="java.lang.String" value="Conectando"/>
+                        <Property name="string" type="java.lang.String" value="Buscando dispositivos"/>
                         <Property name="stringPainted" type="boolean" value="true"/>
                       </Properties>
                     </Component>
@@ -1391,14 +1391,15 @@
                           </Group>
                           <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cortandoProgressBar" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txtSec" alignment="0" pref="381" max="32767" attributes="0"/>
-                                  <Component id="txtMaster" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtExt" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtMaster" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtSec" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="cortandoProgressBar" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
+                              <Component id="txtExt" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="labelFPS2" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtFPS4" alignment="0" max="32767" attributes="0"/>

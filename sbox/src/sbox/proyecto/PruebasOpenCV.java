@@ -8,7 +8,6 @@ package sbox.proyecto;
 import java.io.File;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core;
-import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_COMPLEX_SMALL;
 import static org.bytedeco.javacpp.opencv_core.cvClearMemStorage;
 import static org.bytedeco.javacpp.opencv_core.cvInitFont;
 import static org.bytedeco.javacpp.opencv_core.cvPoint;
@@ -29,7 +28,7 @@ public class PruebasOpenCV {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        File source = new File("C:\\pruebaCrono\\perspectiva1\\pruebaCrono_faceRecorder_28-07-2016_00.58.47.5847_30.avi");
+        File source = new File("C:\\jkehkehvt_activityRender_08-11-2016_20.21.56.2156_1.avi");
         File alineado = new File(source.getParent() + "\\Alineado");
         opencv_core.Mat mat = new opencv_core.Mat();
         Frame frame = new Frame();
@@ -41,7 +40,7 @@ public class PruebasOpenCV {
         FFmpegFrameRecorder recorder = null;
         opencv_core.CvMemStorage storage;
         opencv_core.CvFont mCvFont = new opencv_core.CvFont();
-        cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
+        cvInitFont(mCvFont, opencv_core.CV_FONT_HERSHEY_TRIPLEX, 0.5f, 1.0f, 0, 1, 8);
         try {
             cap = new opencv_highgui.VideoCapture(source.getAbsolutePath());
             converter = new OpenCVFrameConverter.ToIplImage();
@@ -68,13 +67,13 @@ public class PruebasOpenCV {
                     iplImage = converter.convert(frame);
                     storage = opencv_core.CvMemStorage.create();
                     cvClearMemStorage(storage);
-                    int x = 400;
-                    int y = 450;
+                    int x = 950;
+                    int y = 650;
                     if (frameCount==30) {
                         frameCount=0;
                         sec++;
                         System.out.println("sec: "+sec);
-                        cvPutText(iplImage, String.valueOf(sec), cvPoint(x, y), mCvFont, opencv_core.CvScalar.RED);
+                        cvPutText(iplImage, "PRUEBA", cvPoint(x, y), mCvFont, opencv_core.CvScalar.BLACK);
                     }
                     if (startTime == 0) {
                         startTime = System.currentTimeMillis();

@@ -24,6 +24,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -32,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.bytedeco.javacpp.avcodec;
 import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_COMPLEX_SMALL;
+import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_TRIPLEX;
 import org.bytedeco.javacpp.opencv_core.CvFont;
 import org.bytedeco.javacpp.opencv_core.CvMemStorage;
 import org.bytedeco.javacpp.opencv_core.CvScalar;
@@ -423,7 +425,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         txtDescPerspectiva.setRows(5);
         descPerspectivaScrollPanel.setViewportView(txtDescPerspectiva);
 
-        buscarProgressBar.setString("Conectando");
+        buscarProgressBar.setString("Buscando dispositivos");
         buscarProgressBar.setStringPainted(true);
 
         javax.swing.GroupLayout perspectivaPanelLayout = new javax.swing.GroupLayout(perspectivaPanel);
@@ -1096,12 +1098,13 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     .addComponent(cortarButton))
                 .addGap(14, 14, 14)
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cortandoProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtSec, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
-                        .addComponent(txtMaster)
-                        .addComponent(txtExt)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtMaster)
+                    .addComponent(txtSec)
+                    .addGroup(infoPanelLayout.createSequentialGroup()
+                        .addComponent(cortandoProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtExt))
+                .addGap(18, 18, 18)
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(labelFPS2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtFPS4)
@@ -2068,9 +2071,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     } else if ("Cámara externa".equals(comboDispositivos.getSelectedItem().toString())) {
                         device = "1";
                     }
-                    perspExtGrabando.setString("Grabando...");
-                    perspExtGrabando.setVisible(true);
-                    perspExtGrabando.setIndeterminate(true);
+
                     perspExt = true;
                     if (pc != null) {
                         pc.enviarInstruccion("FRAMES;" + device);
@@ -2087,6 +2088,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 }
 
                 if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva1"))) {
+
                     faceRecorder = true;
                     String nombreProyecto = txtNombreProyecto.getText();
                     String rutaProyecto = txtRutaProyecto.getText();
@@ -2098,19 +2100,24 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     }
                     CameraSwingWorker cameraSwingWorker = new CameraSwingWorker(path, nombreProyecto);
                     cameraSwingWorker.execute();
-                    faceRecorderGrabando.setString("Grabando...");
-                    faceRecorderGrabando.setVisible(true);
-                    faceRecorderGrabando.setIndeterminate(true);
                 }
 
                 while (!ProyectoMain.ScreenGo && faceRecorder) {
                     System.out.println("Esperando que inicie faceRecorder");
                 }
-
+                if (faceRecorder) {
+                    faceRecorderGrabando.setString("Grabando...");
+                    faceRecorderGrabando.setVisible(true);
+                    faceRecorderGrabando.setIndeterminate(true);
+                }
                 while (!ProyectoMain.ScreenGo && perspExt) {
                     System.out.println("Esperando que inicie canal externo");
                 }
-
+                if (perspExt) {
+                    perspExtGrabando.setString("Grabando...");
+                    perspExtGrabando.setVisible(true);
+                    perspExtGrabando.setIndeterminate(true);
+                }
                 if ("true".equalsIgnoreCase(p.getProperty("sbox.proyecto.perspectiva2"))) {
                     try {
                         activityRenderGrabando.setString("Grabando...");
@@ -2634,7 +2641,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         Properties p = new Properties();
                         p.load(new FileInputStream(prop.getAbsolutePath()));
 
-                        fileSec = fileSec + "\\videoDetect\\" + experimento + "\\";
+                        fileSec = fileSec + "\\secuencias\\" + experimento + "\\";
 
                         log.info("*************** Inicio proceso cortador de vídeos ***************");
                         cortandoProgressBar.setIndeterminate(false);
@@ -2857,14 +2864,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             } else {
                 fileSec = rutaProyecto + "\\" + nombreProyecto;
             }
-            seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtVideoMaster, "avi", fileSec + "\\perspectiva1");
+            seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtVideoMaster, "avi", fileSec + "\\perspectiva1\\Alineado");
 
             File videoMaster = new File(txtVideoMaster.getText());
             String[] a = videoMaster.getName().split(".avi");
             String[] b = a[0].split("_");
             int l = b.length;
             experimento = b[l - 1];
-            f = new File(fileSec + "\\videoDetect\\" + String.valueOf(experimento));
+            f = new File(fileSec + "\\secuencias\\" + String.valueOf(experimento));
             if (!f.exists()) {
                 txtFPS1.setText(r.getFps(new File(txtVideoMaster.getText())));
                 File prop = new File(fileSec, "properties.sbox");
@@ -3023,7 +3030,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         FFmpegFrameRecorder recorder = null;
         CvMemStorage storage;
         CvFont mCvFont = new CvFont();
-        cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
+        cvInitFont(mCvFont, CV_FONT_HERSHEY_TRIPLEX, 0.5f, 1.0f, 0, 1, 8);
         try {
             cap = new VideoCapture(source.getAbsolutePath());
             converter = new OpenCVFrameConverter.ToIplImage();
@@ -3038,21 +3045,22 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             recorder.setVideoBitrate(2000000);
             recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
             recorder.setFormat("avi");
-            recorder.setFrameRate(30);
-            recorder.setGopSize(60);
+            recorder.setFrameRate(20);
+            recorder.setGopSize(40);
             recorder.start();
-//            initReloj();
-//            t.start();
-            iniciarCronometro();
+            initReloj();
+            t.start();
+            //iniciarCronometro();
             while (cap.grab()) {
                 if (cap.retrieve(mat)) {
                     frame = converter.convert(mat);
                     iplImage = converter.convert(frame);
                     storage = CvMemStorage.create();
                     cvClearMemStorage(storage);
-                    int x = 400;
-                    int y = 450;
-                    cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
+                    int x = 950;
+                    int y = 700;
+                    cvPutText(iplImage, initReloj(), cvPoint(x, y), mCvFont, CvScalar.BLACK);
+                    //cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
                     if (startTime == 0) {
                         startTime = System.currentTimeMillis();
                     }
@@ -3068,9 +3076,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             recorder.stop();
             cap.release();
             pararCronometro();
-//            if (t.isRunning()) {
-//                t.stop();
-//            }
+            if (t.isRunning()) {
+                t.stop();
+            }
         } catch (FrameRecorder.Exception ex) {
             log.error(ex);
         } finally {
@@ -3078,9 +3086,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 recorder.stop();
                 cap.release();
                 pararCronometro();
-//                if (t.isRunning()) {
-//                    t.stop();
-//                }
+                if (t.isRunning()) {
+                    t.stop();
+                }
             } catch (FrameRecorder.Exception ex) {
                 log.error(ex);
             }
@@ -3092,11 +3100,11 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         Date ahora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         final String date = formateador.format(ahora);
-        t = new Timer(10, new java.awt.event.ActionListener() {
+        t = new Timer(1, new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent ae) {
                 ++cs;
-                if (cs == 1000) {
+                if (cs == 100) {
                     cs = 0;
                     ++s;
                 }

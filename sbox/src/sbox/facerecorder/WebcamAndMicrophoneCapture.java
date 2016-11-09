@@ -15,6 +15,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 import javax.swing.JFrame;
+import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import org.apache.log4j.Logger;
 
@@ -35,11 +36,11 @@ import sbox.proyecto.ProyectoMain;
 
 public class WebcamAndMicrophoneCapture {
 
-    final private int WEBCAM_DEVICE_INDEX = 0;
+    final private int WEBCAM_DEVICE_INDEX = 1;
     final private int AUDIO_DEVICE_INDEX = 4;
 
-    final private int FRAME_RATE = 30;
-    final private int GOP_LENGTH_IN_FRAMES = 60;
+    final private int FRAME_RATE = 20;
+    final private int GOP_LENGTH_IN_FRAMES = 40;
 
     private long startTime = 0;
     private long videoTS = 0;
@@ -131,7 +132,6 @@ public class WebcamAndMicrophoneCapture {
         recorder.start();
         ProyectoMain.ScreenGo = true;
         log.info("FaceRecorder: Inicio de grabación");
-
         // Thread for audio capture, this could be in a nested private class if
         // you prefer...
         new Thread(new Runnable() {
