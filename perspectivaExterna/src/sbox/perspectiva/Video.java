@@ -35,8 +35,8 @@ public class Video extends JFrame {
     private Boolean isVisibleDefault = null;
     private String localPath = "";
     //Grabacion
-    final private static int FRAME_RATE = 30;
-    final private static int GOP_LENGTH_IN_FRAMES = 60;
+    final private static int FRAME_RATE = 20;
+    final private static int GOP_LENGTH_IN_FRAMES = 40;
     private OpenCVFrameGrabber grabber = null;
     private OpenCVFrameConverter.ToIplImage converter = null;
     private IplImage grabbedImage = null;
