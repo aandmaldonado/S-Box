@@ -98,7 +98,6 @@ public class ReproductorSec extends javax.swing.JFrame {
         iniButton = new javax.swing.JButton();
         PauseButton = new javax.swing.JButton();
         detButton = new javax.swing.JButton();
-        repeatToggleButton = new javax.swing.JToggleButton();
 
         setResizable(false);
 
@@ -193,16 +192,6 @@ public class ReproductorSec extends javax.swing.JFrame {
             }
         });
 
-        repeatToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668617_audio-video-outline-replay.png"))); // NOI18N
-        repeatToggleButton.setBorder(null);
-        repeatToggleButton.setBorderPainted(false);
-        repeatToggleButton.setOpaque(false);
-        repeatToggleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                repeatToggleButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -214,8 +203,6 @@ public class ReproductorSec extends javax.swing.JFrame {
                 .addComponent(PauseButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(detButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(repeatToggleButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -223,7 +210,6 @@ public class ReproductorSec extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(repeatToggleButton)
                     .addComponent(detButton)
                     .addComponent(PauseButton)
                     .addComponent(iniButton))
@@ -242,19 +228,18 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addComponent(labelPathFR))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelActRender)
-                    .addComponent(labelPathAR))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelPathCE)
-                    .addComponent(labelCanalExt)
-                    .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelActRender)
+                            .addComponent(labelPathAR))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelPathCE)
+                            .addComponent(labelCanalExt)
+                            .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(369, 369, 369))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,10 +306,6 @@ public class ReproductorSec extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_PauseButtonActionPerformed
 
-    private void repeatToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repeatToggleButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_repeatToggleButtonActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -374,6 +355,5 @@ public class ReproductorSec extends javax.swing.JFrame {
     private javax.swing.JLabel labelPathAR;
     private javax.swing.JLabel labelPathCE;
     private javax.swing.JLabel labelPathFR;
-    private javax.swing.JToggleButton repeatToggleButton;
     // End of variables declaration//GEN-END:variables
 }
