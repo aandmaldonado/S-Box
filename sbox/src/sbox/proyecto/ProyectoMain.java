@@ -2824,7 +2824,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     }
                 }
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
-                    perspectiva = "\\perspectiva2\\";
+                    perspectiva = "\\perspectiva3\\";
                     String secMasterParentP = secMasterParent + perspectiva;
                     f = new File(secMasterParentP);
                     archivos = f.listFiles();
@@ -2879,9 +2879,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 p.load(new FileInputStream(prop.getAbsolutePath()));
 
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
-                    perspectiva = "\\perspectiva2\\";
-                    fileSec = fileSec + perspectiva;
-                    f = new File(fileSec);
+                    perspectiva = "\\perspectiva2\\Alineado";
+                    
+                    f = new File(fileSec + perspectiva);
                     archivos = f.listFiles();
                     for (File s : archivos) {
                         a = s.getName().split(".avi");
@@ -2900,9 +2900,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 }
 
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
-                    perspectiva = "\\perspectiva3\\";
-                    fileSec = fileSec + perspectiva;
-                    f = new File(fileSec);
+                    perspectiva = "\\perspectiva3\\Alineado";
+                    
+                    f = new File(fileSec + perspectiva);
                     archivos = f.listFiles();
                     for (File s : archivos) {
                         a = s.getName().split(".avi");
