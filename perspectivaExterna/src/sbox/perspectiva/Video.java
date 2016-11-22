@@ -17,11 +17,14 @@ import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core;
 import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_COMPLEX_SMALL;
 import org.bytedeco.javacpp.opencv_core.CvMemStorage;
+import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_8U;
 
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import static org.bytedeco.javacpp.opencv_core.cvInitFont;
 import static org.bytedeco.javacpp.opencv_core.cvPoint;
 import static org.bytedeco.javacpp.opencv_core.cvPutText;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
+import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.FrameGrabber.Exception;
@@ -40,6 +43,7 @@ public class Video extends JFrame {
     private OpenCVFrameGrabber grabber = null;
     private OpenCVFrameConverter.ToIplImage converter = null;
     private IplImage grabbedImage = null;
+    private IplImage grayImage = null;
     private FFmpegFrameRecorder recorder = null;
     private static long startTime = 0;
     private static long videoTS = 0;
@@ -100,6 +104,8 @@ public class Video extends JFrame {
 //        initReloj();
 //        t.start();
         while (isVisibleDefault && (grabbedImage = converter.convert(grabber.grab())) != null) {
+            grayImage = opencv_core.IplImage.create(grabbedImage.width(), grabbedImage.height(), IPL_DEPTH_8U, 1);
+            cvCvtColor(grabbedImage, grayImage, CV_BGR2GRAY);
             cvClearMemStorage(storage);
 //            opencv_core.CvFont mCvFont = new opencv_core.CvFont();
 //            cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
@@ -118,7 +124,8 @@ public class Video extends JFrame {
                  */
                 recorder.setTimestamp(videoTS);
             }
-            recorder.record(converter.convert(grabbedImage));
+                        recorder.record(converter.convert(grayImage));
+//            recorder.record(converter.convert(grabbedImage));
         }
     }
 

@@ -67,10 +67,12 @@ public class VideoDetection {
         while (cap.grab()) {
             if (cap.retrieve(frame)) {
                 storage = CvMemStorage.create();
-                grayImage = IplImage.create(converter.convertToIplImage(converter.convert(frame)).width(), converter.convertToIplImage(converter.convert(frame)).height(), IPL_DEPTH_8U, 1);
-                cvCvtColor(converter.convertToIplImage(converter.convert(frame)), grayImage, CV_BGR2GRAY);
-                faces = cvHaarDetectObjects(grayImage, classifierFrontalFace, storage, 1.5, 3, CV_HAAR_DO_CANNY_PRUNING);
-                mouth = cvHaarDetectObjects(grayImage, classifierFrontalFaceSmile, storage, 1.5, 3, CV_HAAR_DO_CANNY_PRUNING);
+//                grayImage = IplImage.create(converter.convertToIplImage(converter.convert(frame)).width(), converter.convertToIplImage(converter.convert(frame)).height(), IPL_DEPTH_8U, 1);
+//                cvCvtColor(converter.convertToIplImage(converter.convert(frame)), grayImage, CV_BGR2GRAY);
+//                faces = cvHaarDetectObjects(grayImage, classifierFrontalFace, storage, 1.5, 3, CV_HAAR_DO_CANNY_PRUNING);
+//                mouth = cvHaarDetectObjects(grayImage, classifierFrontalFaceSmile, storage, 1.5, 3, CV_HAAR_DO_CANNY_PRUNING);
+                faces = cvHaarDetectObjects(converter.convertToIplImage(converter.convert(frame)), classifierFrontalFace, storage, 1.5, 3, CV_HAAR_DO_CANNY_PRUNING);
+                mouth = cvHaarDetectObjects(converter.convertToIplImage(converter.convert(frame)), classifierFrontalFaceSmile, storage, 1.5, 3, CV_HAAR_DO_CANNY_PRUNING);
                 cvClearMemStorage(storage);
                 totalFaces = faces.total();
                 totalMouth = mouth.total();

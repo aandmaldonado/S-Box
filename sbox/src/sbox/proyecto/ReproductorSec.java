@@ -21,6 +21,7 @@ public class ReproductorSec extends javax.swing.JFrame {
     private final String ruta = System.getProperty("user.dir") + "\\lib";
     private final File vlcInstallPath = new File(ruta);
     private File faceRecorder, activityRender, canalExt;
+    private static final String NO_DISPONIBLE= "Perspectiva no configurada para este experimento";
 
     /**
      * Creates new form ReproductorSec
@@ -55,23 +56,23 @@ public class ReproductorSec extends javax.swing.JFrame {
         playerCanalExt.setVisible(true);
 
         if (null != faceRecorder) {
-            labelPathFR.setText(faceRecorder.getAbsolutePath());
+            jTextFieldFaceRecorder.setText(faceRecorder.getAbsolutePath());
         } else {
-            labelPathFR.setText("Perspectiva no configurada para este experimento");
+            jTextFieldFaceRecorder.setText(NO_DISPONIBLE);
             faceRecorderPanel.setBackground(Color.BLACK);
         }
 
         if (null != activityRender) {
-            labelPathAR.setText(activityRender.getAbsolutePath());
+            jTextFieldActivityRender.setText(activityRender.getAbsolutePath());
         } else {
-            labelPathAR.setText("Perspectiva no configurada para este experimento");
+            jTextFieldActivityRender.setText(NO_DISPONIBLE);
             activityRenderPanel.setBackground(Color.BLACK);
         }
 
         if (null != canalExt) {
-            labelPathCE.setText(canalExt.getAbsolutePath());
+            jTextFieldCanalExterno.setText(canalExt.getAbsolutePath());
         } else {
-            labelPathCE.setText("Perspectiva no configurada para este experimento");
+            jTextFieldCanalExterno.setText(NO_DISPONIBLE);
             canalExtPanel.setBackground(Color.BLACK);
         }
     }
@@ -91,13 +92,13 @@ public class ReproductorSec extends javax.swing.JFrame {
         labelFaceRecorder = new javax.swing.JLabel();
         labelActRender = new javax.swing.JLabel();
         labelCanalExt = new javax.swing.JLabel();
-        labelPathFR = new javax.swing.JLabel();
-        labelPathAR = new javax.swing.JLabel();
-        labelPathCE = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         iniButton = new javax.swing.JButton();
         PauseButton = new javax.swing.JButton();
         detButton = new javax.swing.JButton();
+        jTextFieldFaceRecorder = new javax.swing.JTextField();
+        jTextFieldActivityRender = new javax.swing.JTextField();
+        jTextFieldCanalExterno = new javax.swing.JTextField();
 
         setResizable(false);
 
@@ -151,12 +152,6 @@ public class ReproductorSec extends javax.swing.JFrame {
 
         labelCanalExt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         labelCanalExt.setText("Perspectiva Externa");
-
-        labelPathFR.setText("jLabel1");
-
-        labelPathAR.setText("jLabel2");
-
-        labelPathCE.setText("jLabel3");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -216,29 +211,43 @@ public class ReproductorSec extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
+        jTextFieldFaceRecorder.setEditable(false);
+        jTextFieldFaceRecorder.setText("jTextField1");
+        jTextFieldFaceRecorder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldFaceRecorderActionPerformed(evt);
+            }
+        });
+
+        jTextFieldActivityRender.setEditable(false);
+        jTextFieldActivityRender.setText("jTextField2");
+
+        jTextFieldCanalExterno.setEditable(false);
+        jTextFieldCanalExterno.setText("jTextField3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(faceRecorderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(faceRecorderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(labelFaceRecorder)
-                    .addComponent(labelPathFR))
+                    .addComponent(jTextFieldFaceRecorder, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(activityRenderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(activityRenderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(labelActRender)
-                            .addComponent(labelPathAR))
+                            .addComponent(jTextFieldActivityRender, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelPathCE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelCanalExt)
-                            .addComponent(canalExtPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(canalExtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldCanalExterno, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -256,12 +265,12 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addComponent(faceRecorderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelPathFR)
-                    .addComponent(labelPathAR)
-                    .addComponent(labelPathCE))
+                    .addComponent(jTextFieldFaceRecorder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldActivityRender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldCanalExterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
@@ -306,6 +315,10 @@ public class ReproductorSec extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_PauseButtonActionPerformed
 
+    private void jTextFieldFaceRecorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFaceRecorderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldFaceRecorderActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -336,7 +349,7 @@ public class ReproductorSec extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ReproductorSec(new File("C:\\prueba\\videoDetect\\videoDetect__1.avi"), new File("C:\\prueba\\videoDetect\\videoDetect__2.avi"), new File("C:\\prueba\\videoDetect\\videoDetect__3.avi")).setVisible(true);
+                new ReproductorSec(new File("C:\\prueba_grises\\secuencias\\2\\perspectiva1\\prueba_grises_videoDetect_faceRecorder_1.avi"), new File("C:\\prueba_grises\\secuencias\\2\\perspectiva2\\prueba_grises_videoDetect_activityRender_1.avi"), null).setVisible(true);
             }
         });
     }
@@ -349,11 +362,11 @@ public class ReproductorSec extends javax.swing.JFrame {
     private javax.swing.JPanel faceRecorderPanel;
     private javax.swing.JButton iniButton;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextFieldActivityRender;
+    private javax.swing.JTextField jTextFieldCanalExterno;
+    private javax.swing.JTextField jTextFieldFaceRecorder;
     private javax.swing.JLabel labelActRender;
     private javax.swing.JLabel labelCanalExt;
     private javax.swing.JLabel labelFaceRecorder;
-    private javax.swing.JLabel labelPathAR;
-    private javax.swing.JLabel labelPathCE;
-    private javax.swing.JLabel labelPathFR;
     // End of variables declaration//GEN-END:variables
 }

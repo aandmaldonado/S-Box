@@ -22,10 +22,13 @@ import org.apache.log4j.Logger;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core;
 import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_COMPLEX_SMALL;
+import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_8U;
 import static org.bytedeco.javacpp.opencv_core.cvClearMemStorage;
 import static org.bytedeco.javacpp.opencv_core.cvInitFont;
 import static org.bytedeco.javacpp.opencv_core.cvPoint;
 import static org.bytedeco.javacpp.opencv_core.cvPutText;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
+import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.FrameGrabber;
@@ -36,7 +39,7 @@ import sbox.proyecto.ProyectoMain;
 
 public class WebcamAndMicrophoneCapture {
 
-    final private int WEBCAM_DEVICE_INDEX = 1;
+    final private int WEBCAM_DEVICE_INDEX = 0;
     final private int AUDIO_DEVICE_INDEX = 4;
 
     final private int FRAME_RATE = 20;
@@ -51,6 +54,7 @@ public class WebcamAndMicrophoneCapture {
 
     private OpenCVFrameConverter.ToIplImage converter = null;
     private opencv_core.IplImage grabbedImage = null;
+    private opencv_core.IplImage grayImage = null;
     private OpenCVFrameGrabber grabber = null;
     private FFmpegFrameRecorder recorder = null;
     private CanvasFrame cFrame = null;
@@ -227,6 +231,8 @@ public class WebcamAndMicrophoneCapture {
         // While we are capturing...
 //        while ((capturedFrame = grabber.grab()) != null) {
         while ((grabbedImage = converter.convert(grabber.grab())) != null) {
+            grayImage = opencv_core.IplImage.create(grabbedImage.width(), grabbedImage.height(), IPL_DEPTH_8U, 1);
+            cvCvtColor(grabbedImage, grayImage, CV_BGR2GRAY);
             cvClearMemStorage(storage);
 //            opencv_core.CvFont mCvFont = new opencv_core.CvFont();
 //            cvInitFont(mCvFont, CV_FONT_HERSHEY_COMPLEX_SMALL, 0.5f, 1.0f, 0, 1, 8);
@@ -261,8 +267,8 @@ public class WebcamAndMicrophoneCapture {
             }
 
             // Send the frame to the org.bytedeco.javacv.FFmpegFrameRecorder
-//            recorder.record(capturedFrame);
-            recorder.record(converter.convert(grabbedImage));
+            recorder.record(converter.convert(grayImage));
+//            recorder.record(converter.convert(grabbedImage));
 
         }
 

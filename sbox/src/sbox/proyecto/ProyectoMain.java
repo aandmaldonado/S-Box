@@ -690,14 +690,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 .addComponent(faceRecorderVerButton))
                             .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
                                 .addComponent(labelPerspExtIcon)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 217, Short.MAX_VALUE)
                                 .addComponent(perspExtVerButton)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(perspExtGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(activityRenderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(faceRecorderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap(271, Short.MAX_VALUE))
         );
         confPerspectivaPanelLayout.setVerticalGroup(
             confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -849,7 +849,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             .addGroup(preliminarPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(tableScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 321, Short.MAX_VALUE))
+                .addGap(0, 719, Short.MAX_VALUE))
         );
         preliminarPanelLayout.setVerticalGroup(
             preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1230,7 +1230,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addGroup(visualizacionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(visualizacionPanelLayout.createSequentialGroup()
                         .addComponent(secuenciasPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 2, Short.MAX_VALUE))
+                        .addGap(0, 398, Short.MAX_VALUE))
                     .addGroup(visualizacionPanelLayout.createSequentialGroup()
                         .addComponent(infoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2008,7 +2008,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
 
     }//GEN-LAST:event_fuentesPanelComponentShown
-
+    /**
+     * Método que inicia la grabación de las perspectivas
+     */
     private void iniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarButtonActionPerformed
         // TODO add your handling code here:
         log.info("********************* Experimento iniciado *********************");
@@ -2142,7 +2144,10 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         }).start();
 
     }//GEN-LAST:event_iniciarButtonActionPerformed
-
+    /**
+     * Método que detiene la grabacion de las perspectivas, guarda y alinea los
+     * videos correspondientes
+     */
     private void detenerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detenerButtonActionPerformed
         // TODO add your handling code here:
         detenerButton.setEnabled(false);
@@ -2873,14 +2878,15 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             experimento = b[l - 1];
             f = new File(fileSec + "\\secuencias\\" + String.valueOf(experimento));
             if (!f.exists()) {
-                txtFPS1.setText(r.getFps(new File(txtVideoMaster.getText())));
+//                txtFPS1.setText(r.getFps(new File(txtVideoMaster.getText())));
+                txtFPS1.setText("20");
                 File prop = new File(fileSec, "properties.sbox");
                 Properties p = new Properties();
                 p.load(new FileInputStream(prop.getAbsolutePath()));
 
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
                     perspectiva = "\\perspectiva2\\Alineado";
-                    
+
                     f = new File(fileSec + perspectiva);
                     archivos = f.listFiles();
                     for (File s : archivos) {
@@ -2889,7 +2895,8 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         l = b.length;
                         if (b[l - 1].equals(experimento)) {
                             txtVideoSec.setText(s.getAbsolutePath());
-                            txtFPS2.setText(r.getFps(new File(s.getAbsolutePath())));
+                            txtFPS2.setText("20");
+//                            txtFPS2.setText(r.getFps(new File(s.getAbsolutePath())));
                         }
                     }
                     if ("".equals(txtVideoSec.getText())) {
@@ -2901,7 +2908,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
                     perspectiva = "\\perspectiva3\\Alineado";
-                    
+
                     f = new File(fileSec + perspectiva);
                     archivos = f.listFiles();
                     for (File s : archivos) {
@@ -2910,7 +2917,8 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         l = b.length;
                         if (b[l - 1].equals(experimento)) {
                             txtVideoExt.setText(s.getAbsolutePath());
-                            txtFPS3.setText(r.getFps(new File(s.getAbsolutePath())));
+                            txtFPS3.setText("20");
+//                            txtFPS3.setText(r.getFps(new File(s.getAbsolutePath())));
 
                         }
                     }
@@ -3059,7 +3067,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     cvClearMemStorage(storage);
                     int x = 950;
                     int y = 700;
-                    cvPutText(iplImage, initReloj_p1(), cvPoint(x, y), mCvFont, CvScalar.BLACK);
+                    cvPutText(iplImage, initReloj_p1(), cvPoint(x, y), mCvFont, CvScalar.WHITE);
                     //cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
                     if (startTime == 0) {
                         startTime = System.currentTimeMillis();
@@ -3095,6 +3103,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         }
 
     }
+
     public void setTime_p2(File source) {
         File alineado = new File(source.getParent() + "\\Alineado");
         Mat mat = new Mat();
@@ -3136,7 +3145,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     cvClearMemStorage(storage);
                     int x = 950;
                     int y = 700;
-                    cvPutText(iplImage, initReloj_p2(), cvPoint(x, y), mCvFont, CvScalar.BLACK);
+                    cvPutText(iplImage, initReloj_p2(), cvPoint(x, y), mCvFont, CvScalar.BLUE);
                     //cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
                     if (startTime == 0) {
                         startTime = System.currentTimeMillis();
@@ -3172,6 +3181,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         }
 
     }
+
     public void setTime_p3(File source) {
         File alineado = new File(source.getParent() + "\\Alineado");
         Mat mat = new Mat();
@@ -3213,7 +3223,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     cvClearMemStorage(storage);
                     int x = 950;
                     int y = 700;
-                    cvPutText(iplImage, initReloj_p3(), cvPoint(x, y), mCvFont, CvScalar.BLACK);
+                    cvPutText(iplImage, initReloj_p3(), cvPoint(x, y), mCvFont, CvScalar.WHITE);
                     //cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
                     if (startTime == 0) {
                         startTime = System.currentTimeMillis();
@@ -3288,6 +3298,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         });
         return cronometro_p1.toString();
     }
+
     public String initReloj_p2() {
         Date ahora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
@@ -3326,6 +3337,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         });
         return cronometro_p2.toString();
     }
+
     public String initReloj_p3() {
         Date ahora = new Date();
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
@@ -3436,7 +3448,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private StringBuilder cronometro_p1 = new StringBuilder();
     private StringBuilder cronometro_p2 = new StringBuilder();
     private StringBuilder cronometro_p3 = new StringBuilder();
-    private Timer t_p1,t_p2,t_p3;
+    private Timer t_p1, t_p2, t_p3;
     private int h_p1, m_p1, s_p1, cs_p1;
     private int h_p2, m_p2, s_p2, cs_p2;
     private int h_p3, m_p3, s_p3, cs_p3;
