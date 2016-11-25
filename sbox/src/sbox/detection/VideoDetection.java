@@ -5,6 +5,7 @@ import static org.bytedeco.javacpp.opencv_core.cvLoad;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.JProgressBar;
 
 import org.apache.log4j.Logger;
@@ -99,16 +100,17 @@ public class VideoDetection {
                             if (timeSmileMmAux < timeSmileMm || timeSmileMm == 0) {
                                 if (timeSmileMm < (holgura + 1)) {
                                     startTime = 0;
-                                    stopTime = 10;
+//                                    stopTime = 10;
+                                    stopTime = startTime + (holgura * 2);
                                 } else if (timeSmileMm > (duracion - (holgura + 1))) {//25
-                                    startTime = duracion - (holgura + holgura);
+                                    startTime = duracion - (holgura * 2);
                                     stopTime = duracion;
                                 } else {
                                     startTime = timeSmileMmAux + 1;
                                     if ((startTime + 1) > duracion) {
                                         stopTime = duracion;
                                     } else {
-                                        stopTime = startTime + (holgura + holgura);
+                                        stopTime = startTime + (holgura * 2);
                                     }
                                 }
                                 times = new TimeDetection();
@@ -126,10 +128,14 @@ public class VideoDetection {
         prog.setVisible(false);
         cap.release();
         log.info("Fin proceso detección de sonrisas");
+        log.info("Tiempo Detección | Tiempo Inicio | Tiempo Termino");
+        for (Entry<Integer, TimeDetection> e : listTime.entrySet()) {
+            log.info(e.getKey() + "\t\t | " + e.getValue().getStartTime() + "\t\t | " + e.getValue().getStopTime());
+        }
         return listTime;
     }
-    
-    public void stop(){
+
+    public void stop() {
         cap.release();
         log.info("Proceso de filtro abortado");
     }
@@ -144,7 +150,6 @@ public class VideoDetection {
 //        cap.release();
 //        return duracion;
 //    }
-
     public long getDuration(File cap) {
         long duracion = 0;
         try {

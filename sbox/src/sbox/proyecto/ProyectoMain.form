@@ -17,7 +17,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Proyecto"/>
+            <Property name="text" type="java.lang.String" value="Experimento"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="itemMenuNuevo">
@@ -28,7 +28,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/resources/PRTIFIconFoldersPlus_16x16.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Nuevo Proyecto"/>
+                <Property name="text" type="java.lang.String" value="Nuevo Experimento"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemMenuNuevoActionPerformed"/>
@@ -42,7 +42,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/resources/PRTIFIconFolderOpen_16x16.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Abrir Proyecto"/>
+                <Property name="text" type="java.lang.String" value="Abrir Experimento"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemMenuAbrirActionPerformed"/>
@@ -182,10 +182,13 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Informaci&#xf3;n del proyecto"/>
+                    <TitledBorder title="Informaci&#xf3;n del experimento"/>
                   </Border>
                 </Property>
               </Properties>
+              <AccessibilityProperties>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Informaci&#xf3;n del experimento"/>
+              </AccessibilityProperties>
 
               <Layout>
                 <DimensionLayout dim="0">
@@ -265,7 +268,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="11" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Crear Proyecto"/>
+                <Property name="text" type="java.lang.String" value="Crear Experimento"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="crearProyectoButtonActionPerformed"/>
@@ -334,7 +337,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="2"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Seleccione las perspectivas por defecto para su proyecto"/>
+                    <Property name="text" type="java.lang.String" value="Seleccione las perspectivas por defecto para su experimento"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="faceRecorderCheck">

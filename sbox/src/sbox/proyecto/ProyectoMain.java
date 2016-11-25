@@ -311,7 +311,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        informacionProyectoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información del proyecto"));
+        informacionProyectoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información del experimento"));
 
         labelNombreProyecto.setText("Nombre:");
 
@@ -362,7 +362,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         );
 
         crearProyectoButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        crearProyectoButton.setText("Crear Proyecto");
+        crearProyectoButton.setText("Crear Experimento");
         crearProyectoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 crearProyectoButtonActionPerformed(evt);
@@ -372,7 +372,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         informacionPerspectivaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información de perspectiva"));
 
         labelDescCheck.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        labelDescCheck.setText("Seleccione las perspectivas por defecto para su proyecto");
+        labelDescCheck.setText("Seleccione las perspectivas por defecto para su experimento");
 
         faceRecorderCheck.setText("Face Recorder");
         faceRecorderCheck.setToolTipText("Esta perspectiva muestra información del rostro del usuario frente a la  pantalla");
@@ -570,6 +570,8 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addComponent(crearProyectoButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        informacionProyectoPanel.getAccessibleContext().setAccessibleName("Información del experimento");
 
         tabPanelPrincipal.addTab("Crear", new javax.swing.ImageIcon(getClass().getResource("/resources/project.png")), proyectoPanel); // NOI18N
 
@@ -1276,11 +1278,11 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
         menuProyecto.setBackground(java.awt.Color.gray);
         menuProyecto.setForeground(java.awt.Color.white);
-        menuProyecto.setText("Proyecto");
+        menuProyecto.setText("Experimento");
 
         itemMenuNuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         itemMenuNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconFoldersPlus_16x16.png"))); // NOI18N
-        itemMenuNuevo.setText("Nuevo Proyecto");
+        itemMenuNuevo.setText("Nuevo Experimento");
         itemMenuNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemMenuNuevoActionPerformed(evt);
@@ -1290,7 +1292,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
         itemMenuAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         itemMenuAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconFolderOpen_16x16.png"))); // NOI18N
-        itemMenuAbrir.setText("Abrir Proyecto");
+        itemMenuAbrir.setText("Abrir Experimento");
         itemMenuAbrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemMenuAbrirActionPerformed(evt);
@@ -1386,9 +1388,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         });
 
         rutaProyectoButton.setEnabled(true);
-        crearProyectoButton.setText("Crear Proyecto");
+        crearProyectoButton.setText("Crear Experimento");
 
-        labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
+        labelDondeEstoy.setText("Usted está en pestaña Creación de Experimento");
         tabPanelPrincipal.setVisible(true);
         tabPanelPrincipal.setSelectedIndex(0);
         tabPanelPrincipal.setEnabledAt(1, false);
@@ -1412,7 +1414,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
 
         if (!txtRutaProyecto.getText().endsWith(".sbox")) {
-            JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Experimento no valido", "Error", JOptionPane.ERROR_MESSAGE);
             seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
         } else {
             txtFPS1.setText("");
@@ -1455,7 +1457,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             });
             try {
 
-                labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
+                labelDondeEstoy.setText("Usted está en pestaña Creación de Experimento");
                 tabPanelPrincipal.setVisible(true);
                 tabPanelPrincipal.setSelectedIndex(0);
                 tabPanelPrincipal.setEnabledAt(1, true);
@@ -1468,7 +1470,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 p.load(new FileInputStream(rutaProperties));
                 txtNombreProyecto.setEnabled(false);
                 txtNombreProyecto.setText(p.getProperty("sbox.proyecto.nombre"));
-                setTitle("Proyecto " + txtNombreProyecto.getText());
+                setTitle("Experimento " + txtNombreProyecto.getText());
                 String replace = txtRutaProyecto.getText().replace(txtNombreProyecto.getText() + "\\properties.sbox", "");
                 txtRutaProyecto.setText(replace);
                 txtRutaProyecto.setEnabled(false);
@@ -1504,7 +1506,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 comboReconocedor.setSelectedItem(p.getProperty("sbox.proyecto.reconocedor.origen"));
                 crearProyectoButton.setText("Guardar Cambios");
                 rutaProyectoButton.setVisible(false);
-                JOptionPane.showMessageDialog(this, "Proyecto cargado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Experimento cargado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
                 proyectoCargado = true;
                 creacionProyecto = true;
                 Properties propLog = new Properties();
@@ -1513,11 +1515,11 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 FileOutputStream outLog = new FileOutputStream("log4j.properties");
                 propLog.store(outLog, null);
                 PropertyConfigurator.configure("log4j.properties");
-                log.info("***************** Proyecto retomado con exito *****************");
+                log.info("***************** Experimento retomado con exito *****************");
 
             } catch (IOException ex) {
                 log.error(ex);
-                JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Experimento no valido", "Error", JOptionPane.ERROR_MESSAGE);
                 seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
             }
         }
@@ -1558,7 +1560,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 File perspectiva2 = new File(path + "\\perspectiva2");
                 File perspectiva3 = new File(path + "\\perspectiva3");
                 rutaProperties = prop.getAbsolutePath();
-                if ("Crear Proyecto".equals(crearProyectoButton.getText())) {
+                if ("Crear Experimento".equals(crearProyectoButton.getText())) {
 
                     if (!carpetaPrincipal.exists()) {
                         if (carpetaPrincipal.mkdirs()) {
@@ -1573,7 +1575,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 p.setProperty("sbox.proyecto.nombre", txtNombreProyecto.getText());
                                 p.setProperty("sbox.proyecto.destino", txtRutaProyecto.getText());
                                 log.info("**************************** S-Box ****************************");
-                                log.info("Nombre proyecto: " + txtNombreProyecto.getText());
+                                log.info("Nombre experimento: " + txtNombreProyecto.getText());
                                 if (faceRecorderCheck.isSelected()) {
                                     if (perspectiva1.mkdirs()) {
                                         p.setProperty("sbox.proyecto.perspectiva1", "true");
@@ -1617,13 +1619,13 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 p.store(out, null);
 
                                 obtencionFuentes = false;
-                                JOptionPane.showMessageDialog(this, "Proyecto creado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "Experimento creado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
                                 setTitle(txtNombreProyecto.getText());
                                 creacionProyecto = true;
                                 tabPanelPrincipal.setEnabledAt(1, true);
                                 tabPanelPrincipal.setEnabledAt(2, false);
                                 tabPanelPrincipal.setEnabledAt(3, false);
-                                log.info("****************** Proyecto creado con exito ******************");
+                                log.info("****************** Experimento creado con exito ******************");
 
                                 if (agregarPerspectiva) {
                                     agregarPerspectivaButton.setText("Modificar Perspectiva");
@@ -1647,15 +1649,15 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 proyectoCargado = true;
                             } catch (IOException ex) {
                                 log.error(ex);
-                                JOptionPane.showMessageDialog(this, "Error al crear el proyecto", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "Error al crear el experimento", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                             new Thread("").start();
                         } else {
-                            JOptionPane.showMessageDialog(this, "Error al crear el proyecto", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Error al crear el experimento", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         txtNombreProyecto.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
-                        JOptionPane.showMessageDialog(this, "Ya existe un proyecto con el mismo nombre", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Ya existe un experimento con el mismo nombre", "Error", JOptionPane.ERROR_MESSAGE);
                     }
 
                 } else if ("Guardar Cambios".equals(crearProyectoButton.getText())) {
@@ -1740,7 +1742,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     p.setProperty("sbox.proyecto.reconocedor.origen", (String) comboReconocedor.getSelectedItem());
                     FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                     p.store(out, null);
-                    JOptionPane.showMessageDialog(this, "Proyecto modificado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Experimento modificado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
 
                     agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
                     agregarPerspectivaButton.setText("Modificar Perspectiva");
@@ -1886,7 +1888,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private void proyectoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_proyectoPanelComponentShown
         // TODO add your handling code here:
         if (tabPanelPrincipal.isVisible()) {
-            labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
+            labelDondeEstoy.setText("Usted está en pestaña Creación de Experimento");
 
         }
     }//GEN-LAST:event_proyectoPanelComponentShown
@@ -2013,7 +2015,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
      */
     private void iniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarButtonActionPerformed
         // TODO add your handling code here:
-        log.info("********************* Experimento iniciado *********************");
+        log.info("********************* Obtencion de muestras iniciada *********************");
         if (faceRecorder) {
             faceRecorderGrabando.setString("Preparando cámara...");
             faceRecorderGrabando.setVisible(true);
@@ -2258,7 +2260,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         guardarFuentesButton.setText("Guardar Fuentes");
         ProyectoMain.ScreenGo = false;
 
-        log.info("******************** Experimento finalizado ********************");
+        log.info("******************** Obtenecion de muestras finalizada ********************");
         String nombreProyecto = txtNombreProyecto.getText();
         String rutaProyecto = txtRutaProyecto.getText();
         String path = "";
@@ -2879,7 +2881,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             f = new File(fileSec + "\\secuencias\\" + String.valueOf(experimento));
             if (!f.exists()) {
 //                txtFPS1.setText(r.getFps(new File(txtVideoMaster.getText())));
-                txtFPS1.setText("20");
+                txtFPS1.setText("30");
                 File prop = new File(fileSec, "properties.sbox");
                 Properties p = new Properties();
                 p.load(new FileInputStream(prop.getAbsolutePath()));
@@ -2895,7 +2897,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         l = b.length;
                         if (b[l - 1].equals(experimento)) {
                             txtVideoSec.setText(s.getAbsolutePath());
-                            txtFPS2.setText("20");
+                            txtFPS2.setText("30");
 //                            txtFPS2.setText(r.getFps(new File(s.getAbsolutePath())));
                         }
                     }
@@ -2917,7 +2919,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         l = b.length;
                         if (b[l - 1].equals(experimento)) {
                             txtVideoExt.setText(s.getAbsolutePath());
-                            txtFPS3.setText("20");
+                            txtFPS3.setText("30");
 //                            txtFPS3.setText(r.getFps(new File(s.getAbsolutePath())));
 
                         }
