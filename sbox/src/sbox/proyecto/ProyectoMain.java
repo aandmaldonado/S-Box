@@ -1867,14 +1867,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
     private void procesamientoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_procesamientoPanelComponentShown
         // TODO add your handling code here:
-        labelDondeEstoy.setText("Usted está en pestaña Sincronización de Fuentes");
+        labelDondeEstoy.setText("Usted está en pestaña Reconocimiento de Sonrisas");
         txtReconecedor.setText(comboReconocedor.getSelectedItem().toString());
         procesandoProgressBar.setVisible(false);
     }//GEN-LAST:event_procesamientoPanelComponentShown
 
     private void visualizacionPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_visualizacionPanelComponentShown
         // TODO add your handling code here:
-        labelDondeEstoy.setText("Usted está en pestaña Visualización de Secuencias");
+        labelDondeEstoy.setText("Usted está en pestaña Generación de Secuencias");
         txtReco.setText(txtReconecedor.getText());
         txtMaster.setText(txtVideoMaster.getText());
         txtSec.setText(txtVideoSec.getText());
@@ -1901,7 +1901,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private void fuentesPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_fuentesPanelComponentShown
         // TODO add your handling code here:
 
-        labelDondeEstoy.setText("Usted está en pestaña Experimentos");
+        labelDondeEstoy.setText("Usted está en pestaña Obtención de Muestras");
 
         Properties p = new Properties();
         try {
