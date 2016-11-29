@@ -225,6 +225,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/resources/1468668624_audio-video-outline-play.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Iniciar"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>
@@ -240,6 +241,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/resources/1468668628_audio-video-outline-pause.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Pausar"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>
@@ -258,6 +260,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/resources/1468668622_audio-video-outline-stop.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Detener"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>

@@ -157,6 +157,7 @@ public class ReproductorSec extends javax.swing.JFrame {
 
         iniButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         iniButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668624_audio-video-outline-play.png"))); // NOI18N
+        iniButton.setToolTipText("Iniciar");
         iniButton.setBorder(null);
         iniButton.setBorderPainted(false);
         iniButton.setOpaque(false);
@@ -167,6 +168,7 @@ public class ReproductorSec extends javax.swing.JFrame {
         });
 
         PauseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668628_audio-video-outline-pause.png"))); // NOI18N
+        PauseButton.setToolTipText("Pausar");
         PauseButton.setBorder(null);
         PauseButton.setBorderPainted(false);
         PauseButton.setOpaque(false);
@@ -178,6 +180,7 @@ public class ReproductorSec extends javax.swing.JFrame {
 
         detButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         detButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668622_audio-video-outline-stop.png"))); // NOI18N
+        detButton.setToolTipText("Detener");
         detButton.setBorder(null);
         detButton.setBorderPainted(false);
         detButton.setOpaque(false);
