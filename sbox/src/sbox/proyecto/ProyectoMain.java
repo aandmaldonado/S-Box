@@ -8,6 +8,9 @@ package sbox.proyecto;
 import java.awt.AWTException;
 import sbox.perspectiva.PerspectivaCliente;
 import java.awt.Color;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,6 +26,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
@@ -184,6 +188,10 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrameMin = new javax.swing.JFrame();
+        jProgressBarGrabMin = new javax.swing.JProgressBar();
+        jButtonDetenerMin = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         tabPanelPrincipal = new javax.swing.JTabbedPane();
         proyectoPanel = new javax.swing.JPanel();
         informacionProyectoPanel = new javax.swing.JPanel();
@@ -290,6 +298,55 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         itemMenuAbrir = new javax.swing.JMenuItem();
         separadorMenuArchivo = new javax.swing.JPopupMenu.Separator();
         itemMenuSalir = new javax.swing.JMenuItem();
+
+        jFrameMin.setAlwaysOnTop(true);
+        jFrameMin.setUndecorated(true);
+
+        jProgressBarGrabMin.setString("Grabando...");
+        jProgressBarGrabMin.setStringPainted(true);
+
+        jButtonDetenerMin.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonDetenerMin.setForeground(java.awt.Color.red);
+        jButtonDetenerMin.setText("Detener");
+        jButtonDetenerMin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDetenerMinActionPerformed(evt);
+            }
+        });
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButton1.setText("Maximizar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jFrameMinLayout = new javax.swing.GroupLayout(jFrameMin.getContentPane());
+        jFrameMin.getContentPane().setLayout(jFrameMinLayout);
+        jFrameMinLayout.setHorizontalGroup(
+            jFrameMinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameMinLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameMinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jProgressBarGrabMin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jFrameMinLayout.createSequentialGroup()
+                        .addComponent(jButtonDetenerMin)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jFrameMinLayout.setVerticalGroup(
+            jFrameMinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameMinLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jProgressBarGrabMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jFrameMinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonDetenerMin)
+                    .addComponent(jButton1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -570,8 +627,6 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addComponent(crearProyectoButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        informacionProyectoPanel.getAccessibleContext().setAccessibleName("Información del experimento");
 
         tabPanelPrincipal.addTab("Crear", new javax.swing.ImageIcon(getClass().getResource("/resources/project.png")), proyectoPanel); // NOI18N
 
@@ -2142,6 +2197,21 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         log.error(ex);
                     }
                 }
+                jFrameMin.setSize(200, 75);
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+                Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+                int x = (int) rect.getMaxX() - jFrameMin.getWidth();
+                int y = (int) rect.getMaxY() - jFrameMin.getHeight();
+                jFrameMin.setLocation(x, y);
+                
+                //jFrameMin.setLocationRelativeTo(null);
+                //jFrameMin.setBounds(0, 0, 200, 75);
+                jFrameMin.setVisible(true);
+                setVisible(false);
+                jProgressBarGrabMin.setString("Grabando...");
+                jProgressBarGrabMin.setVisible(true);
+                jProgressBarGrabMin.setIndeterminate(true);
             }
         }).start();
 
@@ -2949,6 +3019,19 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtReconecedorActionPerformed
 
+    private void jButtonDetenerMinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDetenerMinActionPerformed
+        // TODO add your handling code here:
+        setVisible(true);
+        jFrameMin.setVisible(false);
+        detenerButtonActionPerformed(evt);
+    }//GEN-LAST:event_jButtonDetenerMinActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        setVisible(true);
+        jFrameMin.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      *
      * @return
@@ -3505,8 +3588,12 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuItem itemMenuAbrir;
     private javax.swing.JMenuItem itemMenuNuevo;
     private javax.swing.JMenuItem itemMenuSalir;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonDetenerMin;
+    private javax.swing.JFrame jFrameMin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JProgressBar jProgressBarGrabMin;
     private javax.swing.JLabel labelActivityRender;
     private javax.swing.JLabel labelActivityRenderIcon;
     private javax.swing.JLabel labelDescCheck;
