@@ -8,6 +8,8 @@ package sbox.proyecto;
 import java.awt.AWTException;
 import sbox.perspectiva.PerspectivaCliente;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -32,6 +34,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.ButtonUI;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -154,7 +157,17 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
     public ProyectoMain() {
         initComponents();
-        tabPanelPrincipal.setVisible(false);
+        //tabPanelPrincipal.setVisible(false);
+
+        jLabel5.setVisible(false);
+        jLabel4.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
+
+        tabPanelPrincipal.setEnabledAt(1, false);
+        tabPanelPrincipal.setEnabledAt(2, false);
+        tabPanelPrincipal.setEnabledAt(3, false);
+        tabPanelPrincipal.setEnabledAt(4, false);
         txtDirIP.setEnabled(false);
         buscarButton.setEnabled(false);
         comboDispositivos.setEnabled(false);
@@ -171,8 +184,10 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         File[] archivos = haarcascades.listFiles();
         String[] listHaar = new String[archivos.length + 1];
         listHaar[0] = "Seleccione reconocedor";
+        String nombreArchivo = "";
         for (int i = 0; i < archivos.length; i++) {
-            listHaar[i + 1] = archivos[i].getName();
+            nombreArchivo = archivos[i].getName();
+            listHaar[i + 1] = nombreArchivo.substring(0, nombreArchivo.lastIndexOf("."));
         }
         comboReconocedor.setModel(new DefaultComboBoxModel<>(listHaar));
         setLocationRelativeTo(null);
@@ -193,6 +208,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         jButtonDetenerMin = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         tabPanelPrincipal = new javax.swing.JTabbedPane();
+        archivoPanel = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         proyectoPanel = new javax.swing.JPanel();
         informacionProyectoPanel = new javax.swing.JPanel();
         labelNombreProyecto = new javax.swing.JLabel();
@@ -237,6 +255,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         faceRecorderVerButton = new javax.swing.JButton();
         actRenderVerButton = new javax.swing.JButton();
         perspExtVerButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         controlPanel = new javax.swing.JPanel();
         iniciarButton = new javax.swing.JButton();
         detenerButton = new javax.swing.JButton();
@@ -246,6 +265,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         preliminarPanel = new javax.swing.JPanel();
         tableScrollPane1 = new javax.swing.JScrollPane();
         deteccionTable = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         marcadoPanel = new javax.swing.JPanel();
         labelVideoMaster = new javax.swing.JLabel();
         txtVideoMaster = new javax.swing.JTextField();
@@ -264,8 +286,6 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         txtHolgura = new javax.swing.JTextField();
         labelSeg = new javax.swing.JLabel();
         filtroPanel = new javax.swing.JPanel();
-        labelReconocedor = new javax.swing.JLabel();
-        txtReconecedor = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         visualizacionPanel = new javax.swing.JPanel();
         infoPanel = new javax.swing.JPanel();
@@ -286,18 +306,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         secList = new javax.swing.JList<>();
         visualizarButton = new javax.swing.JButton();
         labelSecMaster = new javax.swing.JLabel();
+        labelSecMaster1 = new javax.swing.JLabel();
+        secScrollPane1 = new javax.swing.JScrollPane();
+        secList1 = new javax.swing.JList<>();
         filtroPanel2 = new javax.swing.JPanel();
-        txtReco = new javax.swing.JTextField();
-        labelReco = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         statusBarPanel = new javax.swing.JPanel();
         labelDondeEstoy = new javax.swing.JLabel();
-        menuBarPrincipal = new javax.swing.JMenuBar();
-        menuProyecto = new javax.swing.JMenu();
-        itemMenuNuevo = new javax.swing.JMenuItem();
-        itemMenuAbrir = new javax.swing.JMenuItem();
-        separadorMenuArchivo = new javax.swing.JPopupMenu.Separator();
-        itemMenuSalir = new javax.swing.JMenuItem();
+        jLabel3 = new javax.swing.JLabel();
 
         jFrameMin.setAlwaysOnTop(true);
         jFrameMin.setUndecorated(true);
@@ -349,6 +365,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(java.awt.Color.gray);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -356,19 +373,78 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        tabPanelPrincipal.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabPanelPrincipalStateChanged(evt);
+            }
+        });
         tabPanelPrincipal.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabPanelPrincipalComponentShown(evt);
             }
         });
 
+        archivoPanel.setBackground(new java.awt.Color(153, 204, 255));
+        archivoPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                archivoPanelComponentShown(evt);
+            }
+        });
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconFoldersPlus_16x16.png"))); // NOI18N
+        jButton2.setText("Nuevo Proyecto");
+        jButton2.setBorderPainted(false);
+        jButton2.setContentAreaFilled(false);
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconFolderOpen_16x16.png"))); // NOI18N
+        jButton3.setText("Abrir Proyecto");
+        jButton3.setBorderPainted(false);
+        jButton3.setContentAreaFilled(false);
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout archivoPanelLayout = new javax.swing.GroupLayout(archivoPanel);
+        archivoPanel.setLayout(archivoPanelLayout);
+        archivoPanelLayout.setHorizontalGroup(
+            archivoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(archivoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(archivoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(1074, Short.MAX_VALUE))
+        );
+        archivoPanelLayout.setVerticalGroup(
+            archivoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(archivoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addContainerGap(427, Short.MAX_VALUE))
+        );
+
+        tabPanelPrincipal.addTab("Archivo", archivoPanel);
+
+        proyectoPanel.setBackground(new java.awt.Color(153, 204, 255));
         proyectoPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 proyectoPanelComponentShown(evt);
             }
         });
 
-        informacionProyectoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información del experimento"));
+        informacionProyectoPanel.setBackground(new java.awt.Color(153, 204, 255));
+        informacionProyectoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información del proyecto"));
 
         labelNombreProyecto.setText("Nombre:");
 
@@ -419,18 +495,20 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         );
 
         crearProyectoButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        crearProyectoButton.setText("Crear Experimento");
+        crearProyectoButton.setText("Crear Proyecto");
         crearProyectoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 crearProyectoButtonActionPerformed(evt);
             }
         });
 
+        informacionPerspectivaPanel.setBackground(new java.awt.Color(153, 204, 255));
         informacionPerspectivaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información de perspectiva"));
 
         labelDescCheck.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        labelDescCheck.setText("Seleccione las perspectivas por defecto para su experimento");
+        labelDescCheck.setText("Seleccione las perspectivas por defecto para su proyecto");
 
+        faceRecorderCheck.setBackground(new java.awt.Color(153, 204, 255));
         faceRecorderCheck.setText("Face Recorder");
         faceRecorderCheck.setToolTipText("Esta perspectiva muestra información del rostro del usuario frente a la  pantalla");
         faceRecorderCheck.addActionListener(new java.awt.event.ActionListener() {
@@ -439,13 +517,13 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        activityRenderCheck.setBackground(new java.awt.Color(153, 204, 255));
         activityRenderCheck.setText("Activity Render");
         activityRenderCheck.setToolTipText("Esta perspectiva muestra información de lo que está viendo el usuario en la  pantalla");
 
         agregarPerspectivaButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/webcam_add.png"))); // NOI18N
         agregarPerspectivaButton.setText("Agregar Perspectiva");
         agregarPerspectivaButton.setToolTipText("Presione si desea configurar una nueva perspectiva");
-        agregarPerspectivaButton.setBorder(null);
         agregarPerspectivaButton.setBorderPainted(false);
         agregarPerspectivaButton.setContentAreaFilled(false);
         agregarPerspectivaButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -455,6 +533,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        perspectivaPanel.setBackground(new java.awt.Color(153, 204, 255));
         perspectivaPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         labelDirIP.setText("Dirección IP:");
@@ -574,6 +653,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap())
         );
 
+        reconocedorPanel.setBackground(new java.awt.Color(153, 204, 255));
         reconocedorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Reconocedor"));
 
         comboReconocedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione reconocedor" }));
@@ -628,14 +708,16 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tabPanelPrincipal.addTab("Crear", new javax.swing.ImageIcon(getClass().getResource("/resources/project.png")), proyectoPanel); // NOI18N
+        tabPanelPrincipal.addTab("Creación de Proyecto", proyectoPanel);
 
+        fuentesPanel.setBackground(new java.awt.Color(153, 204, 255));
         fuentesPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 fuentesPanelComponentShown(evt);
             }
         });
 
+        confPerspectivaPanel.setBackground(new java.awt.Color(153, 204, 255));
         confPerspectivaPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Configuración de perspectivas"));
 
         labelFaceRecorder.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -653,12 +735,13 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
         labelActivityRenderIcon.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         labelActivityRenderIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/developer-api-coding-screen2.png"))); // NOI18N
-        labelActivityRenderIcon.setText("Grabación de la sesión que está realizando el usuario - con posible audio");
+        labelActivityRenderIcon.setText("Grabación de la sesión que está realizando el usuario ");
 
         labelPerspExtIcon.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         labelPerspExtIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/video-camera.png"))); // NOI18N
         labelPerspExtIcon.setText("Grabación desde una cámara externa a otras zonas del cuerpo del usuario");
 
+        simbolosPanel.setBackground(new java.awt.Color(153, 204, 255));
         simbolosPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Simbología"));
 
         labelOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/OK.png"))); // NOI18N
@@ -724,6 +807,10 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        jLabel5.setForeground(java.awt.Color.blue);
+        jLabel5.setText("<html><body><p>En estos momentos se procede a sincronizar y cronometrar los videos...</p></body></html>");
+
         javax.swing.GroupLayout confPerspectivaPanelLayout = new javax.swing.GroupLayout(confPerspectivaPanel);
         confPerspectivaPanel.setLayout(confPerspectivaPanelLayout);
         confPerspectivaPanelLayout.setHorizontalGroup(
@@ -731,38 +818,42 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelFaceRecorder)
                     .addComponent(labelActivityRender)
                     .addComponent(labelPerspExt)
-                    .addComponent(simbolosPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
                         .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
-                                .addComponent(labelActivityRenderIcon)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(actRenderVerButton))
-                            .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
-                                .addComponent(labelFaceRecorderIcon)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(faceRecorderVerButton))
-                            .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
-                                .addComponent(labelPerspExtIcon)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 217, Short.MAX_VALUE)
-                                .addComponent(perspExtVerButton)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(labelPerspExtIcon)
+                            .addComponent(labelFaceRecorderIcon)
+                            .addComponent(labelActivityRenderIcon)
+                            .addComponent(labelFaceRecorder)
+                            .addComponent(simbolosPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
                         .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(perspExtGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(activityRenderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(faceRecorderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(271, Short.MAX_VALUE))
+                            .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
+                                .addComponent(actRenderVerButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(activityRenderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
+                                .addComponent(perspExtVerButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(perspExtGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
+                                .addComponent(faceRecorderVerButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(faceRecorderGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(461, Short.MAX_VALUE))
         );
         confPerspectivaPanelLayout.setVerticalGroup(
             confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confPerspectivaPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(simbolosPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(labelFaceRecorder)
+                .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(confPerspectivaPanelLayout.createSequentialGroup()
+                        .addComponent(simbolosPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelFaceRecorder))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelFaceRecorderIcon)
@@ -778,14 +869,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelPerspExt)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(perspExtGrabando, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(labelPerspExtIcon)
-                        .addComponent(perspExtVerButton)))
+                .addGroup(confPerspectivaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPerspExtIcon)
+                    .addComponent(perspExtVerButton)
+                    .addComponent(perspExtGrabando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        controlPanel.setBackground(new java.awt.Color(153, 204, 255));
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Panel de control"));
 
         iniciarButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -871,14 +962,16 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tabPanelPrincipal.addTab("Grabar", new javax.swing.ImageIcon(getClass().getResource("/resources/video-record.png")), fuentesPanel); // NOI18N
+        tabPanelPrincipal.addTab("Obtención de Muestras", fuentesPanel);
 
+        procesamientoPanel.setBackground(new java.awt.Color(153, 204, 255));
         procesamientoPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 procesamientoPanelComponentShown(evt);
             }
         });
 
+        preliminarPanel.setBackground(new java.awt.Color(153, 204, 255));
         preliminarPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información preliminar de secuencias"));
 
         deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -886,11 +979,11 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
+                "N° Secuencia", "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -899,23 +992,53 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         });
         tableScrollPane1.setViewportView(deteccionTable);
 
+        jLabel4.setText("¿Desea generar estas secuencias?");
+
+        jButton4.setText("SI");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("NO");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout preliminarPanelLayout = new javax.swing.GroupLayout(preliminarPanel);
         preliminarPanel.setLayout(preliminarPanelLayout);
         preliminarPanelLayout.setHorizontalGroup(
             preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(preliminarPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 719, Short.MAX_VALUE))
+                .addGroup(preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tableScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addGroup(preliminarPanelLayout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         preliminarPanelLayout.setVerticalGroup(
             preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(preliminarPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                .addComponent(tableScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(preliminarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
                 .addContainerGap())
         );
 
+        marcadoPanel.setBackground(new java.awt.Color(153, 204, 255));
         marcadoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Fuentes"));
         marcadoPanel.setAutoscrolls(true);
 
@@ -986,7 +1109,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 .addComponent(txtHolgura, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelSeg)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 656, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(videoMasterButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1028,26 +1151,19 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     .addComponent(txtHolgura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelHolgura)
                     .addComponent(labelSeg))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(marcadoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(procesandoProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(marcadorButton))
                 .addContainerGap())
         );
 
-        filtroPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
+        filtroPanel.setBackground(new java.awt.Color(153, 204, 255));
+        filtroPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        labelReconocedor.setText("Reconocedor:");
-
-        txtReconecedor.setEnabled(false);
-        txtReconecedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtReconecedorActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel1.setText("<html><body><p>El filtro corta los videos de acuerdo al reconocedor aplicado en el video MASTER.</p></body></html>");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        jLabel1.setForeground(java.awt.Color.blue);
+        jLabel1.setText("<html><body><p>En esta sección se obtiene una tabla temporal de secuencias, de acuerdo a las detecciones del filtro aplicado en el video master.</p></body></html>");
 
         javax.swing.GroupLayout filtroPanelLayout = new javax.swing.GroupLayout(filtroPanel);
         filtroPanel.setLayout(filtroPanelLayout);
@@ -1055,23 +1171,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             filtroPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filtroPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(filtroPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(filtroPanelLayout.createSequentialGroup()
-                        .addComponent(labelReconocedor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtReconecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         filtroPanelLayout.setVerticalGroup(
             filtroPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filtroPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(filtroPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelReconocedor)
-                    .addComponent(txtReconecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1101,14 +1208,16 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap())
         );
 
-        tabPanelPrincipal.addTab("Filtrar", new javax.swing.ImageIcon(getClass().getResource("/resources/filter_data.png")), procesamientoPanel); // NOI18N
+        tabPanelPrincipal.addTab("Detección de Secuencias", procesamientoPanel);
 
+        visualizacionPanel.setBackground(new java.awt.Color(153, 204, 255));
         visualizacionPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 visualizacionPanelComponentShown(evt);
             }
         });
 
+        infoPanel.setBackground(new java.awt.Color(153, 204, 255));
         infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información preliminar"));
         infoPanel.setAutoscrolls(true);
 
@@ -1200,12 +1309,13 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        secuenciasPanel.setBackground(new java.awt.Color(153, 204, 255));
         secuenciasPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Información de secuencias"));
 
-        secList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        secList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                secListValueChanged(evt);
+            }
         });
         secScrollPane.setViewportView(secList);
 
@@ -1218,6 +1328,15 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
         labelSecMaster.setText("Secuencias generadas desde video master:");
 
+        labelSecMaster1.setText("Video master completo:");
+
+        secList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                secList1ValueChanged(evt);
+            }
+        });
+        secScrollPane1.setViewportView(secList1);
+
         javax.swing.GroupLayout secuenciasPanelLayout = new javax.swing.GroupLayout(secuenciasPanel);
         secuenciasPanel.setLayout(secuenciasPanelLayout);
         secuenciasPanelLayout.setHorizontalGroup(
@@ -1225,31 +1344,44 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             .addGroup(secuenciasPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(visualizarButton)
-                    .addComponent(labelSecMaster)
-                    .addComponent(secScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(293, Short.MAX_VALUE))
+                    .addGroup(secuenciasPanelLayout.createSequentialGroup()
+                        .addGroup(secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelSecMaster1)
+                            .addComponent(secScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addGroup(secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(secScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelSecMaster)))
+                    .addGroup(secuenciasPanelLayout.createSequentialGroup()
+                        .addComponent(visualizarButton)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         secuenciasPanelLayout.setVerticalGroup(
             secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(secuenciasPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelSecMaster)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(secScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addGroup(secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(secuenciasPanelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(secScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))
+                    .addGroup(secuenciasPanelLayout.createSequentialGroup()
+                        .addGroup(secuenciasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelSecMaster1)
+                            .addComponent(labelSecMaster))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(secScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(visualizarButton)
                 .addContainerGap())
         );
 
-        filtroPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
+        filtroPanel2.setBackground(new java.awt.Color(153, 204, 255));
+        filtroPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        txtReco.setEnabled(false);
-
-        labelReco.setText("Reconocedor:");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel2.setText("<html><body><p>El filtro corta los videos de acuerdo al reconocedor aplicado en el video MASTER.</p></body></html>");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        jLabel2.setForeground(java.awt.Color.blue);
+        jLabel2.setText("<html><body><p>En esta sección se cortan los videos, obteniendo las secuencias, de acuerdo a las detecciones del filtro aplicado en el video master.</p></body></html>");
 
         javax.swing.GroupLayout filtroPanel2Layout = new javax.swing.GroupLayout(filtroPanel2);
         filtroPanel2.setLayout(filtroPanel2Layout);
@@ -1258,23 +1390,13 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             .addGroup(filtroPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filtroPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelReco)
-                .addGap(14, 14, 14)
-                .addComponent(txtReco, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         filtroPanel2Layout.setVerticalGroup(
             filtroPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filtroPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(filtroPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtReco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelReco))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1287,7 +1409,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addGroup(visualizacionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(visualizacionPanelLayout.createSequentialGroup()
                         .addComponent(secuenciasPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 398, Short.MAX_VALUE))
+                        .addGap(0, 416, Short.MAX_VALUE))
                     .addGroup(visualizacionPanelLayout.createSequentialGroup()
                         .addComponent(infoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1306,11 +1428,11 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap())
         );
 
-        tabPanelPrincipal.addTab("Generar", new javax.swing.ImageIcon(getClass().getResource("/resources/Cut-20.png")), visualizacionPanel); // NOI18N
+        tabPanelPrincipal.addTab("Generación de Secuencias", visualizacionPanel);
 
         statusBarPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        labelDondeEstoy.setText("Usted está en Pantalla de Bienvenida");
+        labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
 
         javax.swing.GroupLayout statusBarPanelLayout = new javax.swing.GroupLayout(statusBarPanel);
         statusBarPanel.setLayout(statusBarPanelLayout);
@@ -1319,7 +1441,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             .addGroup(statusBarPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelDondeEstoy)
-                .addContainerGap(650, Short.MAX_VALUE))
+                .addContainerGap(613, Short.MAX_VALUE))
         );
         statusBarPanelLayout.setVerticalGroup(
             statusBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1329,45 +1451,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        menuBarPrincipal.setBackground(java.awt.Color.gray);
-
-        menuProyecto.setBackground(java.awt.Color.gray);
-        menuProyecto.setForeground(java.awt.Color.white);
-        menuProyecto.setText("Experimento");
-
-        itemMenuNuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        itemMenuNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconFoldersPlus_16x16.png"))); // NOI18N
-        itemMenuNuevo.setText("Nuevo Experimento");
-        itemMenuNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemMenuNuevoActionPerformed(evt);
-            }
-        });
-        menuProyecto.add(itemMenuNuevo);
-
-        itemMenuAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        itemMenuAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconFolderOpen_16x16.png"))); // NOI18N
-        itemMenuAbrir.setText("Abrir Experimento");
-        itemMenuAbrir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemMenuAbrirActionPerformed(evt);
-            }
-        });
-        menuProyecto.add(itemMenuAbrir);
-        menuProyecto.add(separadorMenuArchivo);
-
-        itemMenuSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/PRTIFIconCross_16x16.png"))); // NOI18N
-        itemMenuSalir.setText("Salir");
-        itemMenuSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemMenuSalirActionPerformed(evt);
-            }
-        });
-        menuProyecto.add(itemMenuSalir);
-
-        menuBarPrincipal.add(menuProyecto);
-
-        setJMenuBar(menuBarPrincipal);
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1376,13 +1460,17 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             .addComponent(statusBarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(statusBarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1390,203 +1478,6 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void itemMenuNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuNuevoActionPerformed
-        // TODO add your handling code here:
-        faceRecorderCheck.setSelected(false);
-        activityRenderCheck.setSelected(false);
-        agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
-        agregarPerspectivaButton.setText("Agregar Perspectiva");
-        agregarPerspectivaButton.setToolTipText("Presione si desea configurar una nueva perspectiva");
-        txtDirIP.setText("");
-        comboDispositivos.setModel(new DefaultComboBoxModel<>(new String[]{"Seleccione dispositivo"}));
-        txtDescPerspectiva.setText("");
-        txtNombreProyecto.setText("");
-        txtRutaProyecto.setText("");
-        txtFPS1.setText("");
-        txtFPS2.setText("");
-        txtFPS3.setText("");
-        txtHolgura.setText("");
-        txtVideoMaster.setText("");
-        txtVideoSec.setText("");
-        txtVideoExt.setText("");
-        deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{
-                    "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
-                }
-        ) {
-            Class[] types = new Class[]{
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-        });
-        txtFPS4.setText("");
-        txtFPS5.setText("");
-        txtFPS6.setText("");
-        txtMaster.setText("");
-        txtSec.setText("");
-        txtExt.setText("");
-        secList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = {" "};
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
-
-        rutaProyectoButton.setEnabled(true);
-        crearProyectoButton.setText("Crear Experimento");
-
-        labelDondeEstoy.setText("Usted está en pestaña Creación de Experimento");
-        tabPanelPrincipal.setVisible(true);
-        tabPanelPrincipal.setSelectedIndex(0);
-        tabPanelPrincipal.setEnabledAt(1, false);
-        tabPanelPrincipal.setEnabledAt(2, false);
-        tabPanelPrincipal.setEnabledAt(3, false);
-        txtDirIP.setEnabled(false);
-        buscarButton.setEnabled(false);
-        comboDispositivos.setEnabled(false);
-        txtDescPerspectiva.setEnabled(false);
-        txtRutaProyecto.setEnabled(false);
-        txtNombreProyecto.setEnabled(true);
-        rutaProyectoButton.setVisible(true);
-        setLocationRelativeTo(null);
-        setBounds(0, 0, 842, 643);
-
-    }//GEN-LAST:event_itemMenuNuevoActionPerformed
-
-    private void itemMenuAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuAbrirActionPerformed
-        // TODO add your handling code here:
-
-        seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
-
-        if (!txtRutaProyecto.getText().endsWith(".sbox")) {
-            JOptionPane.showMessageDialog(this, "Experimento no valido", "Error", JOptionPane.ERROR_MESSAGE);
-            seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
-        } else {
-            txtFPS1.setText("");
-            txtFPS2.setText("");
-            txtFPS3.setText("");
-            txtHolgura.setText("");
-            txtVideoMaster.setText("");
-            txtVideoSec.setText("");
-            txtVideoExt.setText("");
-            deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
-                    new Object[][]{},
-                    new String[]{
-                        "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
-                    }
-            ) {
-                Class[] types = new Class[]{
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class
-                };
-
-                public Class getColumnClass(int columnIndex) {
-                    return types[columnIndex];
-                }
-            });
-            txtFPS4.setText("");
-            txtFPS5.setText("");
-            txtFPS6.setText("");
-            txtMaster.setText("");
-            txtSec.setText("");
-            txtExt.setText("");
-            secList.setModel(new javax.swing.AbstractListModel<String>() {
-                String[] strings = {" "};
-
-                public int getSize() {
-                    return strings.length;
-                }
-
-                public String getElementAt(int i) {
-                    return strings[i];
-                }
-            });
-            try {
-
-                labelDondeEstoy.setText("Usted está en pestaña Creación de Experimento");
-                tabPanelPrincipal.setVisible(true);
-                tabPanelPrincipal.setSelectedIndex(0);
-                tabPanelPrincipal.setEnabledAt(1, true);
-                tabPanelPrincipal.setEnabledAt(2, false);
-                tabPanelPrincipal.setEnabledAt(3, false);
-                setLocationRelativeTo(null);
-                setBounds(0, 0, 842, 643);
-                Properties p = new Properties();
-                rutaProperties = txtRutaProyecto.getText();
-                p.load(new FileInputStream(rutaProperties));
-                txtNombreProyecto.setEnabled(false);
-                txtNombreProyecto.setText(p.getProperty("sbox.proyecto.nombre"));
-                setTitle("Experimento " + txtNombreProyecto.getText());
-                String replace = txtRutaProyecto.getText().replace(txtNombreProyecto.getText() + "\\properties.sbox", "");
-                txtRutaProyecto.setText(replace);
-                txtRutaProyecto.setEnabled(false);
-                if ("true".equals(p.getProperty("sbox.proyecto.perspectiva1"))) {
-                    faceRecorderCheck.setSelected(true);
-                }
-                if ("true".equals(p.getProperty("sbox.proyecto.perspectiva2"))) {
-                    activityRenderCheck.setSelected(true);
-                }
-                if ("true".equals(p.getProperty("sbox.proyecto.perspectiva3"))) {
-                    agregarPerspectivaButton.setText("Modificar Perspectiva");
-                    agregarPerspectivaButton.setToolTipText("Presione si desea modificar la perspectiva");
-                    agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
-                    buscarButton.setVisible(true);
-                    txtDirIP.setText(p.getProperty("sbox.proyecto.perspectiva3.ip"));
-                    comboDispositivos.setModel(new DefaultComboBoxModel<>(new String[]{p.getProperty("sbox.proyecto.perspectiva3.dispositivo")}));
-                    txtDescPerspectiva.setText(p.getProperty("sbox.proyecto.perspectiva3.descripcion"));
-                    buscarButton.setEnabled(false);
-                    txtDirIP.setEnabled(false);
-                    comboDispositivos.setEnabled(false);
-                    txtDescPerspectiva.setEnabled(false);
-                } else {
-                    agregarPerspectivaButton.setText("Agregar Perspectiva");
-                    agregarPerspectivaButton.setToolTipText("Presione si desea configurar una nueva perspectiva");
-                    agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
-                    txtDirIP.setText("");
-                    comboDispositivos.setModel(new DefaultComboBoxModel<>(new String[]{"Seleccione dispositivo"}));
-                    txtDescPerspectiva.setText("");
-                    txtDirIP.setEnabled(false);
-                    comboDispositivos.setEnabled(false);
-                    txtDescPerspectiva.setEnabled(false);
-                }
-                comboReconocedor.setSelectedItem(p.getProperty("sbox.proyecto.reconocedor.origen"));
-                crearProyectoButton.setText("Guardar Cambios");
-                rutaProyectoButton.setVisible(false);
-                JOptionPane.showMessageDialog(this, "Experimento cargado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
-                proyectoCargado = true;
-                creacionProyecto = true;
-                Properties propLog = new Properties();
-                propLog.load(new FileInputStream("log4j.properties"));
-                propLog.setProperty("log4j.appender.ARCHIVO.File", txtRutaProyecto.getText() + txtNombreProyecto.getText() + "\\" + txtNombreProyecto.getText() + ".log");
-                FileOutputStream outLog = new FileOutputStream("log4j.properties");
-                propLog.store(outLog, null);
-                PropertyConfigurator.configure("log4j.properties");
-                log.info("***************** Experimento retomado con exito *****************");
-
-            } catch (IOException ex) {
-                log.error(ex);
-                JOptionPane.showMessageDialog(this, "Experimento no valido", "Error", JOptionPane.ERROR_MESSAGE);
-                seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
-            }
-        }
-    }//GEN-LAST:event_itemMenuAbrirActionPerformed
-
-    private void itemMenuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuSalirActionPerformed
-        // TODO add your handling code here:
-//        if(pc!=null){
-//            pc.enviarInstruccion("CERRAR"); 
-//        }
-        dispose();
-    }//GEN-LAST:event_itemMenuSalirActionPerformed
 
     private void crearProyectoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearProyectoButtonActionPerformed
         // TODO add your handling code here:
@@ -1604,7 +1495,8 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 }
                 Properties propLog = new Properties();
                 propLog.load(new FileInputStream("log4j.properties"));
-                propLog.setProperty("log4j.appender.ARCHIVO.File", path + "\\" + nombreProyecto + ".log");
+                propLog.setProperty("log4j.appender.sbox.File", path + "\\" + nombreProyecto + ".log");
+                propLog.setProperty("log4j.appender.deteccion.File", path + "\\LogDetecciones.log");
                 FileOutputStream outLog = new FileOutputStream("log4j.properties");
                 propLog.store(outLog, null);
 
@@ -1615,7 +1507,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 File perspectiva2 = new File(path + "\\perspectiva2");
                 File perspectiva3 = new File(path + "\\perspectiva3");
                 rutaProperties = prop.getAbsolutePath();
-                if ("Crear Experimento".equals(crearProyectoButton.getText())) {
+                if ("Crear Proyecto".equals(crearProyectoButton.getText())) {
 
                     if (!carpetaPrincipal.exists()) {
                         if (carpetaPrincipal.mkdirs()) {
@@ -1630,7 +1522,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 p.setProperty("sbox.proyecto.nombre", txtNombreProyecto.getText());
                                 p.setProperty("sbox.proyecto.destino", txtRutaProyecto.getText());
                                 log.info("**************************** S-Box ****************************");
-                                log.info("Nombre experimento: " + txtNombreProyecto.getText());
+                                log.info("Nombre proyecto: " + txtNombreProyecto.getText());
                                 if (faceRecorderCheck.isSelected()) {
                                     if (perspectiva1.mkdirs()) {
                                         p.setProperty("sbox.proyecto.perspectiva1", "true");
@@ -1674,13 +1566,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 p.store(out, null);
 
                                 obtencionFuentes = false;
-                                JOptionPane.showMessageDialog(this, "Experimento creado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
-                                setTitle(txtNombreProyecto.getText());
+                                JOptionPane.showMessageDialog(this, "Proyecto creado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
+                                //setTitle(txtNombreProyecto.getText());
+                                jLabel3.setText("Proyecto " + txtNombreProyecto.getText());
                                 creacionProyecto = true;
-                                tabPanelPrincipal.setEnabledAt(1, true);
-                                tabPanelPrincipal.setEnabledAt(2, false);
+                                tabPanelPrincipal.setEnabledAt(2, true);
                                 tabPanelPrincipal.setEnabledAt(3, false);
-                                log.info("****************** Experimento creado con exito ******************");
+                                tabPanelPrincipal.setEnabledAt(4, false);
+                                log.info("****************** Proyecto creado con exito ******************");
 
                                 if (agregarPerspectiva) {
                                     agregarPerspectivaButton.setText("Modificar Perspectiva");
@@ -1704,15 +1597,15 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 proyectoCargado = true;
                             } catch (IOException ex) {
                                 log.error(ex);
-                                JOptionPane.showMessageDialog(this, "Error al crear el experimento", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "Error al crear el proyecto", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                             new Thread("").start();
                         } else {
-                            JOptionPane.showMessageDialog(this, "Error al crear el experimento", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Error al crear el proyecto", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         txtNombreProyecto.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.red));
-                        JOptionPane.showMessageDialog(this, "Ya existe un experimento con el mismo nombre", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Ya existe un proyecto con el mismo nombre", "Error", JOptionPane.ERROR_MESSAGE);
                     }
 
                 } else if ("Guardar Cambios".equals(crearProyectoButton.getText())) {
@@ -1797,7 +1690,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     p.setProperty("sbox.proyecto.reconocedor.origen", (String) comboReconocedor.getSelectedItem());
                     FileOutputStream out = new FileOutputStream(prop.getAbsolutePath());
                     p.store(out, null);
-                    JOptionPane.showMessageDialog(this, "Experimento modificado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Proyecto modificado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
 
                     agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
                     agregarPerspectivaButton.setText("Modificar Perspectiva");
@@ -1922,15 +1815,25 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
     private void procesamientoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_procesamientoPanelComponentShown
         // TODO add your handling code here:
-        labelDondeEstoy.setText("Usted está en pestaña Reconocimiento de Sonrisas");
-        txtReconecedor.setText(comboReconocedor.getSelectedItem().toString());
+        labelDondeEstoy.setText("Usted está en pestaña Detección de Secuencias");
+        //txtReconecedor.setText(comboReconocedor.getSelectedItem().toString());
         procesandoProgressBar.setVisible(false);
+        tabPanelPrincipal.setBackgroundAt(0, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(1, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(2, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(3, new Color(153, 204, 255));
+        tabPanelPrincipal.setBackgroundAt(4, new Color(240, 240, 240));
     }//GEN-LAST:event_procesamientoPanelComponentShown
 
     private void visualizacionPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_visualizacionPanelComponentShown
         // TODO add your handling code here:
         labelDondeEstoy.setText("Usted está en pestaña Generación de Secuencias");
-        txtReco.setText(txtReconecedor.getText());
+        tabPanelPrincipal.setBackgroundAt(0, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(1, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(2, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(3, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(4, new Color(153, 204, 255));
+        //txtReco.setText(txtReconecedor.getText());
         txtMaster.setText(txtVideoMaster.getText());
         txtSec.setText(txtVideoSec.getText());
         txtExt.setText(txtVideoExt.getText());
@@ -1943,8 +1846,12 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private void proyectoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_proyectoPanelComponentShown
         // TODO add your handling code here:
         if (tabPanelPrincipal.isVisible()) {
-            labelDondeEstoy.setText("Usted está en pestaña Creación de Experimento");
-
+            labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
+            tabPanelPrincipal.setBackgroundAt(0, new Color(240, 240, 240));
+            tabPanelPrincipal.setBackgroundAt(1, new Color(153, 204, 255));
+            tabPanelPrincipal.setBackgroundAt(2, new Color(240, 240, 240));
+            tabPanelPrincipal.setBackgroundAt(3, new Color(240, 240, 240));
+            tabPanelPrincipal.setBackgroundAt(4, new Color(240, 240, 240));
         }
     }//GEN-LAST:event_proyectoPanelComponentShown
 
@@ -1957,6 +1864,11 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
 
         labelDondeEstoy.setText("Usted está en pestaña Obtención de Muestras");
+        tabPanelPrincipal.setBackgroundAt(0, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(1, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(2, new Color(153, 204, 255));
+        tabPanelPrincipal.setBackgroundAt(3, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(4, new Color(240, 240, 240));
 
         Properties p = new Properties();
         try {
@@ -2056,7 +1968,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             perspExt = false;
 
         }
-        tabPanelPrincipal.setEnabledAt(2, archivo);
+        tabPanelPrincipal.setEnabledAt(3, archivo);
         faceRecorderGrabando.setVisible(false);
         activityRenderGrabando.setVisible(false);
         perspExtGrabando.setVisible(false);
@@ -2087,9 +1999,10 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             perspExtGrabando.setIndeterminate(true);
         }
         tabPanelPrincipal.setEnabledAt(0, false);
-        tabPanelPrincipal.setEnabledAt(1, true);
-        tabPanelPrincipal.setEnabledAt(2, false);
+        tabPanelPrincipal.setEnabledAt(1, false);
+        tabPanelPrincipal.setEnabledAt(2, true);
         tabPanelPrincipal.setEnabledAt(3, false);
+        tabPanelPrincipal.setEnabledAt(4, false);
         iniciarButton.setEnabled(false);
         detenerButton.setEnabled(true);
         guardarFuentesButton.setEnabled(false);
@@ -2204,7 +2117,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 int x = (int) rect.getMaxX() - jFrameMin.getWidth();
                 int y = (int) rect.getMaxY() - jFrameMin.getHeight();
                 jFrameMin.setLocation(x, y);
-                
+
                 //jFrameMin.setLocationRelativeTo(null);
                 //jFrameMin.setBounds(0, 0, 200, 75);
                 jFrameMin.setVisible(true);
@@ -2437,8 +2350,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             perspExtVerButton.setVisible(false);
             tabPanelPrincipal.setEnabledAt(0, true);
             tabPanelPrincipal.setEnabledAt(1, true);
-            tabPanelPrincipal.setEnabledAt(2, archivo);
-            tabPanelPrincipal.setEnabledAt(3, false);
+            tabPanelPrincipal.setEnabledAt(2, true);
+            tabPanelPrincipal.setEnabledAt(3, archivo);
+            tabPanelPrincipal.setEnabledAt(4, false);
             FileOutputStream out;
             try {
                 out = new FileOutputStream(rutaProperties);
@@ -2472,7 +2386,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             faceRecorderVerButton.setVisible(false);
             actRenderVerButton.setVisible(false);
             perspExtVerButton.setVisible(false);
-
+            jLabel5.setVisible(true);
             if (faceRecorder) {
                 faceRecorderGrabando.setString("Alineando...");
                 faceRecorderGrabando.setIndeterminate(true);
@@ -2512,6 +2426,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     if (perspExt) {
                         setTime_p3(new File(path + "\\perspectiva3\\" + videoExt + ".avi"));
                     }
+                    iniciarButton.setText("¿Otra Muestra?");
                     iniciarButton.setEnabled(true);
                     descartarFuentesButton.setVisible(false);
                     guardarFuentesButton.setVisible(false);
@@ -2529,7 +2444,8 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     tabPanelPrincipal.setEnabledAt(0, true);
                     tabPanelPrincipal.setEnabledAt(1, true);
                     tabPanelPrincipal.setEnabledAt(2, true);
-                    tabPanelPrincipal.setEnabledAt(3, false);
+                    tabPanelPrincipal.setEnabledAt(3, true);
+                    tabPanelPrincipal.setEnabledAt(4, false);
                     FileOutputStream out;
                     try {
                         out = new FileOutputStream(rutaProperties);
@@ -2549,6 +2465,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     if (perspExt) {
                         perspExtGrabando.setVisible(false);
                     }
+                    jLabel5.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Fuentes guardadas con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
             }).start();
@@ -2596,6 +2513,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
     private void tabPanelPrincipalComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabPanelPrincipalComponentShown
         // TODO add your handling code here:
+
     }//GEN-LAST:event_tabPanelPrincipalComponentShown
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -2615,32 +2533,42 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     @Override
                     public void run() {
                         File videoMaster = new File(txtVideoMaster.getText());
-                        File faceDetect = new File(System.getProperty("user.dir") + "\\src\\resources\\haarcascades\\haarcascade_frontalface_default.xml");
-                        File smileDetect = new File(System.getProperty("user.dir") + "\\src\\resources\\haarcascades\\" + txtReconecedor.getText());
+                        File faceDetect = new File(System.getProperty("user.dir") + "\\src\\resources\\haarcascades\\FaceDetection.xml");
+                        File smileDetect = new File(System.getProperty("user.dir") + "\\src\\resources\\haarcascades\\" + comboReconocedor.getSelectedItem() + ".xml");
                         long ini = System.currentTimeMillis();
-                        listTimeDetection = videoDetectionM.getDetection(videoMaster, faceDetect, smileDetect, Integer.parseInt(txtHolgura.getText()), procesandoProgressBar);
+                        listTimeDetection = videoDetectionM.getDetection(videoMaster, faceDetect, smileDetect, Integer.parseInt(txtHolgura.getText()), procesandoProgressBar, experimento);
                         long fin = System.currentTimeMillis();
                         log.info("Duración proceso: " + videoDetectionM.getTimeDetect(fin - ini));
                         if (!abortar) {
-                            Object[][] data = new Object[listTimeDetection.size()][3];
+                            Object[][] data = new Object[listTimeDetection.size()][4];
                             int i = 0;
                             for (Map.Entry<Integer, TimeDetection> entry : listTimeDetection.entrySet()) {
-                                data[i][0] = entry.getKey();
-                                data[i][1] = entry.getValue().getStartTime();
-                                data[i][2] = entry.getValue().getStopTime();
+                                data[i][0] = i + 1;
+                                data[i][1] = entry.getKey();
+                                data[i][2] = entry.getValue().getStartTime();
+                                data[i][3] = entry.getValue().getStopTime();
                                 i++;
                             }
                             DefaultTableModel model = new DefaultTableModel();
-                            String columnNames[] = {"Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"};
+                            String columnNames[] = {"N° Secuencia", "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"};
                             model.setDataVector(data, columnNames);
                             deteccionTable.setModel(model);
-                            tabPanelPrincipal.setEnabledAt(0, true);
-                            tabPanelPrincipal.setEnabledAt(1, true);
-                            tabPanelPrincipal.setEnabledAt(2, true);
+                            tabPanelPrincipal.setEnabledAt(0, false);
+                            tabPanelPrincipal.setEnabledAt(1, false);
+                            tabPanelPrincipal.setEnabledAt(2, false);
+                            tabPanelPrincipal.setEnabledAt(3, true);
+                            tabPanelPrincipal.setEnabledAt(4, false);
                             if (!listTimeDetection.isEmpty()) {
-                                tabPanelPrincipal.setEnabledAt(3, true);
+                                jLabel4.setVisible(true);
+                                jButton4.setVisible(true);
+                                jButton5.setVisible(true);
                             } else {
-                                tabPanelPrincipal.setEnabledAt(3, false);
+                                JOptionPane.showMessageDialog(null, "No se han encontrado secuencias", "Información", JOptionPane.INFORMATION_MESSAGE);
+                                tabPanelPrincipal.setEnabledAt(0, true);
+                                tabPanelPrincipal.setEnabledAt(1, true);
+                                tabPanelPrincipal.setEnabledAt(2, true);
+                                tabPanelPrincipal.setEnabledAt(3, true);
+                                tabPanelPrincipal.setEnabledAt(4, false);
                             }
                             procesandoProgressBar.setVisible(false);
                             procesandoProgressBar.setIndeterminate(false);
@@ -2668,9 +2596,29 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 txtFPS2.setText("");
                 txtFPS3.setText("");
                 txtHolgura.setText("");
+                deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
+                        new Object[][]{},
+                        new String[]{
+                            "N° Secuencia", "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
+                        }
+                ) {
+                    Class[] types = new Class[]{
+                        java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    };
 
+                    public Class getColumnClass(int columnIndex) {
+                        return types[columnIndex];
+                    }
+                });
+                jLabel3.setText("Proyecto " + txtNombreProyecto.getText());
                 marcadorButton.setText("Filtrar");
                 procesandoProgressBar.setVisible(false);
+                tabPanelPrincipal.setEnabledAt(0, true);
+                tabPanelPrincipal.setEnabledAt(1, true);
+                tabPanelPrincipal.setEnabledAt(2, true);
+                tabPanelPrincipal.setEnabledAt(3, true);
+                tabPanelPrincipal.setEnabledAt(4, false);
+
             }
 //            else if (ax == JOptionPane.NO_OPTION) {
 //                JOptionPane.showMessageDialog(null, "Has seleccionado NO.");
@@ -2707,7 +2655,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         int i = 0;
                         File videoMaster = new File(txtMaster.getText());
                         File f;
-                        String nombreProyecto = txtNombreProyecto.getText(), rutaProyecto = txtRutaProyecto.getText(), fileSec, fileSecMaster = null, perspectiva, nomVideo;
+                        String nombreProyecto = txtNombreProyecto.getText(), rutaProyecto = txtRutaProyecto.getText(), fileSec, perspectiva, nomVideo;
                         if ("C:\\".equalsIgnoreCase(rutaProyecto)) {
                             fileSec = rutaProyecto + nombreProyecto;
                         } else {
@@ -2829,9 +2777,15 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         File[] archivos = f.listFiles();
                         DefaultListModel<String> model = new DefaultListModel<>();
                         for (File s : archivos) {
-                            model.addElement(s.getAbsolutePath());
+                            //model.addElement(s.getAbsolutePath());
+                            model.addElement(s.getName());
                         }
                         secList.setModel(model);
+
+                        f = new File(txtMaster.getText());
+                        model = new DefaultListModel<>();
+                        model.addElement(f.getName());
+                        secList1.setModel(model);
                         cortandoProgressBar.setIndeterminate(false);
                         cortandoProgressBar.setVisible(false);
                         long fin = System.currentTimeMillis();
@@ -2867,7 +2821,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private void visualizarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarButtonActionPerformed
         // TODO add your handling code here:
         ReproductorSec rSec = null;
-        if (!secList.isSelectionEmpty()) {
+        if (!secList.isSelectionEmpty() || !secList1.isSelectionEmpty()) {
             try {
                 File f, secSecundario = null, secExterno = null;
                 File[] archivos;
@@ -2877,40 +2831,81 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 } else {
                     path = rutaProyecto + "\\" + nombreProyecto;
                 }
-                File secMaster = new File(secList.getSelectedValue());
-                String[] a = secMaster.getName().split(".avi");
-                String[] b = a[0].split("_");
-                int l = b.length;
-                secuencia = b[l - 1];
-                File prop = new File(path, "properties.sbox");
-                Properties p = new Properties();
-                p.load(new FileInputStream(prop.getAbsolutePath()));
-                String secMasterParent = secMaster.getParentFile().getParent();
-                if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
-                    perspectiva = "\\perspectiva2\\";
-                    String secMasterParentP = secMasterParent + perspectiva;
-                    f = new File(secMasterParentP);
-                    archivos = f.listFiles();
-                    for (File s : archivos) {
-                        a = s.getName().split(".avi");
-                        b = a[0].split("_");
-                        l = b.length;
-                        if (b[l - 1].equals(secuencia)) {
-                            secSecundario = new File(s.getAbsolutePath());
+                File secMaster = null;
+                if (!secList.isSelectionEmpty()) {
+                    secMaster = new File(fileSecMaster + "\\" + secList.getSelectedValue());
+                    String[] a = secMaster.getName().split(".avi");
+                    String[] b = a[0].split("_");
+                    int l = b.length;
+                    secuencia = b[l - 1];
+                    File prop = new File(path, "properties.sbox");
+                    Properties p = new Properties();
+                    p.load(new FileInputStream(prop.getAbsolutePath()));
+                    String secMasterParent = secMaster.getParentFile().getParent();
+                    if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
+                        perspectiva = "\\perspectiva2\\";
+                        String secMasterParentP = secMasterParent + perspectiva;
+                        f = new File(secMasterParentP);
+                        archivos = f.listFiles();
+                        for (File s : archivos) {
+                            a = s.getName().split(".avi");
+                            b = a[0].split("_");
+                            l = b.length;
+                            if (b[l - 1].equals(secuencia)) {
+                                secSecundario = new File(s.getAbsolutePath());
+                            }
                         }
                     }
-                }
-                if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
-                    perspectiva = "\\perspectiva3\\";
-                    String secMasterParentP = secMasterParent + perspectiva;
-                    f = new File(secMasterParentP);
-                    archivos = f.listFiles();
-                    for (File s : archivos) {
-                        a = s.getName().split(".avi");
-                        b = a[0].split("_");
-                        l = b.length;
-                        if (b[l - 1].equals(secuencia)) {
-                            secExterno = new File(s.getAbsolutePath());
+                    if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
+                        perspectiva = "\\perspectiva3\\";
+                        String secMasterParentP = secMasterParent + perspectiva;
+                        f = new File(secMasterParentP);
+                        archivos = f.listFiles();
+                        for (File s : archivos) {
+                            a = s.getName().split(".avi");
+                            b = a[0].split("_");
+                            l = b.length;
+                            if (b[l - 1].equals(secuencia)) {
+                                secExterno = new File(s.getAbsolutePath());
+                            }
+                        }
+                    }
+                } else if (!secList1.isSelectionEmpty()) {
+                    secMaster = new File(path + "\\perspectiva1\\Alineado\\" + secList1.getSelectedValue());
+                    String[] a = secMaster.getName().split(".avi");
+                    String[] b = a[0].split("_");
+                    int l = b.length;
+                    secuencia = b[l - 1];
+                    File prop = new File(path, "properties.sbox");
+                    Properties p = new Properties();
+                    p.load(new FileInputStream(prop.getAbsolutePath()));
+                    String secMasterParent = secMaster.getParentFile().getParent();
+                    if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva2"))) {
+                        perspectiva = "\\perspectiva2\\Alineado";
+                        String secMasterParentP = path + perspectiva;
+                        f = new File(secMasterParentP);
+                        archivos = f.listFiles();
+                        for (File s : archivos) {
+                            a = s.getName().split(".avi");
+                            b = a[0].split("_");
+                            l = b.length;
+                            if (b[l - 1].equals(secuencia)) {
+                                secSecundario = new File(s.getAbsolutePath());
+                            }
+                        }
+                    }
+                    if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
+                        perspectiva = "\\perspectiva3\\Alineado";
+                        String secMasterParentP = path + perspectiva;
+                        f = new File(secMasterParentP);
+                        archivos = f.listFiles();
+                        for (File s : archivos) {
+                            a = s.getName().split(".avi");
+                            b = a[0].split("_");
+                            l = b.length;
+                            if (b[l - 1].equals(secuencia)) {
+                                secExterno = new File(s.getAbsolutePath());
+                            }
                         }
                     }
                 }
@@ -2923,7 +2918,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 log.info(ex);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una secuencia master", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un video", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_visualizarButtonActionPerformed
@@ -2975,7 +2970,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         txtVideoSec.setText("Video no disponible");
                     }
                 } else {
-                    txtVideoSec.setText("Perspectiva no configurada para este experimento");
+                    txtVideoSec.setText("Perspectiva no configurada para este proyecto");
                 }
 
                 if (Boolean.parseBoolean(p.getProperty("sbox.proyecto.perspectiva3"))) {
@@ -2998,8 +2993,9 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                         txtVideoExt.setText("video no disponible");
                     }
                 } else {
-                    txtVideoExt.setText("Perspectiva no configurada para este experimento");
+                    txtVideoExt.setText("Perspectiva no configurada para este proyecto");
                 }
+                jLabel3.setText("Proyecto " + nombreProyecto + " -> Muestra N° " + String.valueOf(experimento));
             } else {
                 int ax = JOptionPane.showConfirmDialog(this, "El video que seleccionó ya ha sido procesado ¿Desea seleccionar otro?");
                 if (ax == JOptionPane.YES_OPTION) {
@@ -3015,10 +3011,6 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         }
     }//GEN-LAST:event_videoMasterButtonActionPerformed
 
-    private void txtReconecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReconecedorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtReconecedorActionPerformed
-
     private void jButtonDetenerMinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDetenerMinActionPerformed
         // TODO add your handling code here:
         setVisible(true);
@@ -3031,6 +3023,313 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         setVisible(true);
         jFrameMin.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
+
+        if (!txtRutaProyecto.getText().endsWith(".sbox")) {
+            JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
+            seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
+        } else {
+            txtFPS1.setText("");
+            txtFPS2.setText("");
+            txtFPS3.setText("");
+            txtHolgura.setText("");
+            txtVideoMaster.setText("");
+            txtVideoSec.setText("");
+            txtVideoExt.setText("");
+            iniciarButton.setText("Iniciar");
+            deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object[][]{},
+                    new String[]{
+                        "N° Secuencia", "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
+                    }
+            ) {
+                Class[] types = new Class[]{
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types[columnIndex];
+                }
+            });
+            txtFPS4.setText("");
+            txtFPS5.setText("");
+            txtFPS6.setText("");
+            txtMaster.setText("");
+            txtSec.setText("");
+            txtExt.setText("");
+            secList.setModel(new javax.swing.AbstractListModel<String>() {
+                String[] strings = {" "};
+
+                public int getSize() {
+                    return strings.length;
+                }
+
+                public String getElementAt(int i) {
+                    return strings[i];
+                }
+            });
+            secList1.setModel(new javax.swing.AbstractListModel<String>() {
+                String[] strings = {" "};
+
+                public int getSize() {
+                    return strings.length;
+                }
+
+                public String getElementAt(int i) {
+                    return strings[i];
+                }
+            });
+            try {
+
+                labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
+
+                setLocationRelativeTo(null);
+                setBounds(0, 0, 842, 643);
+                Properties p = new Properties();
+                rutaProperties = txtRutaProyecto.getText();
+                p.load(new FileInputStream(rutaProperties));
+                tabPanelPrincipal.setVisible(true);
+                tabPanelPrincipal.setSelectedIndex(1);
+                tabPanelPrincipal.setEnabledAt(0, true);
+                tabPanelPrincipal.setEnabledAt(1, true);
+                tabPanelPrincipal.setEnabledAt(2, true);
+                int experimento = 0;
+                if (!"".equals(p.getProperty("sbox.proyecto.experimentos"))) {
+                    experimento = Integer.parseInt(p.getProperty("sbox.proyecto.experimentos"));
+                }
+
+                if (experimento > 0) {
+                    tabPanelPrincipal.setEnabledAt(3, true);
+                } else {
+                    tabPanelPrincipal.setEnabledAt(3, false);
+                }
+
+                tabPanelPrincipal.setEnabledAt(4, false);
+                txtNombreProyecto.setEnabled(false);
+                txtNombreProyecto.setText(p.getProperty("sbox.proyecto.nombre"));
+                //setTitle("Proyecto " + txtNombreProyecto.getText());
+                jLabel3.setText("Proyecto " + txtNombreProyecto.getText());
+                String replace = txtRutaProyecto.getText().replace(txtNombreProyecto.getText() + "\\properties.sbox", "");
+                txtRutaProyecto.setText(replace);
+                txtRutaProyecto.setEnabled(false);
+                if ("true".equals(p.getProperty("sbox.proyecto.perspectiva1"))) {
+                    faceRecorderCheck.setSelected(true);
+                }
+                if ("true".equals(p.getProperty("sbox.proyecto.perspectiva2"))) {
+                    activityRenderCheck.setSelected(true);
+                }
+                if ("true".equals(p.getProperty("sbox.proyecto.perspectiva3"))) {
+                    agregarPerspectivaButton.setText("Modificar Perspectiva");
+                    agregarPerspectivaButton.setToolTipText("Presione si desea modificar la perspectiva");
+                    agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
+                    buscarButton.setVisible(true);
+                    txtDirIP.setText(p.getProperty("sbox.proyecto.perspectiva3.ip"));
+                    comboDispositivos.setModel(new DefaultComboBoxModel<>(new String[]{p.getProperty("sbox.proyecto.perspectiva3.dispositivo")}));
+                    txtDescPerspectiva.setText(p.getProperty("sbox.proyecto.perspectiva3.descripcion"));
+                    buscarButton.setEnabled(false);
+                    txtDirIP.setEnabled(false);
+                    comboDispositivos.setEnabled(false);
+                    txtDescPerspectiva.setEnabled(false);
+                } else {
+                    agregarPerspectivaButton.setText("Agregar Perspectiva");
+                    agregarPerspectivaButton.setToolTipText("Presione si desea configurar una nueva perspectiva");
+                    agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
+                    txtDirIP.setText("");
+                    comboDispositivos.setModel(new DefaultComboBoxModel<>(new String[]{"Seleccione dispositivo"}));
+                    txtDescPerspectiva.setText("");
+                    txtDirIP.setEnabled(false);
+                    comboDispositivos.setEnabled(false);
+                    txtDescPerspectiva.setEnabled(false);
+                }
+
+                comboReconocedor.setSelectedItem(p.getProperty("sbox.proyecto.reconocedor.origen"));
+                crearProyectoButton.setText("Guardar Cambios");
+                rutaProyectoButton.setVisible(false);
+                JOptionPane.showMessageDialog(this, "Proyecto cargado con éxito", "Información", JOptionPane.INFORMATION_MESSAGE);
+                proyectoCargado = true;
+                creacionProyecto = true;
+                Properties propLog = new Properties();
+                propLog.load(new FileInputStream("log4j.properties"));
+                propLog.setProperty("log4j.appender.sbox.File", txtRutaProyecto.getText() + txtNombreProyecto.getText() + "\\" + txtNombreProyecto.getText() + ".log");
+                propLog.setProperty("log4j.appender.deteccion.File", txtRutaProyecto.getText() + txtNombreProyecto.getText() + "\\LogDetecciones.log");
+                FileOutputStream outLog = new FileOutputStream("log4j.properties");
+                propLog.store(outLog, null);
+                PropertyConfigurator.configure("log4j.properties");
+                log.info("***************** Proyecto retomado con exito *****************");
+
+            } catch (IOException ex) {
+                log.error(ex);
+                JOptionPane.showMessageDialog(this, "Proyecto no valido", "Error", JOptionPane.ERROR_MESSAGE);
+                seleccionarArchivo(JFileChooser.FILES_ONLY, "Abrir", txtRutaProyecto, "sbox", "C:\\");
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        faceRecorderCheck.setSelected(false);
+        activityRenderCheck.setSelected(false);
+        agregarPerspectivaButton.setIcon(new ImageIcon(getClass().getResource("/resources/webcam_add.png")));
+        agregarPerspectivaButton.setText("Agregar Perspectiva");
+        agregarPerspectivaButton.setToolTipText("Presione si desea configurar una nueva perspectiva");
+        txtDirIP.setText("");
+        comboDispositivos.setModel(new DefaultComboBoxModel<>(new String[]{"Seleccione dispositivo"}));
+        txtDescPerspectiva.setText("");
+        txtNombreProyecto.setText("");
+        txtRutaProyecto.setText("");
+        iniciarButton.setText("Iniciar");
+        txtFPS1.setText("");
+        txtFPS2.setText("");
+        txtFPS3.setText("");
+        txtHolgura.setText("");
+        txtVideoMaster.setText("");
+        txtVideoSec.setText("");
+        txtVideoExt.setText("");
+        deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "N° Secuencia", "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
+                }
+        ) {
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+        });
+        txtFPS4.setText("");
+        txtFPS5.setText("");
+        txtFPS6.setText("");
+        txtMaster.setText("");
+        txtSec.setText("");
+        txtExt.setText("");
+        secList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {" "};
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public String getElementAt(int i) {
+                return strings[i];
+            }
+        });
+        secList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {" "};
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public String getElementAt(int i) {
+                return strings[i];
+            }
+        });
+
+        rutaProyectoButton.setEnabled(true);
+        crearProyectoButton.setText("Crear Proyecto");
+
+        labelDondeEstoy.setText("Usted está en pestaña Creación de Proyecto");
+        //tabPanelPrincipal.setVisible(true);
+        tabPanelPrincipal.setSelectedIndex(1);
+        tabPanelPrincipal.setEnabledAt(1, true);
+        tabPanelPrincipal.setEnabledAt(2, false);
+        tabPanelPrincipal.setEnabledAt(3, false);
+        tabPanelPrincipal.setEnabledAt(4, false);
+        txtDirIP.setEnabled(false);
+        buscarButton.setEnabled(false);
+        comboDispositivos.setEnabled(false);
+        txtDescPerspectiva.setEnabled(false);
+        txtRutaProyecto.setEnabled(false);
+        txtNombreProyecto.setEnabled(true);
+        rutaProyectoButton.setVisible(true);
+        setLocationRelativeTo(null);
+        setBounds(0, 0, 842, 643);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here
+        tabPanelPrincipal.setSelectedIndex(4);
+        tabPanelPrincipal.setEnabledAt(0, true);
+        tabPanelPrincipal.setEnabledAt(1, true);
+        tabPanelPrincipal.setEnabledAt(2, true);
+        tabPanelPrincipal.setEnabledAt(3, true);
+        tabPanelPrincipal.setEnabledAt(4, true);
+        jLabel4.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        int ax = JOptionPane.showConfirmDialog(this, "Esta acción eliminará la información actual ¿Desea continuar?");
+        if (ax == JOptionPane.YES_OPTION) {
+            jLabel4.setVisible(false);
+            jButton4.setVisible(false);
+            jButton5.setVisible(false);
+            txtVideoMaster.setText("");
+            txtVideoSec.setText("");
+            txtVideoExt.setText("");
+            txtFPS1.setText("");
+            txtFPS2.setText("");
+            txtFPS3.setText("");
+            txtHolgura.setText("");
+            deteccionTable.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object[][]{},
+                    new String[]{
+                        "N° Secuencia", "Tiempo Detección", "Tiempo Inicio", "Tiempo Termino"
+                    }
+            ) {
+                Class[] types = new Class[]{
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types[columnIndex];
+                }
+            });
+            jLabel3.setText("Proyecto " + txtNombreProyecto.getText());
+            marcadorButton.setText("Filtrar");
+            procesandoProgressBar.setVisible(false);
+            tabPanelPrincipal.setEnabledAt(0, true);
+            tabPanelPrincipal.setEnabledAt(1, true);
+            tabPanelPrincipal.setEnabledAt(2, true);
+            tabPanelPrincipal.setEnabledAt(3, true);
+            tabPanelPrincipal.setEnabledAt(4, false);
+
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void archivoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_archivoPanelComponentShown
+        // TODO add your handling code here:
+        labelDondeEstoy.setText("Usted está en pestaña Archivo");
+        tabPanelPrincipal.setBackgroundAt(0, new Color(153, 204, 255));
+        tabPanelPrincipal.setBackgroundAt(1, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(2, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(3, new Color(240, 240, 240));
+        tabPanelPrincipal.setBackgroundAt(4, new Color(240, 240, 240));
+    }//GEN-LAST:event_archivoPanelComponentShown
+
+    private void secList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_secList1ValueChanged
+        // TODO add your handling code here:
+        secList.clearSelection();
+    }//GEN-LAST:event_secList1ValueChanged
+
+    private void secListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_secListValueChanged
+        // TODO add your handling code here:
+        secList1.clearSelection();
+    }//GEN-LAST:event_secListValueChanged
+
+    private void tabPanelPrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPanelPrincipalStateChanged
+        // TODO add your handling code here:
+        /*int indice=tabPanelPrincipal.getSelectedIndex();
+        tabPanelPrincipal.setBackgroundAt(indice, tabPanelPrincipal.getComponentAt(indice).getBackground());*/
+    }//GEN-LAST:event_tabPanelPrincipalStateChanged
 
     /**
      *
@@ -3517,6 +3816,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
     //File
     private File carpetaPrincipal = null;
+    private String fileSecMaster = "";
     private String rutaProperties = "";
     private String videoFace = "";
     private String videoScreen = "";
@@ -3525,6 +3825,15 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private int experimentos = 0;
     private String experimento = "";
     private String secuencia = "";
+    private String glosaFiltro = "";
+
+    public String getGlosaFiltro() {
+        return glosaFiltro;
+    }
+
+    public void setGlosaFiltro(String glosaFiltro) {
+        this.glosaFiltro = glosaFiltro;
+    }
 
     public static boolean ScreenGo = false;
     public static boolean ScreenStop = false;
@@ -3541,7 +3850,8 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private Map<Integer, TimeDetection> listTimeDetection = new HashMap<Integer, TimeDetection>();
     private VideoDetection videoDetectionM = new VideoDetection();
     //Log
-    private final static Logger log = Logger.getLogger(ProyectoMain.class.getName());
+    private final static Logger log = Logger.getLogger("sbox");
+
     Thread hilo;
     boolean cronometroActivo;
     private String timeText;
@@ -3560,6 +3870,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JProgressBar activityRenderGrabando;
     private javax.swing.JLabel activityRenderIcon;
     private javax.swing.JButton agregarPerspectivaButton;
+    private javax.swing.JPanel archivoPanel;
     private javax.swing.JButton buscarButton;
     private javax.swing.JProgressBar buscarProgressBar;
     private javax.swing.JComboBox<String> comboDispositivos;
@@ -3585,14 +3896,18 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel informacionPerspectivaPanel;
     private javax.swing.JPanel informacionProyectoPanel;
     private javax.swing.JButton iniciarButton;
-    private javax.swing.JMenuItem itemMenuAbrir;
-    private javax.swing.JMenuItem itemMenuNuevo;
-    private javax.swing.JMenuItem itemMenuSalir;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonDetenerMin;
     private javax.swing.JFrame jFrameMin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JProgressBar jProgressBarGrabMin;
     private javax.swing.JLabel labelActivityRender;
     private javax.swing.JLabel labelActivityRenderIcon;
@@ -3613,19 +3928,16 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel labelOk;
     private javax.swing.JLabel labelPerspExt;
     private javax.swing.JLabel labelPerspExtIcon;
-    private javax.swing.JLabel labelReco;
-    private javax.swing.JLabel labelReconocedor;
     private javax.swing.JLabel labelRutaProyecto;
     private javax.swing.JLabel labelSec;
     private javax.swing.JLabel labelSecMaster;
+    private javax.swing.JLabel labelSecMaster1;
     private javax.swing.JLabel labelSeg;
     private javax.swing.JLabel labelVideoExt;
     private javax.swing.JLabel labelVideoMaster;
     private javax.swing.JLabel labelVideoSec;
     private javax.swing.JPanel marcadoPanel;
     private javax.swing.JButton marcadorButton;
-    private javax.swing.JMenuBar menuBarPrincipal;
-    private javax.swing.JMenu menuProyecto;
     private javax.swing.JProgressBar perspExtGrabando;
     private javax.swing.JButton perspExtVerButton;
     private javax.swing.JPanel perspectivaPanel;
@@ -3636,9 +3948,10 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel reconocedorPanel;
     private javax.swing.JButton rutaProyectoButton;
     private javax.swing.JList<String> secList;
+    private javax.swing.JList<String> secList1;
     private javax.swing.JScrollPane secScrollPane;
+    private javax.swing.JScrollPane secScrollPane1;
     private javax.swing.JPanel secuenciasPanel;
-    private javax.swing.JPopupMenu.Separator separadorMenuArchivo;
     private javax.swing.JPanel simbolosPanel;
     private javax.swing.JPanel statusBarPanel;
     private javax.swing.JTabbedPane tabPanelPrincipal;
@@ -3655,8 +3968,6 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JTextField txtHolgura;
     private javax.swing.JTextField txtMaster;
     private javax.swing.JTextField txtNombreProyecto;
-    private javax.swing.JTextField txtReco;
-    private javax.swing.JTextField txtReconecedor;
     private javax.swing.JTextField txtRutaProyecto;
     private javax.swing.JTextField txtSec;
     private javax.swing.JTextField txtVideoExt;

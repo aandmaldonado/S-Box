@@ -99,7 +99,7 @@ import org.monte.media.quicktime.QuickTimeWriter;
  */
 public class ScreenRecorder extends AbstractStateModel {
 
-    private final static Logger log = Logger.getLogger(ScreenRecorder.class.getName());
+    private final static Logger log = Logger.getLogger("sbox");
     private String videoScreen = "";
 
     public enum State {

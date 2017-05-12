@@ -94,8 +94,9 @@ public class ReproductorSec extends javax.swing.JFrame {
         labelCanalExt = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         iniButton = new javax.swing.JButton();
-        PauseButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         detButton = new javax.swing.JButton();
+        PauseButton = new javax.swing.JButton();
         jTextFieldFaceRecorder = new javax.swing.JTextField();
         jTextFieldActivityRender = new javax.swing.JTextField();
         jTextFieldCanalExterno = new javax.swing.JTextField();
@@ -156,10 +157,11 @@ public class ReproductorSec extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         iniButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        iniButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668624_audio-video-outline-play.png"))); // NOI18N
+        iniButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1494323492_play.png"))); // NOI18N
         iniButton.setToolTipText("Iniciar");
         iniButton.setBorder(null);
         iniButton.setBorderPainted(false);
+        iniButton.setContentAreaFilled(false);
         iniButton.setOpaque(false);
         iniButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,26 +169,39 @@ public class ReproductorSec extends javax.swing.JFrame {
             }
         });
 
-        PauseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668628_audio-video-outline-pause.png"))); // NOI18N
-        PauseButton.setToolTipText("Pausar");
-        PauseButton.setBorder(null);
-        PauseButton.setBorderPainted(false);
-        PauseButton.setOpaque(false);
-        PauseButton.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1494323504_left.png"))); // NOI18N
+        jButton1.setToolTipText("Volver");
+        jButton1.setBorder(null);
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PauseButtonActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
         detButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        detButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1468668622_audio-video-outline-stop.png"))); // NOI18N
+        detButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1494323500_stop.png"))); // NOI18N
         detButton.setToolTipText("Detener");
         detButton.setBorder(null);
         detButton.setBorderPainted(false);
+        detButton.setContentAreaFilled(false);
         detButton.setOpaque(false);
         detButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 detButtonActionPerformed(evt);
+            }
+        });
+
+        PauseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1494323496_pause.png"))); // NOI18N
+        PauseButton.setToolTipText("Pausar");
+        PauseButton.setBorder(null);
+        PauseButton.setBorderPainted(false);
+        PauseButton.setContentAreaFilled(false);
+        PauseButton.setOpaque(false);
+        PauseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PauseButtonActionPerformed(evt);
             }
         });
 
@@ -195,23 +210,26 @@ public class ReproductorSec extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(iniButton)
+                .addGap(35, 35, 35)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PauseButton)
+                .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(detButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(PauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(detButton)
-                    .addComponent(PauseButton)
-                    .addComponent(iniButton))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(iniButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(detButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTextFieldFaceRecorder.setEditable(false);
@@ -240,7 +258,6 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addComponent(jTextFieldFaceRecorder, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(activityRenderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -250,8 +267,9 @@ public class ReproductorSec extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelCanalExt)
                             .addComponent(canalExtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldCanalExterno, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jTextFieldCanalExterno, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,7 +291,7 @@ public class ReproductorSec extends javax.swing.JFrame {
                     .addComponent(jTextFieldCanalExterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -322,6 +340,11 @@ public class ReproductorSec extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldFaceRecorderActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -364,6 +387,7 @@ public class ReproductorSec extends javax.swing.JFrame {
     private javax.swing.JButton detButton;
     private javax.swing.JPanel faceRecorderPanel;
     private javax.swing.JButton iniButton;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextFieldActivityRender;
     private javax.swing.JTextField jTextFieldCanalExterno;

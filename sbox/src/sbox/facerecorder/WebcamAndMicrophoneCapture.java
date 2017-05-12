@@ -60,7 +60,7 @@ public class WebcamAndMicrophoneCapture {
     private CanvasFrame cFrame = null;
     private boolean running = true;
     private String videoFace = "";
-    private final static Logger log = Logger.getLogger(WebcamAndMicrophoneCapture.class.getName());
+    private final static Logger log = Logger.getLogger("sbox");
 
     public WebcamAndMicrophoneCapture() {
 

@@ -39,7 +39,7 @@ public class initScreenRecorder extends javax.swing.JFrame {
      *
      */
     private static final long serialVersionUID = 2428698729310732777L;
-    private final static Logger log = Logger.getLogger(WebcamAndMicrophoneCapture.class.getName());
+    private final static Logger log = Logger.getLogger("sbox");
     private ScreenRecorder screenRecorder = null;
     private File movieFolder;
     private String videoScreen = "";

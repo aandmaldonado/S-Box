@@ -41,7 +41,7 @@ public class PerspectivaServidor {
     private File temp = null;
     private String nombreVideo = "";
     public static boolean grab = false;
-    private final static Logger log = Logger.getLogger(PerspectivaServidor.class.getName());
+    private final static Logger log = Logger.getLogger("perspectiva");
 
     class CameraSwingWorker extends SwingWorker<String, Object> {
 

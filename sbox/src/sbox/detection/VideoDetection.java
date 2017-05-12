@@ -35,13 +35,14 @@ public class VideoDetection {
     private CvHaarClassifierCascade classifierFrontalFaceSmile;
     private OpenCVFrameConverter.ToIplImage converter;
     private Mat frame;
-    private final static Logger log = Logger.getLogger(VideoDetection.class.getName());
+    private final static Logger logSbox = Logger.getLogger("sbox");
+    private final static Logger logDeteccion = Logger.getLogger("deteccion");
 
     public VideoDetection() {
 
     }
 
-    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect, int holgura, JProgressBar prog) {
+    public Map<Integer, TimeDetection> getDetection(File videoMaster, File faceDetect, File smileDetect, int holgura, JProgressBar prog, String muestra) {
         TimeDetection times = null;
         Map<Integer, TimeDetection> listTime = new HashMap<Integer, TimeDetection>();
         frame = new Mat();
@@ -54,17 +55,24 @@ public class VideoDetection {
         CvMemStorage storage;
         IplImage grayImage;
         int duracion = 0, totalFaces = 0, totalMouth = 0, xFace = 0, yFace = 0, wFace = 0, hFace = 0, xMouth = 0, yMouth = 0, wMouth = 0, hMouth = 0, timeSmileMs = 0, timeSmileMmAux = 0, timeSmileMm = 0, startTime = 0, stopTime = 0, n = 0;
-        log.info("Inicio proceso detección de sonrisas");
-        log.info("Video MASTER: " + videoMaster.getAbsolutePath());
-        log.info("Reconocedor: " + smileDetect.getName());
-        log.info("Holgura: " + String.valueOf(holgura));
+        logSbox.info("Inicio proceso detección de secuencias en Muestra N° "+muestra);
+        logSbox.info("Video MASTER: " + videoMaster.getAbsolutePath());
+        logSbox.info("Reconocedor: " + smileDetect.getName());
+        logSbox.info("Holgura: " + String.valueOf(holgura));
+
+        logDeteccion.info("Inicio proceso detección de secuencias en Muestra N° "+muestra);
+        logDeteccion.info("Video MASTER: " + videoMaster.getAbsolutePath());
+        logDeteccion.info("Reconocedor: " + smileDetect.getName());
+        logDeteccion.info("Holgura: " + String.valueOf(holgura));
 //        duracion = (int) getDuration(new VideoCapture(videoMaster.getAbsolutePath())) / 1000;
         duracion = (int) getDuration(videoMaster) / 1000;
 //        log.info("Duracion video: " + getTimeDetect(getDuration(new VideoCapture(videoMaster.getAbsolutePath()))));
-        log.info("Duracion video: " + getTimeDetect(getDuration(videoMaster)));
+        logSbox.info("Duracion video: " + getTimeDetect(getDuration(videoMaster)));
+        logDeteccion.info("Duracion video: " + getTimeDetect(getDuration(videoMaster)));
         prog.setIndeterminate(false);
         prog.setValue(n);
         prog.setString(String.valueOf(n) + "%");
+        int nSecuencia = 1;
         while (cap.grab()) {
             if (cap.retrieve(frame)) {
                 storage = CvMemStorage.create();
@@ -114,11 +122,14 @@ public class VideoDetection {
                                     }
                                 }
                                 times = new TimeDetection();
+
+                                //times.setnSecuencia(String.valueOf(nSecuencia));
                                 times.setTime(String.valueOf(timeSmileMm));
                                 times.setStartTime(String.valueOf(startTime));
                                 times.setStopTime(String.valueOf(stopTime));
                                 listTime.put(timeSmileMm, times);
                                 timeSmileMmAux = stopTime;
+                                //nSecuencia++;
                             }
                         }
                     }
@@ -127,17 +138,23 @@ public class VideoDetection {
         }
         prog.setVisible(false);
         cap.release();
-        log.info("Fin proceso detección de sonrisas");
-        log.info("Tiempo Detección | Tiempo Inicio | Tiempo Termino");
+        logSbox.info("Fin proceso detección de secuencias en Muestra N° "+muestra);
+        logSbox.info("N° Secuencia | Tiempo Detección | Tiempo Inicio | Tiempo Termino");
+        logDeteccion.info("Fin proceso detección de secuencias en Muestra N° "+muestra);
+        logDeteccion.info("N° Secuencia | Tiempo Detección | Tiempo Inicio | Tiempo Termino");
+        int i = 1;
         for (Entry<Integer, TimeDetection> e : listTime.entrySet()) {
-            log.info(e.getKey() + "\t\t | " + e.getValue().getStartTime() + "\t\t | " + e.getValue().getStopTime());
+            logSbox.info(i + "\t\t | " + e.getKey() + "\t\t | " + e.getValue().getStartTime() + "\t\t | " + e.getValue().getStopTime());
+            logDeteccion.info(i + "\t\t | " + e.getKey() + "\t\t | " + e.getValue().getStartTime() + "\t\t | " + e.getValue().getStopTime());
+            i++;
         }
         return listTime;
     }
 
     public void stop() {
         cap.release();
-        log.info("Proceso de filtro abortado");
+        logSbox.info("Proceso de filtro abortado");
+        logDeteccion.info("Proceso de filtro abortado");
     }
 
 //    public long getDuration(VideoCapture cap) {
@@ -157,7 +174,8 @@ public class VideoDetection {
             grabber.start();
             duracion = grabber.getLengthInTime() / 1000;
         } catch (FrameGrabber.Exception ex) {
-            log.error(ex);
+            logSbox.error(ex);
+            logDeteccion.error(ex);
         }
         return duracion;
     }

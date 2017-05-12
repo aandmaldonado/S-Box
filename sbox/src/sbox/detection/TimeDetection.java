@@ -17,6 +17,15 @@ public class TimeDetection {
     private String startTime = "";
     private String stopTime = "";
     private String time = "";
+    private String nSecuencia = "";
+
+    public String getnSecuencia() {
+        return nSecuencia;
+    }
+
+    public void setnSecuencia(String nSecuencia) {
+        this.nSecuencia = nSecuencia;
+    }
     private String startFrame = "";
     private String stopFrame = "";
 
@@ -60,7 +69,7 @@ public class TimeDetection {
     public void setStopTime(String stopTime) {
         this.stopTime = stopTime;
     }
-    
+
     public String getTime() {
         return time;
     }

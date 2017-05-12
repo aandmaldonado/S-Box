@@ -35,7 +35,7 @@ public class PerspectivaCliente extends Thread implements Serializable {
     public static boolean listaFrames = false;
     public static boolean video = false;
     private String path;
-    private final static Logger log = Logger.getLogger(PerspectivaCliente.class.getName());
+    private final static Logger log = Logger.getLogger("sbox");
     public static boolean con = false;
     private String nombreVideo = "";
     private String nombreProyecto = "";

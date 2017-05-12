@@ -21,7 +21,7 @@ public class Reproductor extends javax.swing.JFrame {
     private File file;
     private final String ruta = System.getProperty("user.dir") + "\\lib";
     private final File vlcInstallPath = new File(ruta);
-    private final static Logger log = Logger.getLogger(VideoDetection.class.getName());
+    private final static Logger log = Logger.getLogger("sbox");
 
     //bandera para controlar la reproduccion de video y el cambio en el avance de video
     private boolean band = true;
