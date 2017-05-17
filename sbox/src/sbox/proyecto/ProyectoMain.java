@@ -18,12 +18,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
+import javax.sound.sampled.TargetDataLine;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -41,6 +52,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.bytedeco.javacpp.avcodec;
 import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_COMPLEX_SMALL;
 import static org.bytedeco.javacpp.opencv_core.CV_FONT_HERSHEY_TRIPLEX;
+import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.CvFont;
 import org.bytedeco.javacpp.opencv_core.CvMemStorage;
 import org.bytedeco.javacpp.opencv_core.CvScalar;
@@ -51,11 +63,14 @@ import static org.bytedeco.javacpp.opencv_core.cvInitFont;
 import static org.bytedeco.javacpp.opencv_core.cvPoint;
 import static org.bytedeco.javacpp.opencv_core.cvPutText;
 import org.bytedeco.javacpp.opencv_highgui.VideoCapture;
+import org.bytedeco.javacpp.opencv_imgproc;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;
 import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameGrabber;
+import org.bytedeco.javacv.CanvasFrame;
 import org.jdesktop.swingworker.SwingWorker;
 import sbox.activityrender.initScreenRecorder;
 import sbox.detection.TimeDetection;
@@ -3410,26 +3425,200 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         }
     }
 
+//    public void setTime_p1(File source) {
+//        File alineado = new File(source.getParent() + "\\Alineado");
+//        Mat mat = new Mat();
+//        Frame frame = new Frame();
+//        IplImage iplImage = null;
+//        int captureWidth = 1366, captureHeight = 768;
+//        long startTime = 0, videoTS;
+//        OpenCVFrameConverter.ToIplImage converter = null;
+//        VideoCapture cap = null;
+//        final FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(alineado.getAbsolutePath() + "\\" + source.getName(), captureWidth, captureHeight, 2);
+//        CvMemStorage storage;
+//        CvFont mCvFont = new CvFont();
+//        cvInitFont(mCvFont, CV_FONT_HERSHEY_TRIPLEX, 0.5f, 1.0f, 0, 1, 8);
+//        final int AUDIO_DEVICE_INDEX = 4;
+//        final int FRAME_RATE = 20;
+//        final boolean running = true;
+//        try {
+//            cap = new VideoCapture(source.getAbsolutePath());
+//            converter = new OpenCVFrameConverter.ToIplImage();
+//            if (!alineado.exists()) {
+//                alineado.mkdirs();
+//            }
+//            
+//            recorder.setInterleaved(true);
+//            recorder.setVideoOption("tune", "zerolatency");
+//            recorder.setVideoOption("preset", "ultrafast");
+//            recorder.setVideoOption("crf", "28");
+//            recorder.setVideoBitrate(2000000);
+//            recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+//            recorder.setFormat("avi");
+//            recorder.setFrameRate(20);
+//            recorder.setGopSize(40);
+//            
+//            recorder.setAudioOption("crf", "0");
+//            recorder.setAudioQuality(0);
+//            recorder.setAudioBitrate(192000);
+//            recorder.setSampleRate(44100);
+//            recorder.setAudioChannels(2);
+//            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
+//            recorder.start();
+//            
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    // Pick a format...
+//                    // NOTE: It is better to enumerate the formats that the system
+//                    // supports,
+//                    // because getLine() can error out with any particular format...
+//                    // For us: 44.1 sample rate, 16 bits, stereo, signed, little
+//                    // endian
+//                    AudioFormat audioFormat = new AudioFormat(44100.0F, 16, 2, true, false);
+//
+//                    // Get TargetDataLine with that format
+//                    Mixer.Info[] minfoSet = AudioSystem.getMixerInfo();
+//                    Mixer mixer = AudioSystem.getMixer(minfoSet[AUDIO_DEVICE_INDEX]);
+//                    DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+//
+//                    try {
+//                        // Open and start capturing audio
+//                        // It's possible to have more control over the chosen audio
+//                        // device with this line:
+//                        // TargetDataLine line =
+//                        // (TargetDataLine)mixer.getLine(dataLineInfo);
+//                        final TargetDataLine line = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
+//                        line.open(audioFormat);
+//                        line.start();
+//
+//                        final int sampleRate = (int) audioFormat.getSampleRate();
+//                        final int numChannels = audioFormat.getChannels();
+//
+//                        // Let's initialize our audio buffer...
+//                        int audioBufferSize = sampleRate * numChannels;
+//                        final byte[] audioBytes = new byte[audioBufferSize];
+//
+//                        // Using a ScheduledThreadPoolExecutor vs a while loop with
+//                        // a Thread.sleep will allow
+//                        // us to get around some OS specific timing issues, and keep
+//                        // to a more precise
+//                        // clock as the fixed rate accounts for garbage collection
+//                        // time, etc
+//                        // a similar approach could be used for the webcam capture
+//                        // as well, if you wish
+//                        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+//                        exec.scheduleAtFixedRate(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                try {
+//                                    // Read from the line... non-blocking
+//                                    int nBytesRead = line.read(audioBytes, 0, line.available());
+//
+//                                    // Since we specified 16 bits in the
+//                                    // AudioFormat,
+//                                    // we need to convert our read byte[] to short[]
+//                                    // (see source from
+//                                    // FFmpegFrameRecorder.recordSamples for
+//                                    // AV_SAMPLE_FMT_S16)
+//                                    // Let's initialize our short[] array
+//                                    int nSamplesRead = nBytesRead / 2;
+//                                    short[] samples = new short[nSamplesRead];
+//
+//                                    // Let's wrap our short[] into a ShortBuffer and
+//                                    // pass it to recordSamples
+//                                    ByteBuffer.wrap(audioBytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(samples);
+//                                    ShortBuffer sBuff = ShortBuffer.wrap(samples, 0, nSamplesRead);
+//
+//                                    // recorder is instance of
+//                                    // org.bytedeco.javacv.FFmpegFrameRecorder
+//                                    if (running) {
+//                                        recorder.recordSamples(sampleRate, numChannels, sBuff);
+//                                    }
+//                                } catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
+//                                    log.error(e);
+//                                }
+//                            }
+//                        }, 0, (long) 1000 / FRAME_RATE, TimeUnit.MILLISECONDS);
+//                    } catch (LineUnavailableException e1) {
+//                        log.error(e1);
+//                    }
+//                }
+//            }).start();
+//            initReloj_p1();
+//            t_p1.start();
+//            //iniciarCronometro();
+//            while (cap.grab()) {
+//                if (cap.retrieve(mat)) {
+//                    frame = converter.convert(mat);
+//                    iplImage = converter.convert(frame);
+//                    storage = CvMemStorage.create();
+//                    cvClearMemStorage(storage);
+//                    int x = 950;
+//                    int y = 700;
+//                    cvPutText(iplImage, initReloj_p1(), cvPoint(x, y), mCvFont, CvScalar.WHITE);
+//                    //cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
+//                    if (startTime == 0) {
+//                        startTime = System.currentTimeMillis();
+//                    }
+//                    videoTS = 1000 * (System.currentTimeMillis() - startTime);
+//
+//                    if (videoTS > recorder.getTimestamp()) {
+//                        recorder.setTimestamp(videoTS);
+//                    }
+//                    recorder.record(converter.convert(iplImage));
+//                }
+//            }
+//
+//            recorder.stop();
+//            cap.release();
+//            pararCronometro();
+//            if (t_p1.isRunning()) {
+//                t_p1.stop();
+//            }
+//        } catch (FrameRecorder.Exception ex) {
+//            log.error(ex);
+//        } finally {
+//            try {
+//                recorder.stop();
+//                cap.release();
+//                pararCronometro();
+//                if (t_p1.isRunning()) {
+//                    t_p1.stop();
+//                }
+//            } catch (FrameRecorder.Exception ex) {
+//                log.error(ex);
+//            }
+//        }
+//
+//    }
     public void setTime_p1(File source) {
         File alineado = new File(source.getParent() + "\\Alineado");
-        Mat mat = new Mat();
-        Frame frame = new Frame();
-        IplImage iplImage = null;
-        int captureWidth = 1366, captureHeight = 768;
-        long startTime = 0, videoTS;
+        final boolean running = true;
+        final int AUDIO_DEVICE_INDEX = 4;
+        final int FRAME_RATE = 20;
+        final int GOP_LENGTH_IN_FRAMES = 40;
+        int captureWidth = 1366;
+        int captureHeight = 768;
+        long startTime = 0;
+        long videoTS = 0;
+        CanvasFrame cFrame = null;
+        final FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(alineado.getAbsolutePath() + "\\" + source.getName(), captureWidth, captureHeight, 2);
+        OpenCVFrameGrabber grabber = null;
         OpenCVFrameConverter.ToIplImage converter = null;
-        VideoCapture cap = null;
-        FFmpegFrameRecorder recorder = null;
-        CvMemStorage storage;
+        opencv_core.IplImage grabbedImage = null;
         CvFont mCvFont = new CvFont();
         cvInitFont(mCvFont, CV_FONT_HERSHEY_TRIPLEX, 0.5f, 1.0f, 0, 1, 8);
         try {
-            cap = new VideoCapture(source.getAbsolutePath());
+            grabber = new OpenCVFrameGrabber(source.getAbsolutePath());
+            grabber.setImageWidth(captureWidth);
+            grabber.setImageHeight(captureHeight);
+            grabber.start();
             converter = new OpenCVFrameConverter.ToIplImage();
+            grabbedImage = converter.convert(grabber.grab());
             if (!alineado.exists()) {
                 alineado.mkdirs();
             }
-            recorder = new FFmpegFrameRecorder(alineado.getAbsolutePath() + "\\" + source.getName(), captureWidth, captureHeight, 2);
             recorder.setInterleaved(true);
             recorder.setVideoOption("tune", "zerolatency");
             recorder.setVideoOption("preset", "ultrafast");
@@ -3437,55 +3626,97 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
             recorder.setVideoBitrate(2000000);
             recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
             recorder.setFormat("avi");
-            recorder.setFrameRate(20);
-            recorder.setGopSize(40);
+            recorder.setFrameRate(FRAME_RATE);
+            recorder.setGopSize(GOP_LENGTH_IN_FRAMES);
+            recorder.setAudioOption("crf", "0");
+            recorder.setAudioQuality(0);
+            recorder.setAudioBitrate(192000);
+            recorder.setSampleRate(44100);
+            recorder.setAudioChannels(2);
+            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
             recorder.start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AudioFormat audioFormat = new AudioFormat(44100.0F, 16, 2, true, false);
+                    Mixer.Info[] minfoSet = AudioSystem.getMixerInfo();
+                    Mixer mixer = AudioSystem.getMixer(minfoSet[AUDIO_DEVICE_INDEX]);
+                    DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+                    try {
+                        final TargetDataLine line = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
+                        line.open(audioFormat);
+                        line.start();
+                        final int sampleRate = (int) audioFormat.getSampleRate();
+                        final int numChannels = audioFormat.getChannels();
+                        int audioBufferSize = sampleRate * numChannels;
+                        final byte[] audioBytes = new byte[audioBufferSize];
+                        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+                        exec.scheduleAtFixedRate(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    int nBytesRead = line.read(audioBytes, 0, line.available());
+                                    int nSamplesRead = nBytesRead / 2;
+                                    short[] samples = new short[nSamplesRead];
+                                    ByteBuffer.wrap(audioBytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(samples);
+                                    ShortBuffer sBuff = ShortBuffer.wrap(samples, 0, nSamplesRead);
+                                    if (running) {
+                                        recorder.recordSamples(sampleRate, numChannels, sBuff);
+                                    }
+                                } catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
+                                    log.error(e);
+                                }
+                            }
+                        }, 0, (long) 1000 / FRAME_RATE, TimeUnit.MILLISECONDS);
+                    } catch (LineUnavailableException e1) {
+                        log.error(e1);
+                    }
+                }
+            }).start();
+            cFrame = new CanvasFrame("", CanvasFrame.getDefaultGamma() / grabber.getGamma());
+            cFrame.setAlwaysOnTop(true);
+            cFrame.pack();
+            cFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            cFrame.setVisible(false);
+            cFrame.setLocation(450, 0);
+            opencv_core.CvMemStorage storage = opencv_core.CvMemStorage.create();
             initReloj_p1();
             t_p1.start();
-            //iniciarCronometro();
-            while (cap.grab()) {
-                if (cap.retrieve(mat)) {
-                    frame = converter.convert(mat);
-                    iplImage = converter.convert(frame);
-                    storage = CvMemStorage.create();
-                    cvClearMemStorage(storage);
-                    int x = 950;
-                    int y = 700;
-                    cvPutText(iplImage, initReloj_p1(), cvPoint(x, y), mCvFont, CvScalar.WHITE);
-                    //cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
-                    if (startTime == 0) {
-                        startTime = System.currentTimeMillis();
-                    }
-                    videoTS = 1000 * (System.currentTimeMillis() - startTime);
-
-                    if (videoTS > recorder.getTimestamp()) {
-                        recorder.setTimestamp(videoTS);
-                    }
-                    recorder.record(converter.convert(iplImage));
+            while ((grabbedImage = converter.convert(grabber.grab())) != null) {
+                cvClearMemStorage(storage);
+                int x = 950;
+                int y = 700;
+                cvPutText(grabbedImage, initReloj_p1(), cvPoint(x, y), mCvFont, CvScalar.BLUE);
+                cFrame.setCanvasSize(grabber.getImageWidth(), grabber.getImageHeight());
+                if (startTime == 0) {
+                    startTime = System.currentTimeMillis();
                 }
+                videoTS = 1000 * (System.currentTimeMillis() - startTime);
+                if (videoTS > recorder.getTimestamp()) {
+                    recorder.setTimestamp(videoTS);
+                }
+                recorder.record(converter.convert(grabbedImage));
             }
-
             recorder.stop();
-            cap.release();
+            grabber.release();
             pararCronometro();
             if (t_p1.isRunning()) {
                 t_p1.stop();
             }
-        } catch (FrameRecorder.Exception ex) {
+        } catch (FrameRecorder.Exception | OpenCVFrameGrabber.Exception ex) {
             log.error(ex);
         } finally {
             try {
                 recorder.stop();
-                cap.release();
+                grabber.release();
                 pararCronometro();
                 if (t_p1.isRunning()) {
                     t_p1.stop();
                 }
-            } catch (FrameRecorder.Exception ex) {
+            } catch (FrameRecorder.Exception | OpenCVFrameGrabber.Exception ex) {
                 log.error(ex);
             }
         }
-
     }
 
     public void setTime_p2(File source) {
@@ -3563,7 +3794,6 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 log.error(ex);
             }
         }
-
     }
 
     public void setTime_p3(File source) {
