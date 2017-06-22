@@ -210,10 +210,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         comboReconocedor.setModel(new DefaultComboBoxModel<>(listHaar));
         setLocationRelativeTo(null);
         setBounds(0, 0, 842, 641);
-        jFrameReq.setSize(431, 155);
-        jFrameReq.setLocation(150, 150);
-        jFrameReq.setAlwaysOnTop(true);
-        jFrameReq.setVisible(true);
+        
     }
 
     /**
@@ -234,6 +231,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         tabPanelPrincipal = new javax.swing.JTabbedPane();
         archivoPanel = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
@@ -341,6 +339,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         statusBarPanel = new javax.swing.JPanel();
         labelDondeEstoy = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
 
         jFrameMin.setAlwaysOnTop(true);
         jFrameMin.setUndecorated(true);
@@ -395,19 +394,22 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Requisitos del Sistema"));
 
-        jLabel6.setText("Procesador:        Intel(R) Core(TM) i5-4288U CPU @ 2.60 GHz 2.60 GHz");
+        jLabel6.setText("Procesador:            Intel(R) Core(TM) i5-4288U CPU @ 2.60 GHz 2.60 GHz");
 
-        jLabel7.setText("Memoria (RAM):  8,00 GB");
+        jLabel7.setText("Memoria (RAM):      8,00 GB");
 
-        jLabel8.setText("Tipo de sistema:  Sistema operativo de 64 bits, procesador x64");
+        jLabel8.setText("Tipo de sistema:      Sistema operativo de 64 bits, procesador x64");
+
+        jLabel9.setText("Sistema operativo:  Windows 7");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(32, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
                     .addComponent(jLabel8)
                     .addComponent(jLabel7)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -419,6 +421,8 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -499,7 +503,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addGroup(archivoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(1074, Short.MAX_VALUE))
+                .addContainerGap(678, Short.MAX_VALUE))
         );
         archivoPanelLayout.setVerticalGroup(
             archivoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,7 +512,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
-                .addContainerGap(427, Short.MAX_VALUE))
+                .addContainerGap(411, Short.MAX_VALUE))
         );
 
         tabPanelPrincipal.addTab("Archivo", archivoPanel);
@@ -1186,7 +1190,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                                 .addComponent(txtHolgura, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelSeg)
-                                .addGap(0, 656, Short.MAX_VALUE)))
+                                .addGap(0, 260, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(videoMasterButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1530,6 +1534,17 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/1498114426_user_help.png"))); // NOI18N
+        jButton6.setText("Help");
+        jButton6.setBorderPainted(false);
+        jButton6.setContentAreaFilled(false);
+        jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1539,17 +1554,22 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(statusBarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -3413,6 +3433,14 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
         tabPanelPrincipal.setBackgroundAt(indice, tabPanelPrincipal.getComponentAt(indice).getBackground());*/
     }//GEN-LAST:event_tabPanelPrincipalStateChanged
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        jFrameReq.setSize(431, 180);
+        jFrameReq.setLocation(150, 150);
+        jFrameReq.setAlwaysOnTop(true);
+        jFrameReq.setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      *
      * @return
@@ -4248,6 +4276,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButtonDetenerMin;
     private javax.swing.JFrame jFrameMin;
     private javax.swing.JFrame jFrameReq;
@@ -4259,6 +4288,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBarGrabMin;
     private javax.swing.JLabel labelActivityRender;
