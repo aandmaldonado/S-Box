@@ -3977,7 +3977,7 @@ public class ProyectoMain extends javax.swing.JFrame implements Runnable {
                     cvClearMemStorage(storage);
                     int x = 950;
                     int y = 700;
-                    cvPutText(iplImage, initReloj_p3(), cvPoint(x, y), mCvFont, CvScalar.WHITE);
+                    cvPutText(iplImage, initReloj_p3(), cvPoint(x, y), mCvFont, CvScalar.BLUE);
                     //cvPutText(iplImage, getTimeText(), cvPoint(x, y), mCvFont, CvScalar.RED);
                     if (startTime == 0) {
                         startTime = System.currentTimeMillis();
