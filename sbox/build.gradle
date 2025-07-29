@@ -12,10 +12,68 @@ dependencies {
     implementation 'org.bytedeco:opencv-platform:4.5.5-1.5.7'
     implementation 'org.bytedeco:ffmpeg-platform:4.4-1.5.6'
     
+    // Lombok para reducir boilerplate
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+    
     // MonteMedia (si tienes el JAR local)
     // implementation files('lib/monte-cc.jar')
 }
 
 application {
     mainClass = mainClassName
+}
+
+// Configuración de tests - deshabilitar ejecución automática
+test {
+    enabled = false  // No ejecutar tests automáticamente
+}
+
+// Tarea para ejecutar la prueba de cámara
+task runCameraTest(type: JavaExec) {
+    group = 'application'
+    description = 'Ejecuta la prueba de cámara'
+    mainClass = 'sbox.proyecto.CameraTest'
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// Tarea para ejecutar la prueba de grabación de pantalla
+task runScreenRecordingTest(type: JavaExec) {
+    group = 'application'
+    description = 'Ejecuta la prueba de grabación de pantalla'
+    mainClass = 'sbox.proyecto.ScreenRecordingTest'
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// Tarea para ejecutar la detección de sonrisas
+task runSmileDetection(type: JavaExec) {
+    group = 'application'
+    description = 'Ejecuta la detección de sonrisas'
+    mainClass = 'sbox.detection.VideoDetection'
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// Tarea para ejecutar la prueba de captura de audio
+task runAudioCaptureTest(type: JavaExec) {
+    group = 'application'
+    description = 'Ejecuta la prueba de captura de audio'
+    mainClass = 'sbox.proyecto.AudioCaptureTest'
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// Tarea para ejecutar la prueba de sincronización multimodal
+task runMultimodalSyncTest(type: JavaExec) {
+    group = 'application'
+    description = 'Ejecuta la prueba de sincronización multimodal'
+    mainClass = 'sbox.sync.MultimodalSyncTest'
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// Tarea para ejecutar todas las pruebas
+task runAllTests {
+    group = 'application'
+    description = 'Ejecuta todas las pruebas de funcionalidad'
+    dependsOn runCameraTest, runScreenRecordingTest, runSmileDetection, runAudioCaptureTest, runMultimodalSyncTest
 } 

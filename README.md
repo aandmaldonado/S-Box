@@ -1,173 +1,276 @@
-# S-Box
+# S-Box - Sistema de Grabación Multimodal
 
-S-Box: Plataforma para el análisis multimodal de videos asociados al fenómeno de la sonrisa
+S-Box es un sistema avanzado de grabación multimodal que permite capturar simultáneamente video de cámara, audio de micrófono, grabación de pantalla y detección de expresiones faciales en tiempo real.
 
-## Descripción General
-S-Box es una solución de Computación Afectiva que utiliza Inteligencia Artificial y Visión por Computadora para analizar videos de sonrisas y respuestas emocionales. Permite la captura sincronizada de video facial, audio, actividad en pantalla y perspectivas externas, facilitando el análisis científico y profesional de emociones humanas.
+## Características Principales
 
-## Arquitectura del Proyecto
-Este es un proyecto monorepo que contiene dos módulos principales:
+### ✅ Funcionalidades Implementadas
+- **Captura de Video**: Webcam en tiempo real (640x480, 30 FPS)
+- **Grabación de Pantalla**: Captura completa de pantalla en MP4 (H.264)
+- **Detección de Sonrisas**: Análisis facial usando OpenCV y clasificadores Haar
+- **Captura de Audio**: Micrófono en WAV (44.1kHz, 16-bit, Mono)
+- **Interfaz Unificada**: Control centralizado de todas las funcionalidades
+- **Gestión de Recursos**: Liberación automática de recursos
 
-### 📁 sbox/ - Aplicación Principal
-Aplicación completa para análisis multimodal de sonrisas con:
-- **Captura Multimodal**: Video facial, audio, pantalla y perspectiva externa
-- **Detección de Sonrisas**: Algoritmos OpenCV con modelos Haarcascade
-- **Interfaz de Usuario**: Swing con formularios NetBeans
-- **Reproductor Multimodal**: Visualización sincronizada de múltiples fuentes
+### 🔄 Funcionalidades Pendientes
+- Sincronización multimodal (cámara + pantalla + audio)
+- Perspectiva externa (cliente-servidor)
+- Reproducción multimodal
+- Configuración avanzada de parámetros
 
-### 📁 perspectivaExterna/ - Servidor de Captura Externa
-Servidor para capturar y transmitir video desde fuentes externas:
-- **Captura de Video**: Streams de red, cámaras IP, fuentes externas
-- **Transmisión**: Comunicación en red para perspectivas adicionales
-- **Interfaz de Monitoreo**: Logging y control del servidor
+## Estructura del Proyecto
 
-## Características Implementadas
-
-### 🎥 Captura Multimodal
-- **Video Facial**: Captura desde webcam con sincronización de audio
-- **Grabación de Pantalla**: Actividad en pantalla en tiempo real
-- **Perspectiva Externa**: Captura de fuentes de video externas
-- **Sincronización**: Algoritmos para alinear múltiples fuentes
-
-### 🤖 Detección de Sonrisas
-- **Algoritmos OpenCV**: Detección facial y de expresiones
-- **Modelos Haarcascade**: 
-  - Detección de rostros
-  - Detección de boca
-  - Detección de sonrisas
-- **Procesamiento en Tiempo Real**: Análisis continuo de frames
-
-### 🎮 Interfaz de Usuario
-- **Ventana Principal**: Controles de grabación y reproducción
-- **Reproductor Multimodal**: Revisión de secuencias desde múltiples perspectivas
-- **Controles de Tiempo**: Sincronización y cronometro
-- **Interfaz Swing**: Formularios NetBeans para UI
-
-### 📊 Procesamiento y Análisis
-- **Filtrado Inteligente**: Identificación de episodios relevantes
-- **Generación de Secuencias**: Creación de clips para análisis
-- **Exportación**: Datos y reportes para análisis externo
-
-## Estado Actual (AS-IS)
-
-### Tecnologías Utilizadas
-- **Java**: 8+ (compatible)
-- **Gradle**: Sistema de build
-- **OpenCV**: 4.5.5 (Bytedeco/JavaCV stack)
-- **VLCJ**: 3.10.1 para reproducción multimedia
-- **Swing**: Interfaz de usuario
-- **NetBeans**: Formularios de diseño
-
-### Dependencias Principales
-```gradle
-// Bytedeco/JavaCV stack
-implementation 'org.bytedeco:javacv:1.5.8'
-implementation 'org.bytedeco:javacpp:1.5.8'
-implementation 'org.bytedeco:opencv-platform:4.5.5-1.5.7'
-implementation 'org.bytedeco:ffmpeg-platform:4.4-1.5.6'
-
-// VLCJ para reproducción
-implementation 'uk.co.caprica:vlcj:3.10.1'
-
-// Utilidades
-implementation 'log4j:log4j:1.2.17'
-implementation 'net.java.dev.jna:jna:4.5.2'
-implementation 'org.swinglabs:swing-worker:1.1'
 ```
+S-Box/
+├── sbox/                              # Módulo principal
+│   ├── src/
+│   │   ├── main/java/sbox/           # Código principal
+│   │   │   ├── proyecto/
+│   │   │   │   └── ProyectoMain.java # Aplicación principal
+│   │   │   ├── facerecorder/
+│   │   │   │   ├── AudioCapture.java # Captura de audio
+│   │   │   │   └── WebcamAndMicrophoneCapture.java
+│   │   │   ├── activityrender/
+│   │   │   │   └── ScreenRecorder.java # Grabación de pantalla
+│   │   │   └── detection/
+│   │   │       └── VideoDetection.java # Detección de sonrisas
+│   │   └── test/java/sbox/           # Tests de funcionalidad
+│   │       ├── proyecto/
+│   │       │   ├── CameraTest.java
+│   │       │   ├── ScreenRecordingTest.java
+│   │       │   └── AudioCaptureTest.java
+│   │       └── detection/
+│   │           └── VideoDetection.java
+│   └── build.gradle
+├── perspectivaExterna/                # Módulo de perspectiva externa
+│   ├── src/main/java/sbox/perspectiva/
+│   │   ├── PerspectivaServidor.java
+│   │   ├── VentanaLog.java
+│   │   └── Video.java
+│   └── build.gradle
+├── scripts/                          # Scripts de prueba
+│   ├── test_camera.sh
+│   ├── test_screen_recording.sh
+│   ├── test_smile_detection.sh
+│   ├── test_audio_capture.sh
+│   ├── run_all_tests.sh
+│   └── README.md
+├── docs/                             # Documentación
+│   ├── PRD.md
+│   └── TECH_SOLUTION.md
+├── CAMERA_TEST.md                    # Guía de pruebas
+├── build.gradle                      # Configuración raíz
+└── README.md                         # Este archivo
+```
+
+## Tecnologías Utilizadas
+
+### Core Technologies
+- **Java 8+**: Lenguaje principal
+- **Gradle**: Sistema de build
+- **Swing**: Interfaz gráfica
+
+### Computer Vision & Multimedia
+- **Bytedeco/JavaCV 1.5.8**: Bindings Java para OpenCV y FFmpeg
+- **OpenCV 4.5.5**: Computer vision library
+- **FFmpeg 4.4**: Procesamiento de video y audio
+- **Haar Cascades**: Detección de objetos (caras, sonrisas, bocas)
+
+### Audio Processing
+- **Java Sound API**: Captura de audio nativa
+- **PCM WAV**: Formato de audio sin compresión
+
+### Development Tools
+- **Lombok**: Reducción de boilerplate code
+- **Log4j**: Sistema de logging
 
 ## Instalación y Configuración
 
-### Requisitos del Sistema
-- **Java**: 8 o superior
-- **Gradle**: 7.0+
-- **VLC Media Player**: Para reproducción multimedia
-- **Webcam**: Para captura de video facial
-- **Permisos**: Acceso a cámara y micrófono
+### Prerrequisitos
+- Java 8 o superior
+- Gradle 7.0+
+- Webcam funcional
+- Micrófono funcional
+- Permisos de acceso a cámara, pantalla y micrófono
 
-### Configuración de VLC
-Para que VLCJ funcione correctamente:
-1. Instalar VLC Media Player
-2. Configurar variable de entorno `VLC_PLUGIN_PATH`
-3. Verificar que VLC esté en el PATH del sistema
-
-### Compilación del Proyecto
+### Instalación
 ```bash
-# Compilar todo el proyecto
+# Clonar el repositorio
+git clone <repository-url>
+cd S-Box
+
+# Compilar el proyecto
 ./gradlew build
 
-# Compilar módulo específico
-./gradlew :sbox:build
-./gradlew :perspectivaExterna:build
-```
-
-### Ejecución
-```bash
-# Ejecutar aplicación principal
-./gradlew :sbox:run
-
-# Ejecutar servidor de perspectiva externa
-./gradlew :perspectivaExterna:run
-```
-
-## Estructura del Proyecto
-```
-S-Box/
-├── build.gradle              # Configuración Gradle raíz
-├── settings.gradle           # Configuración de módulos
-├── gradlew                   # Wrapper Gradle (Unix/macOS)
-├── sbox/                     # Aplicación principal
-│   ├── build.gradle
-│   ├── README.md             # Documentación específica
-│   └── src/main/java/sbox/
-│       ├── activityrender/   # Grabación de pantalla
-│       ├── detection/        # Algoritmos de detección
-│       ├── facerecorder/     # Captura facial
-│       ├── perspectiva/      # Cliente externo
-│       ├── proyecto/         # UI principal
-│       └── resources/        # Recursos (haarcascades, imágenes)
-├── perspectivaExterna/       # Servidor externo
-│   ├── build.gradle
-│   ├── README.md             # Documentación específica
-│   └── src/main/java/sbox/perspectiva/
-└── docs/                     # Documentación general
-    ├── PRD.md
-    └── TECH_SOLUTION.md
-```
-
-## Uso del Sistema
-
-### 1. Iniciar Aplicación Principal
-```bash
+# Ejecutar la aplicación principal
 ./gradlew :sbox:run
 ```
 
-### 2. Configurar Captura
-- Conectar webcam
-- Verificar micrófono
-- Configurar resolución de pantalla
+## Uso
 
-### 3. Iniciar Grabación
-- Usar controles en la interfaz principal
-- Monitorear estado de captura
-- Verificar sincronización
+### Aplicación Principal
+```bash
+# Ejecutar aplicación completa
+./gradlew :sbox:run
+```
 
-### 4. Análisis y Reproducción
-- Usar reproductor multimodal
-- Revisar secuencias detectadas
-- Exportar datos para análisis
+### Pruebas Individuales
+```bash
+# Prueba de cámara
+./gradlew :sbox:runCameraTest
+# o
+./scripts/test_camera.sh
 
-## Documentación Específica
-- **[S-Box Principal](sbox/README.md)**: Documentación completa de la aplicación principal
-- **[Perspectiva Externa](perspectivaExterna/README.md)**: Documentación del servidor externo
-- **[PRD](docs/PRD.md)**: Requerimientos de negocio
-- **[TECH_SOLUTION](docs/TECH_SOLUTION.md)**: Solución técnica y roadmap
+# Prueba de grabación de pantalla
+./gradlew :sbox:runScreenRecordingTest
+# o
+./scripts/test_screen_recording.sh
 
-## Notas de Desarrollo
-- Código en proceso de refactorización
-- Migración desde OpenCV legacy a Bytedeco/JavaCV
-- Interfaz Swing funcional con formularios NetBeans
-- Requiere configuración adicional para fuentes externas
+# Prueba de detección de sonrisas
+./gradlew :sbox:runSmileDetection
+# o
+./scripts/test_smile_detection.sh
+
+# Prueba de captura de audio
+./gradlew :sbox:runAudioCaptureTest
+# o
+./scripts/test_audio_capture.sh
+```
+
+### Ejecutar Todas las Pruebas
+```bash
+# Usando Gradle
+./gradlew :sbox:runAllTests
+
+# Usando script
+./scripts/run_all_tests.sh
+```
+
+## Funcionalidades Detalladas
+
+### Captura de Video
+- **Resolución**: 640x480 píxeles
+- **Frame Rate**: ~30 FPS
+- **Formato**: RGB (3 canales)
+- **Compatibilidad**: macOS ARM64 (Apple Silicon)
+
+### Grabación de Pantalla
+- **Formato**: MP4 (H.264)
+- **Frame Rate**: 30 FPS
+- **Resolución**: Nativa de pantalla
+- **Almacenamiento**: Carpeta `recordings/`
+
+### Detección de Sonrisas
+- **Clasificadores**: Haar Cascades
+- **Detecciones**: Caras, sonrisas, bocas
+- **Visualización**: Rectángulos de colores
+- **Estadísticas**: Contadores en tiempo real
+
+### Captura de Audio
+- **Formato**: WAV (44.1kHz, 16-bit, Mono)
+- **Medidor**: Volumen en tiempo real (dB)
+- **Almacenamiento**: Archivos WAV en `recordings/`
+
+## Archivos de Salida
+
+### Ubicación
+Todos los archivos se guardan en la carpeta `recordings/`:
+```
+recordings/
+├── screen_[proyecto]_[experimento].mp4  # Grabaciones de pantalla
+├── audio_[timestamp].wav                # Archivos de audio
+└── ...
+```
+
+### Formatos
+- **Video**: MP4 con codec H.264
+- **Audio**: WAV sin compresión
+- **Metadatos**: Timestamp y parámetros de captura
+
+## Solución de Problemas
+
+### Errores Comunes
+
+#### Error de Cámara
+```bash
+# Verificar permisos
+# Verificar que no haya otra aplicación usando la cámara
+# Reiniciar la aplicación
+```
+
+#### Error de Audio
+```bash
+# Verificar micrófono conectado
+# Verificar permisos de acceso
+# Verificar drivers de audio
+```
+
+#### Error de Permisos
+```bash
+# macOS: System Preferences > Security & Privacy > Privacy
+# Linux: Verificar permisos de /dev/video* y /dev/audio*
+```
+
+### Logs
+Los logs se generan automáticamente y pueden ser consultados para debugging.
+
+## Desarrollo
+
+### Estructura de Tests
+Los tests están organizados en `sbox/src/test/` y pueden ejecutarse individualmente o en conjunto.
+
+### Agregar Nuevas Funcionalidades
+1. Crear clase en `src/main/java/sbox/`
+2. Crear test en `src/test/java/sbox/`
+3. Agregar tarea Gradle en `build.gradle`
+4. Crear script en `scripts/`
+5. Actualizar documentación
+
+### Build y Deploy
+```bash
+# Compilar
+./gradlew build
+
+# Ejecutar tests
+./gradlew :sbox:runAllTests
+
+# Crear JAR
+./gradlew :sbox:jar
+```
+
+## Contribución
+
+1. Fork el proyecto
+2. Crear rama para feature (`git checkout -b feature/AmazingFeature`)
+3. Commit cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir Pull Request
 
 ## Licencia
-Proyecto académico, licencia abierta a definir.
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+## Contacto
+
+- **Autor**: amaldonado
+- **Proyecto**: S-Box
+- **Documentación**: Ver `docs/` y `CAMERA_TEST.md`
+
+## Changelog
+
+### v1.0.0 (Actual)
+- ✅ Captura de cámara funcional
+- ✅ Grabación de pantalla funcional
+- ✅ Detección de sonrisas funcional
+- ✅ Captura de audio funcional
+- ✅ Interfaz unificada
+- ✅ Tests organizados
+- ✅ Scripts de automatización
+- ✅ Documentación completa
+
+### Próximas Versiones
+- 🔄 Sincronización multimodal
+- 🔄 Perspectiva externa
+- 🔄 Reproducción avanzada
+- 🔄 Configuración avanzada
 

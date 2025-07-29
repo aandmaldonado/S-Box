@@ -1,14 +1,16 @@
-package sbox.facerecorder;
+package sbox.proyecto;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,17 +27,16 @@ import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameGrabber;
-import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.IplImage;
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 /**
- * Clase para captura de webcam y micrófono
+ * Prueba simple de cámara para S-Box
  * @author amaldonado
  */
 @Slf4j
-public class WebcamAndMicrophoneCapture extends JFrame {
+public class CameraTest extends JFrame {
     
     private static final long serialVersionUID = 1L;
     
@@ -43,78 +44,68 @@ public class WebcamAndMicrophoneCapture extends JFrame {
     private FrameGrabber grabber;
     private OpenCVFrameConverter.ToIplImage converter;
     private Java2DFrameConverter java2DConverter;
-    private IplImage grabbedImage = null;
-    private IplImage grayImage = null;
     private boolean isCapturing = false;
     private Thread captureThread;
+    private BufferedImage currentFrame = null;
     
     private JPanel mainPanel;
-    private JButton btnIniciarCaptura;
-    private JButton btnDetenerCaptura;
-    private JLabel lblEstado;
-    private JLabel videoLabel;
+    private JButton btnStart;
+    private JButton btnStop;
+    private JLabel lblStatus;
+    private VideoPanel videoPanel;
     
-    public WebcamAndMicrophoneCapture() {
+    public CameraTest() {
         initComponents();
         setupLayout();
+        setupWindowListener();
     }
     
     private void initComponents() {
-        setTitle("Captura de Webcam y Micrófono");
+        setTitle("S-Box - Prueba de Cámara");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(700, 550);
         setLocationRelativeTo(null);
         
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
         
         // Panel de controles
-        JPanel controlPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-        controlPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel controlPanel = new JPanel();
+        controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        btnIniciarCaptura = new JButton("Iniciar Captura");
-        btnDetenerCaptura = new JButton("Detener Captura");
+        btnStart = new JButton("Iniciar Cámara");
+        btnStop = new JButton("Detener Cámara");
+        lblStatus = new JLabel("Estado: Listo");
         
-        // Configurar botones
-        btnIniciarCaptura.setFont(new Font("Arial", Font.BOLD, 14));
-        btnDetenerCaptura.setFont(new Font("Arial", Font.BOLD, 14));
+        btnStart.setFont(new Font("Arial", Font.BOLD, 14));
+        btnStop.setFont(new Font("Arial", Font.BOLD, 14));
+        lblStatus.setFont(new Font("Arial", Font.PLAIN, 14));
         
         // Agregar listeners
-        btnIniciarCaptura.addActionListener(new ActionListener() {
+        btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                iniciarCaptura();
+                startCamera();
             }
         });
         
-        btnDetenerCaptura.addActionListener(new ActionListener() {
+        btnStop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detenerCaptura();
+                stopCamera();
             }
         });
         
-        controlPanel.add(btnIniciarCaptura);
-        controlPanel.add(btnDetenerCaptura);
+        controlPanel.add(btnStart);
+        controlPanel.add(btnStop);
+        controlPanel.add(lblStatus);
         
-        // Panel de estado
-        JPanel statusPanel = new JPanel();
-        lblEstado = new JLabel("Estado: Listo");
-        lblEstado.setFont(new Font("Arial", Font.PLAIN, 16));
-        statusPanel.add(lblEstado);
-        
-        // Área de captura
-        JPanel capturePanel = new JPanel();
-        capturePanel.setBackground(Color.BLACK);
-        capturePanel.setPreferredSize(new Dimension(400, 300));
-        videoLabel = new JLabel("Área de Captura");
-        videoLabel.setForeground(Color.WHITE);
-        videoLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        capturePanel.add(videoLabel);
+        // Panel de video
+        videoPanel = new VideoPanel();
+        videoPanel.setPreferredSize(new Dimension(640, 480));
         
         mainPanel.add(controlPanel, BorderLayout.NORTH);
-        mainPanel.add(capturePanel, BorderLayout.CENTER);
-        mainPanel.add(statusPanel, BorderLayout.SOUTH);
+        mainPanel.add(videoPanel, BorderLayout.CENTER);
         
         add(mainPanel);
     }
@@ -123,9 +114,18 @@ public class WebcamAndMicrophoneCapture extends JFrame {
         // Configuración adicional del layout si es necesaria
     }
     
-    private void iniciarCaptura() {
-        log.info("Iniciando captura de webcam y micrófono...");
-        lblEstado.setText("Estado: Iniciando captura...");
+    private void setupWindowListener() {
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                stopCamera();
+            }
+        });
+    }
+    
+    private void startCamera() {
+        log.info("Iniciando cámara...");
+        lblStatus.setText("Estado: Iniciando cámara...");
         
         try {
             // Inicializar grabber - usar OpenCVFrameGrabber para compatibilidad con macOS
@@ -136,12 +136,8 @@ public class WebcamAndMicrophoneCapture extends JFrame {
             converter = new OpenCVFrameConverter.ToIplImage();
             java2DConverter = new Java2DFrameConverter();
             
-            // Crear imágenes
-            grabbedImage = IplImage.create(640, 480, IPL_DEPTH_8U, 3);
-            grayImage = IplImage.create(640, 480, IPL_DEPTH_8U, 1);
-            
             isCapturing = true;
-            lblEstado.setText("Estado: Capturando...");
+            lblStatus.setText("Estado: Cámara iniciada");
             
             // Iniciar thread de captura
             captureThread = new Thread(new Runnable() {
@@ -161,25 +157,24 @@ public class WebcamAndMicrophoneCapture extends JFrame {
                                         image = resized;
                                     }
                                     
-                                    // Copiar a grabbedImage
-                                    cvCopy(image, grabbedImage);
-                                    
-                                    // Convertir a escala de grises
-                                    cvCvtColor(grabbedImage, grayImage, CV_BGR2GRAY);
+                                    // Convertir a BufferedImage para mostrar
+                                    Frame displayFrame = converter.convert(image);
+                                    BufferedImage bufferedImage = java2DConverter.convert(displayFrame);
                                     
                                     // Actualizar UI en EDT
                                     SwingUtilities.invokeLater(new Runnable() {
                                         @Override
                                         public void run() {
-                                            videoLabel.setText("Capturando... " + 
-                                                grabbedImage.width() + "x" + grabbedImage.height());
+                                            currentFrame = bufferedImage;
+                                            videoPanel.setFrame(currentFrame);
+                                            videoPanel.repaint();
                                         }
                                     });
                                 }
                             }
                             Thread.sleep(33); // ~30 FPS
                         } catch (Exception e) {
-                            log.error("Error en captura", e);
+                            log.error("Error en captura de cámara", e);
                             break;
                         }
                     }
@@ -188,20 +183,20 @@ public class WebcamAndMicrophoneCapture extends JFrame {
             captureThread.start();
             
         } catch (Exception e) {
-            log.error("Error al iniciar captura", e);
-            lblEstado.setText("Estado: Error al iniciar captura - " + e.getMessage());
+            log.error("Error al iniciar cámara", e);
+            lblStatus.setText("Estado: Error al iniciar cámara - " + e.getMessage());
         }
     }
     
-    private void detenerCaptura() {
-        log.info("Deteniendo captura...");
+    private void stopCamera() {
+        log.info("Deteniendo cámara...");
         isCapturing = false;
         
         if (captureThread != null) {
             try {
                 captureThread.join(1000); // Esperar máximo 1 segundo
             } catch (InterruptedException e) {
-                log.warn("Interrupción al detener thread de captura", e);
+                log.warn("Interrupción al detener thread de cámara", e);
             }
         }
         
@@ -214,25 +209,51 @@ public class WebcamAndMicrophoneCapture extends JFrame {
             }
         }
         
-        if (grabbedImage != null) {
-            grabbedImage.release();
-            grabbedImage = null;
-        }
-        if (grayImage != null) {
-            grayImage.release();
-            grayImage = null;
+        currentFrame = null;
+        videoPanel.setFrame(null);
+        videoPanel.repaint();
+        
+        lblStatus.setText("Estado: Cámara detenida");
+    }
+    
+    // Panel personalizado para mostrar video
+    private class VideoPanel extends JPanel {
+        private BufferedImage frame = null;
+        
+        public void setFrame(BufferedImage frame) {
+            this.frame = frame;
         }
         
-        lblEstado.setText("Estado: Captura detenida");
-        videoLabel.setText("Área de Captura");
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            
+            if (frame != null) {
+                // Dibujar el frame centrado
+                int x = (getWidth() - frame.getWidth()) / 2;
+                int y = (getHeight() - frame.getHeight()) / 2;
+                g2d.drawImage(frame, x, y, null);
+            } else {
+                // Dibujar fondo negro con texto
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                g2d.setColor(Color.WHITE);
+                g2d.setFont(new Font("Arial", Font.BOLD, 18));
+                String text = "Área de Video";
+                int x = (getWidth() - g2d.getFontMetrics().stringWidth(text)) / 2;
+                int y = getHeight() / 2;
+                g2d.drawString(text, x, y);
+            }
+        }
     }
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new WebcamAndMicrophoneCapture().setVisible(true);
+                new CameraTest().setVisible(true);
             }
         });
     }
-}
+} 

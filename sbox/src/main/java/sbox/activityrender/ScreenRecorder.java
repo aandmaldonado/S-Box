@@ -5,40 +5,29 @@ import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sound.sampled.Mixer;
 import javax.swing.SwingConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
-// Comentamos todas las importaciones problemáticas de MonteMedia
-// import org.monte.media.AudioFormatKeys;
-// import static org.monte.media.AudioFormatKeys.*;
-// import org.monte.media.Buffer;
-// import org.monte.media.BufferFlag;
-// import static org.monte.media.BufferFlag.*;
-// import org.monte.media.Codec;
-// import org.monte.media.Format;
-// import static org.monte.media.FormatKeys.EncodingKey;
-// import static org.monte.media.FormatKeys.FrameRateKey;
-// import static org.monte.media.FormatKeys.MIME_QUICKTIME;
-// import org.monte.media.FormatKeys.MediaType;
-// import static org.monte.media.FormatKeys.MediaTypeKey;
-// import static org.monte.media.FormatKeys.MimeTypeKey;
-// import org.monte.media.MovieWriter;
-// import org.monte.media.Registry;
-// import static org.monte.media.VideoFormatKeys.*;
-// import org.monte.media.avi.AVIWriter;
-// import org.monte.media.beans.AbstractStateModel;
-// import org.monte.media.color.Colors;
-// import org.monte.media.converter.CodecChain;
-// import org.monte.media.converter.ScaleImageCodec;
-// import org.monte.media.image.Images;
-// import org.monte.media.math.Rational;
-// import org.monte.media.quicktime.QuickTimeWriter;
+// Importaciones de Bytedeco/JavaCV para grabación
+import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.Java2DFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.bytedeco.opencv.opencv_core.IplImage;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 /**
  * Clase para grabación de pantalla
@@ -51,21 +40,22 @@ public class ScreenRecorder {
     public static String nombreProyecto = "";
     public static int experimentos = 0;
     
-    // Comentamos todas las variables problemáticas de MonteMedia
-    // private Format fileFormat;
-    // protected Format mouseFormat;
-    // private Format screenFormat;
-    // private Format audioFormat;
-    // private MovieWriter w;
-    // private ArrayBlockingQueue<Buffer> mouseCaptures;
-    // private ArrayBlockingQueue<Buffer> writerQueue;
-    // private Codec frameEncoder;
-    // private Rational outputTime;
-    // private Rational ffrDuration;
+    // Variables para grabación de pantalla
+    private FFmpegFrameRecorder recorder;
+    private Robot robot;
+    private Rectangle screenRect;
+    private boolean running;
+    private long startTime;
+    private Thread recordingThread;
+    private BlockingQueue<BufferedImage> frameQueue;
+    private Java2DFrameConverter converter;
+    private OpenCVFrameConverter.ToIplImage opencvConverter;
+    
+    // Variables de sincronización
+    private AtomicLong currentTimestamp = new AtomicLong(0);
+    private AtomicLong frameCount = new AtomicLong(0);
     
     private ArrayList<File> recordedFiles;
-    private long startTime;
-    private boolean running;
     private GraphicsConfiguration cfg;
     private Rectangle areaRect;
     private File movieFolder;
@@ -75,73 +65,201 @@ public class ScreenRecorder {
         log.info("ScreenRecorder inicializado");
         recordedFiles = new ArrayList<>();
         running = false;
+        frameQueue = new ArrayBlockingQueue<>(30); // Buffer de 30 frames
+        converter = new Java2DFrameConverter();
+        opencvConverter = new OpenCVFrameConverter.ToIplImage();
+        
+        try {
+            robot = new Robot();
+            screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+        } catch (AWTException e) {
+            log.error("Error al inicializar Robot", e);
+        }
     }
     
     public void start() {
         log.info("Iniciando grabación de pantalla...");
-        running = true;
-        startTime = System.currentTimeMillis();
-        // Comentamos el código original de MonteMedia
-        /*
+        
         try {
-            // Código original de grabación de pantalla aquí
-            // w = createMovieWriter();
-            // w.start();
-            log.info("Grabación de pantalla iniciada");
+            // Crear directorio para videos si no existe
+            File outputDir = new File("recordings");
+            if (!outputDir.exists()) {
+                outputDir.mkdirs();
+            }
+            
+            // Configurar grabador FFmpeg
+            String outputFile = "recordings/screen_" + nombreProyecto + "_" + experimentos + ".mp4";
+            recorder = new FFmpegFrameRecorder(outputFile, screenRect.width, screenRect.height);
+            
+            // Configurar parámetros de grabación
+            recorder.setVideoCodec(org.bytedeco.ffmpeg.global.avcodec.AV_CODEC_ID_H264);
+            recorder.setFormat("mp4");
+            recorder.setFrameRate(30);
+            recorder.setPixelFormat(org.bytedeco.ffmpeg.global.avutil.AV_PIX_FMT_YUV420P);
+            
+            recorder.start();
+            
+            running = true;
+            startTime = System.currentTimeMillis();
+            currentTimestamp.set(startTime);
+            frameCount.set(0);
+            
+            // Iniciar thread de grabación
+            recordingThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (running) {
+                        try {
+                            // Capturar pantalla
+                            BufferedImage screenCapture = robot.createScreenCapture(screenRect);
+                            
+                            // Convertir a Frame para FFmpeg
+                            Frame frame = converter.convert(screenCapture);
+                            recorder.record(frame);
+                            
+                            // Actualizar estadísticas
+                            currentTimestamp.set(System.currentTimeMillis());
+                            frameCount.incrementAndGet();
+                            
+                            // Pequeña pausa para mantener 30 FPS
+                            Thread.sleep(33); // ~30 FPS
+                            
+                        } catch (Exception e) {
+                            log.error("Error en grabación de pantalla", e);
+                            break;
+                        }
+                    }
+                }
+            });
+            recordingThread.start();
+            
+            log.info("Grabación de pantalla iniciada - Resolución: {}x{}", screenRect.width, screenRect.height);
+            
         } catch (Exception e) {
             log.error("Error al iniciar grabación de pantalla", e);
+            throw new RuntimeException("No se pudo iniciar la grabación de pantalla", e);
         }
-        */
     }
     
     public String stop() {
         log.info("Deteniendo grabación de pantalla...");
         running = false;
-        // Comentamos el código original de MonteMedia
-        /*
-        try {
-            // w.stop();
-            // w.close();
-            log.info("Grabación de pantalla detenida");
-        } catch (Exception e) {
-            log.error("Error al detener grabación de pantalla", e);
+        
+        if (recordingThread != null) {
+            try {
+                recordingThread.join(2000); // Esperar máximo 2 segundos
+            } catch (InterruptedException e) {
+                log.warn("Interrupción al detener thread de grabación", e);
+            }
         }
-        */
-        return "video_screen_" + nombreProyecto + "_" + experimentos + ".avi";
-    }
-    
-    // Comentamos todos los métodos originales de MonteMedia
-    /*
-    protected MovieWriter createMovieWriter() throws IOException {
-        // Código original aquí
+        
+        if (recorder != null) {
+            try {
+                recorder.stop();
+                recorder.release();
+                
+                // Obtener archivo grabado
+                String outputFile = "recordings/screen_" + nombreProyecto + "_" + experimentos + ".mp4";
+                File recordedFile = new File(outputFile);
+                recordedFiles.add(recordedFile);
+                
+                log.info("Grabación de pantalla detenida - Archivo: {}", recordedFile.getAbsolutePath());
+                return recordedFile.getAbsolutePath();
+                
+            } catch (Exception e) {
+                log.error("Error al detener grabador", e);
+                return null;
+            }
+        }
+        
         return null;
     }
     
-    protected File createMovieFile(Format fileFormat) throws IOException {
-        // Código original aquí
-        return null;
+    /**
+     * Verifica si la grabación está activa
+     */
+    public boolean isRecording() {
+        return running;
     }
     
-    protected void write(Buffer buf) throws IOException, InterruptedException {
-        // Código original aquí
+    /**
+     * Obtiene el timestamp actual de la grabación
+     */
+    public long getCurrentTimestamp() {
+        if (!running) {
+            return 0;
+        }
+        return currentTimestamp.get() - startTime;
     }
     
-    private void doWrite(Buffer buf) throws IOException {
-        // Código original aquí
+    /**
+     * Obtiene el número de frames grabados
+     */
+    public long getFrameCount() {
+        return frameCount.get();
     }
-    */
+    
+    /**
+     * Obtiene el tiempo de inicio de la grabación
+     */
+    public long getStartTime() {
+        return startTime;
+    }
+    
+    /**
+     * Verifica si la grabación está sincronizada
+     */
+    public boolean isInSync(long expectedTimestamp) {
+        if (!running) {
+            return false;
+        }
+        
+        long currentTime = currentTimestamp.get();
+        long elapsedTime = currentTime - startTime;
+        long drift = Math.abs(elapsedTime - expectedTimestamp);
+        
+        // Considerar sincronizado si el drift es menor a 50ms
+        return drift <= 50;
+    }
+    
+    public String getRecordingStats() {
+        if (running) {
+            long duration = System.currentTimeMillis() - startTime;
+            long frames = frameCount.get();
+            double fps = frames > 0 ? (frames * 1000.0) / duration : 0;
+            
+            return String.format("Duración: %ds | Frames: %d | FPS: %.1f", 
+                duration / 1000, frames, fps);
+        }
+        return "No grabando";
+    }
+    
+    public ArrayList<File> getRecordedFiles() {
+        return new ArrayList<>(recordedFiles);
+    }
+    
+    public void clearRecordedFiles() {
+        recordedFiles.clear();
+    }
     
     public static void main(String[] args) {
-        log.info("ScreenRecorder - Clase para grabación de pantalla");
         ScreenRecorder recorder = new ScreenRecorder();
-        recorder.start();
-        // Simulamos grabación
+        ScreenRecorder.nombreProyecto = "test";
+        ScreenRecorder.experimentos = 1;
+        
         try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
+            System.out.println("Iniciando grabación de pantalla...");
+            recorder.start();
+            
+            // Grabar por 5 segundos
+            Thread.sleep(5000);
+            
+            System.out.println("Deteniendo grabación...");
+            String outputFile = recorder.stop();
+            System.out.println("Archivo guardado: " + outputFile);
+            
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        String result = recorder.stop();
-        log.info("Archivo generado: {}", result);
     }
 }
