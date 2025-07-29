@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+allprojects {
+    group = 'com.sbox'
+    version = '1.0-SNAPSHOT'
+    
+    repositories {
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'application'
+    
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+    
+    dependencies {
+        // Dependencias comunes para ambos proyectos
+        implementation 'log4j:log4j:1.2.17'
+        implementation 'net.java.dev.jna:jna:4.5.2'
+        implementation 'uk.co.caprica:vlcj:3.10.1'
+        implementation 'org.swinglabs:swing-worker:1.1'
+        
+        // Lombok para reducir código boilerplate
+        compileOnly 'org.projectlombok:lombok:1.18.30'
+        annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    }
+} 

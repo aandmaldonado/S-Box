@@ -1,0 +1,4 @@
+rootProject.name = 'S-Box'
+
+include 'sbox'
+include 'perspectivaExterna' 
